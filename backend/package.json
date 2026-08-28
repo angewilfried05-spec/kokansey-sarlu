@@ -7,12 +7,11 @@
     "seed": "node prisma/seed.js"
   },
   "scripts": {
-    "start": "prisma db push && node index.js",
+    "start": "prisma generate && prisma db push && node index.js",
     "dev": "nodemon index.js",
     "test": "node --test test/*.test.js",
     "db:push": "prisma db push",
-    "db:extras": "psql $DATABASE_URL -f prisma/postgresql/extras.sql",
-    "postinstall": "prisma generate"
+    "db:extras": "psql $DATABASE_URL -f prisma/postgresql/extras.sql"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
