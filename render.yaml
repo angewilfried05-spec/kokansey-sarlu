@@ -19,7 +19,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: 24h
       - key: FRONTEND_URL
-        value: https://kokansey-frontend.vercel.app
+        value: https://kokansey-sarlu-jq3n-dv457mz6m-gaw2.vercel.app
       - key: SERVE_FRONTEND
         value: false
 
