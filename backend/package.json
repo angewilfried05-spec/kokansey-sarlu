@@ -11,7 +11,8 @@
     "dev": "nodemon index.js",
     "test": "node --test test/*.test.js",
     "db:push": "prisma db push",
-    "db:extras": "psql $DATABASE_URL -f prisma/postgresql/extras.sql"
+    "db:extras": "psql $DATABASE_URL -f prisma/postgresql/extras.sql",
+    "postinstall": "prisma generate && prisma db push"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
