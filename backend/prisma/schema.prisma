@@ -1,0 +1,383 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  username  String     @unique
+  password  String
+  name      String?
+  role      String     @default("GERANT")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  contact   String?
+  email     String?
+  auditLogs AuditLog[]
+}
+
+model Employee {
+  id              String          @id @default(cuid())
+  firstName       String
+  lastName        String
+  hireDate        DateTime
+  salary          Float
+  contact         String
+  position        String
+  residence       String
+  cniNumber       String          @unique
+  matricule       String?         @unique // Identifiant Sage/Sari
+  photoUrl        String?
+  spouseName      String?
+  spouseContact   String?
+  typeSpeculation String?
+  speculation     String?
+  service         String?
+  contractType    String?         // CDD, CDI, STAGIAIRE, INTERIM, TEMPS_PARTIEL
+  contractStart   DateTime?
+  contractEnd     DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  absences        Absence[]
+  salaries        SalaryHistory[]
+  trucksAsDriver   Truck[]         @relation("DriverRelation")
+  trucksAsConveyor Truck[]         @relation("ConveyorRelation")
+  tasks           Task[]
+}
+
+model Absence {
+  id         String   @id @default(cuid())
+  date       DateTime
+  reason     String?
+  employeeId String
+  createdAt  DateTime @default(now())
+  employee   Employee @relation(fields: [employeeId], references: [id])
+}
+
+model SalaryHistory {
+  id           String   @id @default(cuid())
+  date         DateTime
+  amount       Float    // Net payé
+  baseSalary   Float?
+  bonuses      Float?   @default(0)
+  cnpsEmployee Float?   @default(0)
+  cnpsEmployer Float?   @default(0)
+  taxIS        Float?   @default(0) // Impôt sur Salaire
+  taxCN        Float?   @default(0) // Contribution Nationale
+  taxIGR       Float?   @default(0) // IGR
+  employeeId   String
+  createdAt    DateTime @default(now())
+  employee     Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Speculation {
+  id             String          @id @default(cuid())
+  name           String          @unique // Hévéa, Cacao, etc.
+  category       String          // Cultures Industrielles, Cultures Vivrières, Elevage
+  status         String          @default("EN_COURS") // EN_COURS, TERMINE
+  areaSize       Float?          // Taille de la parcelle en hectares
+  sales          Sale[]
+  expenses       Expense[]
+  stockMovements StockMovement[]
+  harvests       Harvest[]
+  stocks         Stock[]
+  createdAt      DateTime        @default(now())
+}
+
+model Harvest {
+  id            String      @id @default(cuid())
+  date          DateTime
+  speculationId String
+  quantity      Float
+  unit          String
+  quality       String?
+  observation   String?
+  campagneId    String?     @map("campagne_id")
+  campagne      Campagne?   @relation(fields: [campagneId], references: [id])
+  createdAt     DateTime    @default(now())
+  speculation   Speculation @relation(fields: [speculationId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  details   String
+  timestamp DateTime @default(now())
+}
+
+model Sale {
+  id            String           @id @default(cuid())
+  date          DateTime
+  speculationId String
+  product       String
+  quantity      Float
+  unit          String
+  unitPrice     Float
+  totalPrice    Float
+  client        String?
+  clientId      String?          @map("client_id")
+  clientCompte  Client?          @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  observation   String?
+  campagneId    String?          @map("campagne_id")
+  campagne      Campagne?        @relation(fields: [campagneId], references: [id])
+  invoiceId     String?          @map("invoice_id")
+  invoice       Invoice?         @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  createdAt     DateTime         @default(now())
+  speculation   Speculation      @relation(fields: [speculationId], references: [id])
+  operation     OperationClient?
+  invoiceItems  InvoiceItem[]
+}
+
+model Expense {
+  id            String       @id @default(cuid())
+  date          DateTime
+  type          String
+  category      String
+  speculationId String?
+  amount        Float
+  observation   String?
+  createdAt     DateTime     @default(now())
+  supplier      String?
+  speculation   Speculation? @relation(fields: [speculationId], references: [id])
+}
+
+model Truck {
+  id               String         @id @default(cuid())
+  internalCode     String         @unique // Code généré: EXP-AGR-TRA-001
+  registration     String         @unique // Immatriculation
+  category         String         // AGR, TRP, UTL, MOB, MNT, ADM
+  subCategory      String         // Tracteur, Camion benne, etc.
+  brand            String
+  model            String
+  year             Int
+  assignment       String         // EXP, LOG, MNT, ADM, SEC, PRO
+  energyType       String         // Diesel, Essence, Électrique, Hybride, Gaz
+  mileage          Float          @default(0) // Kilométrage ou heures moteur
+  consumption      Float?         // Consommation moyenne
+  serviceDate      DateTime
+  nextMaintenance  DateTime?
+  status           String         @default("Disponible") // Disponible, Affecté, En mission, En maintenance, En panne, Hors service, Réformé
+  
+  driverId         String?
+  driver           Employee?      @relation("DriverRelation", fields: [driverId], references: [id])
+  
+  conveyorId       String?
+  conveyor         Employee?      @relation("ConveyorRelation", fields: [conveyorId], references: [id])
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  trips            Trip[]
+  tasks            Task[]
+  expenses         TruckExpense[]
+}
+
+model TruckExpense {
+  id          String   @id @default(cuid())
+  date        DateTime
+  truckId     String
+  type        String
+  amount      Float
+  observation String?
+  createdAt   DateTime @default(now())
+  truck       Truck    @relation(fields: [truckId], references: [id])
+}
+
+model Trip {
+  id          String    @id @default(cuid())
+  date        DateTime
+  truckId     String
+  destination String
+  cargo       String
+  observation String?
+  status      String    @default("EN_COURS") // EN_COURS, TERMINE
+  completedAt DateTime? @map("completed_at")
+  createdAt   DateTime  @default(now())
+  truck       Truck     @relation(fields: [truckId], references: [id])
+  tasks       Task[]
+}
+
+model Stock {
+  id            String          @id @default(cuid())
+  name          String          @unique
+  category      String
+  quantity      Float           @default(0)
+  unit          String
+  minThreshold  Float           @default(0)
+  speculationId String?
+  speculation   Speculation?    @relation(fields: [speculationId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  movements     StockMovement[]
+}
+
+model StockMovement {
+  id            String       @id @default(cuid())
+  date          DateTime     @default(now())
+  stockId       String
+  type          String
+  quantity      Float
+  reason        String?
+  speculationId String?
+  createdAt     DateTime     @default(now())
+  speculation   Speculation? @relation(fields: [speculationId], references: [id])
+  stock         Stock        @relation(fields: [stockId], references: [id])
+}
+
+model Campagne {
+  id          String        @id @default(cuid())
+  nom         String
+  description String?
+  dateDebut   DateTime      @map("date_debut")
+  dateFin     DateTime      @map("date_fin")
+  actif       Boolean       @default(true)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  harvests    Harvest[]
+  sales       Sale[]
+
+  @@map("campagnes")
+}
+
+model Client {
+  id          String            @id @default(cuid())
+  nom         String
+  telephone   String?
+  email       String?
+  adresse     String?
+  typeClient  String            @default("particulier") @map("type_client")
+  actif       Boolean           @default(true)
+  cooperativeId String?         @map("cooperative_id")
+  cooperative Cooperative?      @relation(fields: [cooperativeId], references: [id])
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  operations  OperationClient[]
+  sales       Sale[]
+  invoices    Invoice[]
+
+  @@map("clients")
+}
+
+model Cooperative {
+  id          String        @id @default(cuid())
+  nom         String
+  telephone   String?
+  email       String?
+  adresse     String?
+  president   String?
+  description String?
+  actif       Boolean       @default(true)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  members     Client[]
+
+  @@map("cooperatives")
+}
+
+model OperationClient {
+  id             String    @id @default(cuid())
+  clientId       String    @map("client_id")
+  client         Client    @relation(fields: [clientId], references: [id])
+  typeOperation  String    @map("type_operation")
+  montant        Float
+  description    String?
+  reference      String?
+  modePaiement   String?   @map("mode_paiement")
+  dateOperation  DateTime  @default(now()) @map("date_operation")
+  creePar        String?   @map("cree_par")
+  saleId         String?   @unique @map("sale_id")
+  sale           Sale?     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  invoiceId      String?   @map("invoice_id")
+  invoice        Invoice?  @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@map("operations_client")
+}
+
+model Invoice {
+  id             String          @id @default(cuid())
+  numero         String          @unique
+  clientId       String          @map("client_id")
+  client         Client          @relation(fields: [clientId], references: [id])
+  dateEmission   DateTime        @default(now()) @map("date_emission")
+  dateEcheance   DateTime?       @map("date_echeance")
+  montantTotal   Float           @map("montant_total")
+  montantPaye    Float           @default(0) @map("montant_paye")
+  statut         String          @default("EN_ATTENTE") // EN_ATTENTE, PAYEE, PARTIELLEMENT_PAYEE, ANNULEE, IMPAYEE
+  mentionsLegales String?        @map("mentions_legales")
+  notes          String?
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  items          InvoiceItem[]
+  operations     OperationClient[]
+  sales          Sale[]
+
+  @@map("invoices")
+}
+
+model InvoiceItem {
+  id          String      @id @default(cuid())
+  invoiceId   String      @map("invoice_id")
+  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  saleId      String?     @map("sale_id")
+  sale        Sale?       @relation(fields: [saleId], references: [id], onDelete: SetNull)
+  description String
+  quantity    Float
+  unit        String
+  unitPrice   Float       @map("unit_price")
+  totalPrice  Float       @map("total_price")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@map("invoice_items")
+}
+
+model InvoiceTemplate {
+  id              String   @id @default(cuid())
+  companyName     String   @default("KOKANSEY SARLU") @map("company_name")
+  companySubtitle String   @default("Gestion Agricole & Commerciale") @map("company_subtitle")
+  companyAddress  String?  @map("company_address")
+  companyPhone    String?  @map("company_phone")
+  companyEmail    String?  @map("company_email")
+  logoUrl         String?  @map("logo_url")
+  primaryColor    String   @default("#1a4d2e") @map("primary_color")
+  secondaryColor  String?  @map("secondary_color")
+  footerText      String?  @map("footer_text")
+  legalMention    String?  @map("legal_mention")
+  disclaimer      String?  @map("disclaimer")
+  defaultNotes    String?  @map("default_notes")
+  showSignatureZones Boolean @default(true) @map("show_signature_zones")
+  showQrCode      Boolean  @default(false) @map("show_qr_code")
+  taxLabel        String?  @map("tax_label")
+  taxRate         Float?   @map("tax_rate")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  updatedBy       String?  @map("updated_by")
+
+  @@map("invoice_templates")
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      String    @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  priority    String    @default("NORMAL") // LOW, NORMAL, HIGH
+  dueDate     DateTime? @map("due_date")
+  assignedToId String   @map("assigned_to_id")
+  assignedTo  Employee  @relation(fields: [assignedToId], references: [id])
+  truckId     String?   @map("truck_id")
+  truck       Truck?    @relation(fields: [truckId], references: [id])
+  tripId      String?   @map("trip_id")
+  trip        Trip?     @relation(fields: [tripId], references: [id])
+  createdById String?   @map("created_by_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("tasks")
+}

@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #1a4d2e;
+  --color-secondary: #e8c872;
+  --color-surface: #ffffff;
+  --color-background: #f8fafc;
+  --color-muted: #64748b;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* Animations fluides globales */
+.animate-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-out {
+  animation: fadeOut 0.2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Scrollbar custom */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Mode sombre scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Global dark mode helpers (low specificity to allow explicit dark: classes to override) */
+:where(.dark) .bg-white { background-color: #1e293b; }
+:where(.dark) .bg-gray-50 { background-color: #334155; }
+:where(.dark) .bg-gray-50\/50 { background-color: rgba(51, 65, 85, 0.5); }
+:where(.dark) .bg-gray-100 { background-color: #475569; }
+:where(.dark) .bg-gray-200 { background-color: #64748b; }
+:where(.dark) .bg-green-50 { background-color: rgba(20, 83, 45, 0.25); }
+:where(.dark) .bg-red-50 { background-color: rgba(127, 29, 29, 0.25); }
+:where(.dark) .bg-amber-50 { background-color: rgba(120, 53, 15, 0.25); }
+:where(.dark) .bg-blue-50 { background-color: rgba(30, 58, 138, 0.25); }
+
+:where(.dark) .text-gray-900,
+:where(.dark) .text-gray-800 { color: #f8fafc; }
+:where(.dark) .text-gray-700 { color: #e2e8f0; }
+:where(.dark) .text-gray-600 { color: #cbd5e1; }
+:where(.dark) .text-gray-500 { color: #94a3b8; }
+:where(.dark) .text-gray-400 { color: #64748b; }
+:where(.dark) .text-gray-300 { color: #475569; }
+:where(.dark) .text-green-600 { color: #4ade80; }
+:where(.dark) .text-red-600 { color: #f87171; }
+:where(.dark) .text-amber-600 { color: #fbbf24; }
+:where(.dark) .text-blue-600 { color: #60a5fa; }
+
+:where(.dark) .border-gray-100,
+:where(.dark) .border-gray-200 { border-color: #334155; }
+:where(.dark) .border-gray-300 { border-color: #475569; }
+:where(.dark) .divide-gray-50 > * + *,
+:where(.dark) .divide-gray-100 > * + * { border-color: #334155; }
+
+:where(.dark) .placeholder-gray-500::placeholder { color: #94a3b8; }
+:where(.dark) .placeholder-gray-400::placeholder { color: #64748b; }

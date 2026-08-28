@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KOKANSEY SARLU</string>
+    <string name="offline_message">Aucune connexion internet.\nVérifiez votre réseau.</string>
+    <string name="retry">Réessayer</string>
+</resources>

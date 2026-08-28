@@ -1,0 +1,39 @@
+# Environnement
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Builds
+frontend/dist/
+frontend/dist-electron/
+desktop/dist-electron/
+desktop/node_modules/
+android-webview-app/app/build/
+android-webview-app/build/
+android-webview-app/.gradle/
+android-webview-app/*.log
+
+# Base de données locale (SQLite) — ne jamais commiter de données métier
+backend/prisma/dev.db
+backend/prisma/*.db
+*.db-journal
+
+# Sessions WhatsApp & cache
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

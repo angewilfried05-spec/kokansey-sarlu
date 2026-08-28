@@ -1,0 +1,59 @@
+{
+  "name": "kokansey-desktop",
+  "version": "1.0.0",
+  "description": "Application de bureau KOKANSEY SARLU",
+  "main": "electron-main.cjs",
+  "type": "commonjs",
+  "author": "KOKANSEY SARLU",
+  "scripts": {
+    "start": "electron .",
+    "build": "npm --prefix ../frontend run build",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.kokansey.desktop",
+    "productName": "KOKANSEY SARLU",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron-main.cjs",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": ["**/*", "!prisma/migrations"]
+      },
+      {
+        "from": "../frontend/dist",
+        "to": "frontend/dist",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
