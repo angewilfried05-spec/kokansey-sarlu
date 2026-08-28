@@ -211,11 +211,11 @@ app.get('/api/config.js', (_req, res) => {
   res.send(`window.KOKANSEY_RUNTIME = { API_BASE: '/api', VERSION: '1.0.0' };`);
 });
 
-// Serve frontend build in production / desktop mode
+// Serve frontend build only if SERVE_FRONTEND is true
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.join(__dirname, '../frontend/dist');
-if (process.env.NODE_ENV === 'production' || process.env.SERVE_FRONTEND === 'true') {
+if (process.env.SERVE_FRONTEND === 'true') {
   app.use(express.static(frontendDistPath));
   app.get('*', (_req, res) => {
     res.sendFile(path.join(frontendDistPath, 'index.html'));
