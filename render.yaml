@@ -27,4 +27,3 @@ databases:
   - name: kokansey-db
     plan: free
     databaseName: kokansey
-    user: kokansey_user

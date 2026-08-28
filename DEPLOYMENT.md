@@ -6,6 +6,8 @@
 - **Frontend** : React + Vite → hébergé sur Vercel
 - **Base de données** : PostgreSQL → hébergée sur Render
 
+**Architecture séparée** : Backend et frontend sont déployés séparément. Le frontend appelle le backend via l'URL Render configurée dans `VITE_API_URL`.
+
 ## Étape 1 : Préparation du repository
 
 ### 1.1 Pousser le code sur GitHub
@@ -115,11 +117,7 @@ Ajoutez la variable :
 
 - `VITE_API_URL` : URL de votre backend Render (ex: `https://kokansey-backend.onrender.com`)
 
-### 3.5 Redirections API
-
-Le fichier `vercel.json` configure automatiquement les redirections :
-- Les requêtes `/api/*` sont redirigées vers le backend Render
-- Les autres routes servent le frontend (SPA)
+Cette variable est utilisée dans `frontend/src/lib/api.ts` pour construire les URLs d'API.
 
 ## Étape 4 : Mise à jour CORS
 
