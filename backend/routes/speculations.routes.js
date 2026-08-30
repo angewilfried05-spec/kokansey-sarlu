@@ -1,5 +1,5 @@
 export default function registerSpeculationsRoutes(app, { prisma, authenticate, authorize, checkAdmin, logAction }) {
-  app.get('/api/speculations', authenticate, authorize(['GERANT', 'COMMERCIAL', 'STOCK_MANAGER']), async (req, res) => {
+  app.get('/api/speculations', authenticate, authorize(['GERANT', 'COMMERCIAL', 'STOCK_MANAGER', 'ADMIN']), async (req, res) => {
     try {
       const speculations = await prisma.speculation.findMany({
         include: {
@@ -15,7 +15,7 @@ export default function registerSpeculationsRoutes(app, { prisma, authenticate, 
     }
   });
 
-  app.post('/api/speculations', authenticate, authorize(['GERANT']), async (req, res) => {
+  app.post('/api/speculations', authenticate, authorize(['GERANT', 'ADMIN']), async (req, res) => {
     try {
       const body = req.body;
       const speculation = await prisma.speculation.create({
@@ -32,7 +32,7 @@ export default function registerSpeculationsRoutes(app, { prisma, authenticate, 
     }
   });
 
-  app.put('/api/speculations/:id', authenticate, authorize(['GERANT']), async (req, res) => {
+  app.put('/api/speculations/:id', authenticate, authorize(['GERANT', 'ADMIN']), async (req, res) => {
     try {
       const body = req.body;
       const speculation = await prisma.speculation.update({
