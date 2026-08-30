@@ -5,7 +5,7 @@ services:
     env: node
     plan: free
     buildCommand: cd backend && npm install && cd ../frontend && npm install && npx vite build
-    startCommand: cd backend && npx prisma generate && npx prisma db push && npm start
+    startCommand: cd backend && npx prisma generate && npx prisma db push && npx prisma db seed && npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -23,6 +23,12 @@ services:
         value: https://kokansey-backend.onrender.com
       - key: SERVE_FRONTEND
         value: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: ADMIN_NAME
+        value: Administrateur
 
 databases:
   - name: kokansey-db
