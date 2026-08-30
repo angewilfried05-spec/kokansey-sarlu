@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || 'https://kokansey-sarlu-1.onrender.com';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 let backendUnavailable = false;
 

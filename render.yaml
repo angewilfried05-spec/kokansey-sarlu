@@ -3,7 +3,7 @@ services:
     name: kokansey-backend
     env: node
     plan: free
-    buildCommand: cd backend && npm install
+    buildCommand: cd backend && npm install && cd ../frontend && npm install && npm run build
     startCommand: cd backend && npx prisma generate && npx prisma db push && npm start
     envVars:
       - key: NODE_ENV
@@ -19,9 +19,9 @@ services:
       - key: JWT_EXPIRES_IN
         value: 24h
       - key: FRONTEND_URL
-        value: https://kokansey-sarlu-jq3n-dv457mz6m-gaw2.vercel.app
+        value: https://kokansey-sarlu-1.onrender.com
       - key: SERVE_FRONTEND
-        value: false
+        value: true
 
 databases:
   - name: kokansey-db
