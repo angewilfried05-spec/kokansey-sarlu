@@ -20,7 +20,7 @@ services:
       - key: JWT_EXPIRES_IN
         value: 24h
       - key: FRONTEND_URL
-        value: https://kokansey-sarlu-1.onrender.com
+        value: https://kokansey-backend.onrender.com
       - key: SERVE_FRONTEND
         value: true
 
