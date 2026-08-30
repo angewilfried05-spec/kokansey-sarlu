@@ -215,10 +215,20 @@ app.get('/api/config.js', (_req, res) => {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.join(__dirname, '../frontend/dist');
+console.log('Frontend dist path:', frontendDistPath);
+console.log('SERVE_FRONTEND:', process.env.SERVE_FRONTEND);
 if (process.env.SERVE_FRONTEND === 'true') {
-  app.use(express.static(frontendDistPath));
-  app.get('*', (_req, res) => {
-    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  app.use(express.static(frontendDistPath, {
+    maxAge: '1h',
+    etag: true
+  }));
+  // SPA fallback - serve index.html for non-API routes
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api')) {
+      res.status(404).json({ error: 'API endpoint not found' });
+    } else {
+      res.sendFile(path.join(frontendDistPath, 'index.html'));
+    }
   });
 }
 
