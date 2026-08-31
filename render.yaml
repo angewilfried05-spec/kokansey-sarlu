@@ -24,11 +24,11 @@ services:
       - key: SERVE_FRONTEND
         value: true
       - key: ADMIN_USERNAME
-        value: admin
+        value: KOKANSEY GROUP
       - key: ADMIN_PASSWORD
-        generateValue: true
+        value: admin123
       - key: ADMIN_NAME
-        value: Administrateur
+        value: YAO KONAN KAN SERAPHIN
       - key: ENABLE_WHATSAPP
         value: false
 
