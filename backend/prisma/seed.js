@@ -39,7 +39,7 @@ async function main() {
     // 1. Speculations
     for (const spec of data.Speculation || []) {
       await prisma.speculation.upsert({
-        where: { id: spec.id },
+        where: { name: spec.name },
         update: spec,
         create: spec,
       });
