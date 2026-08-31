@@ -1,0 +1,429 @@
+{
+  "User": [
+    {
+      "id": "cms7gsp2t0000aqltgfbxjv5h",
+      "username": "KOKANSEY GROUP",
+      "password": "$2a$10$j53zKngywgxc9JrJ9vT68OHbN3bbhI047OAJKQlbPybqXMh.7aTQ.",
+      "name": "YAO KONAN KAN SERAPHIN",
+      "role": "ADMIN",
+      "createdAt": "2026-07-30T12:03:11.477Z",
+      "updatedAt": "2026-07-30T12:03:11.477Z",
+      "contact": null,
+      "email": null
+    }
+  ],
+  "Speculation": [
+    {
+      "id": "cms7gsp3k0001aqltcf2mp6bd",
+      "name": "Hévéa",
+      "category": "Cultures Industrielles",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.504Z"
+    },
+    {
+      "id": "cms7gsp3z0002aqlto8g7b0bh",
+      "name": "Cacao",
+      "category": "Cultures Industrielles",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.520Z"
+    },
+    {
+      "id": "cms7gsp4c0003aqltzm63edaa",
+      "name": "Palmier à huile",
+      "category": "Cultures Industrielles",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.532Z"
+    },
+    {
+      "id": "cms7gsp4o0004aqltdiqqo3t8",
+      "name": "Maïs",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.545Z"
+    },
+    {
+      "id": "cms7gsp540005aqlt02v5os8j",
+      "name": "Riz",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.561Z"
+    },
+    {
+      "id": "cms7gsp5g0006aqltz8yaiq2u",
+      "name": "Igname",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.572Z"
+    },
+    {
+      "id": "cms7gsp5t0007aqltj1tzax22",
+      "name": "Manioc",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.585Z"
+    },
+    {
+      "id": "cms7gsp620008aqlty3b9daaq",
+      "name": "Arachides",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.595Z"
+    },
+    {
+      "id": "cms7gsp6e0009aqltqcg3j4jw",
+      "name": "Gombo",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.606Z"
+    },
+    {
+      "id": "cms7gsp6p000aaqltudhg5l9m",
+      "name": "Piment",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.617Z"
+    },
+    {
+      "id": "cms7gsp71000baqlt7n90hyud",
+      "name": "Papaye",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.629Z"
+    },
+    {
+      "id": "cms7gsp7b000caqltwpyj9evc",
+      "name": "Aubergine",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.639Z"
+    },
+    {
+      "id": "cms7gsp7m000daqltx6ytinuk",
+      "name": "Banane plantain",
+      "category": "Cultures Vivrières",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.650Z"
+    },
+    {
+      "id": "cms7gsp7x000eaqltplt3qvmj",
+      "name": "Canards",
+      "category": "Elevage",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.661Z"
+    },
+    {
+      "id": "cms7gsp88000faqlt7o5kwwoc",
+      "name": "Poules pondeuses",
+      "category": "Elevage",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.672Z"
+    },
+    {
+      "id": "cms7gsp8j000gaqlteqcd8kah",
+      "name": "Poules hybrides",
+      "category": "Elevage",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.683Z"
+    },
+    {
+      "id": "cms7gsp90000haqlt7mtzca1i",
+      "name": "Porcs",
+      "category": "Elevage",
+      "status": "EN_COURS",
+      "areaSize": null,
+      "createdAt": "2026-07-30T12:03:11.700Z"
+    }
+  ],
+  "Client": [
+    {
+      "id": "cms7jyi9v000jbrltj1vnpdwn",
+      "nom": "Mohamed Dao",
+      "telephone": "0787418087",
+      "email": "arnolddao123@gmail.com",
+      "adresse": "",
+      "typeClient": "entreprise",
+      "actif": true,
+      "cooperativeId": null,
+      "createdAt": "2026-07-30T13:31:41.443Z",
+      "updatedAt": "2026-07-30T13:31:41.443Z"
+    },
+    {
+      "id": "cmsbkqvs90000gd1uodsfu0n1",
+      "nom": "Gouré Ange Wilfried",
+      "telephone": "0758652594",
+      "email": "angewilfried05@gmail.com",
+      "adresse": "13 BP 157 Abidjan 13",
+      "typeClient": "entreprise",
+      "actif": true,
+      "cooperativeId": null,
+      "createdAt": "2026-08-02T09:04:50.024Z",
+      "updatedAt": "2026-08-02T09:04:50.024Z"
+    }
+  ],
+  "Cooperative": [],
+  "Sale": [
+    {
+      "id": "cms7jtncn000bbrltirrg02la",
+      "date": "2026-07-30T00:00:00.000Z",
+      "speculationId": "cms7gsp3z0002aqlto8g7b0bh",
+      "product": "Cacao séché",
+      "quantity": 10000,
+      "unit": "KG",
+      "unitPrice": 850,
+      "totalPrice": 8500000,
+      "client": "mohamed dao",
+      "clientId": null,
+      "observation": " [Qualité: Standard]",
+      "campagneId": null,
+      "invoiceId": null,
+      "createdAt": "2026-07-30T13:27:54.743Z"
+    },
+    {
+      "id": "cms7jzq59000obrltl77xnosb",
+      "date": "2026-07-30T00:00:00.000Z",
+      "speculationId": "cms7gsp3k0001aqltcf2mp6bd",
+      "product": "Latex",
+      "quantity": 300,
+      "unit": "KG",
+      "unitPrice": 350,
+      "totalPrice": 105000,
+      "client": "Mohamed Dao",
+      "clientId": "cms7jyi9v000jbrltj1vnpdwn",
+      "observation": " [Qualité: Premium]",
+      "campagneId": "cms7jvb3v000gbrltjfleeb3k",
+      "invoiceId": "cms7jzq5p000qbrltcax7keji",
+      "createdAt": "2026-07-30T13:32:38.301Z"
+    },
+    {
+      "id": "cmsbktfda0009gd1ux0rocgvm",
+      "date": "2026-08-02T00:00:00.000Z",
+      "speculationId": "cms7gsp3z0002aqlto8g7b0bh",
+      "product": "Cacao séché",
+      "quantity": 500,
+      "unit": "KG",
+      "unitPrice": 850,
+      "totalPrice": 425000,
+      "client": "Gouré Ange Wilfried",
+      "clientId": "cmsbkqvs90000gd1uodsfu0n1",
+      "observation": " [Qualité: Standard]",
+      "campagneId": "cms7jvb3v000gbrltjfleeb3k",
+      "invoiceId": "cmsbktfdm000bgd1u9nai2tbb",
+      "createdAt": "2026-08-02T09:06:48.718Z"
+    },
+    {
+      "id": "cmsbl05qe000mgd1ueerzhf6d",
+      "date": "2026-08-02T00:00:00.000Z",
+      "speculationId": "cms7gsp3z0002aqlto8g7b0bh",
+      "product": "Cacao séché",
+      "quantity": 1500,
+      "unit": "KG",
+      "unitPrice": 850,
+      "totalPrice": 1275000,
+      "client": "Mohamed Dao",
+      "clientId": "cms7jyi9v000jbrltj1vnpdwn",
+      "observation": " [Qualité: Standard]",
+      "campagneId": "cms7jvb3v000gbrltjfleeb3k",
+      "invoiceId": "cmsbl05qp000ogd1uglqz6xf7",
+      "createdAt": "2026-08-02T09:12:02.823Z"
+    }
+  ],
+  "Harvest": [
+    {
+      "id": "cms7ij9m70012k48sszkbdiy7",
+      "date": "2026-07-30T00:00:00.000Z",
+      "speculationId": "cms7gsp3k0001aqltcf2mp6bd",
+      "quantity": 500,
+      "unit": "KG",
+      "quality": "Premium",
+      "observation": "test cascade",
+      "campagneId": null,
+      "createdAt": "2026-07-30T12:51:50.768Z"
+    },
+    {
+      "id": "cms7js9sz0002brltsvwch5sv",
+      "date": "2026-07-30T00:00:00.000Z",
+      "speculationId": "cms7gsp3z0002aqlto8g7b0bh",
+      "quantity": 50000,
+      "unit": "KG",
+      "quality": "Standard",
+      "observation": "",
+      "campagneId": null,
+      "createdAt": "2026-07-30T13:26:50.531Z"
+    }
+  ],
+  "Campagne": [
+    {
+      "id": "cms7jvb3v000gbrltjfleeb3k",
+      "nom": "01-08-2026",
+      "description": "",
+      "dateDebut": "2026-08-01T00:00:00.000Z",
+      "dateFin": "2026-08-01T00:00:00.000Z",
+      "actif": true,
+      "createdAt": "2026-07-30T13:29:12.187Z",
+      "updatedAt": "2026-07-30T13:29:12.187Z"
+    }
+  ],
+  "Export": [],
+  "Invoice": [
+    {
+      "id": "cms7jzq5p000qbrltcax7keji",
+      "numero": "FACT-2026-0001",
+      "clientId": "cms7jyi9v000jbrltj1vnpdwn",
+      "dateEmission": "2026-07-30T13:32:38.317Z",
+      "dateEcheance": null,
+      "montantTotal": 105000,
+      "montantPaye": 105000,
+      "statut": "PAYEE",
+      "mentionsLegales": "TVA non applicable - Article 293 B du CGI",
+      "notes": null,
+      "createdAt": "2026-07-30T13:32:38.317Z",
+      "updatedAt": "2026-07-30T13:33:31.526Z"
+    },
+    {
+      "id": "cmsbktfdm000bgd1u9nai2tbb",
+      "numero": "FACT-2026-0002",
+      "clientId": "cmsbkqvs90000gd1uodsfu0n1",
+      "dateEmission": "2026-08-02T09:06:48.729Z",
+      "dateEcheance": null,
+      "montantTotal": 425000,
+      "montantPaye": 425000,
+      "statut": "PAYEE",
+      "mentionsLegales": "TVA non applicable - Article 293 B du CGI",
+      "notes": null,
+      "createdAt": "2026-08-02T09:06:48.729Z",
+      "updatedAt": "2026-08-02T09:25:36.982Z"
+    },
+    {
+      "id": "cmsbl05qp000ogd1uglqz6xf7",
+      "numero": "FACT-2026-0003",
+      "clientId": "cms7jyi9v000jbrltj1vnpdwn",
+      "dateEmission": "2026-08-02T09:12:02.833Z",
+      "dateEcheance": null,
+      "montantTotal": 1275000,
+      "montantPaye": 1275000,
+      "statut": "PAYEE",
+      "mentionsLegales": "TVA non applicable - Article 293 B du CGI",
+      "notes": null,
+      "createdAt": "2026-08-02T09:12:02.833Z",
+      "updatedAt": "2026-08-02T09:17:02.352Z"
+    }
+  ],
+  "Task": [
+    {
+      "id": "cms7hgpgu000ck48s39ymyntx",
+      "title": "Trajet vers Port de SAN PEDRO",
+      "description": "Véhicule: AA-426-AH (TRA-001)\nCargaison: 25 Tonnes de CACAO",
+      "status": "COMPLETED",
+      "priority": "NORMAL",
+      "dueDate": "2026-07-30T00:00:00.000Z",
+      "assignedToId": "cms7hbz6g0000k48sh08nejtv",
+      "truckId": "cms7hfabd0006k48s39guru66",
+      "tripId": "cms7hgpg0000ak48s9xho9epz",
+      "createdById": "cmrhvi9ct0000rawgrg4h46di",
+      "createdAt": "2026-07-30T12:21:51.726Z",
+      "updatedAt": "2026-07-30T12:22:58.631Z"
+    }
+  ],
+  "Notification": [],
+  "Expense": [
+    {
+      "id": "cms7qp10r001lbrlte2r7lz94",
+      "date": "2026-07-30T00:00:00.000Z",
+      "type": "Achat",
+      "category": "Main d'œuvre",
+      "speculationId": "cms7gsp88000faqlt7o5kwwoc",
+      "amount": 750000,
+      "observation": "",
+      "createdAt": "2026-07-30T16:40:16.491Z",
+      "supplier": ""
+    }
+  ],
+  "Employee": [
+    {
+      "id": "cms7hbz6g0000k48sh08nejtv",
+      "firstName": "Faustin",
+      "lastName": "Yao",
+      "hireDate": "2026-01-01T00:00:00.000Z",
+      "salary": 350000,
+      "contact": "0759278281",
+      "position": "Tech",
+      "residence": "Abobo",
+      "cniNumber": "CI00014455874",
+      "matricule": "EMP001",
+      "photoUrl": null,
+      "spouseName": null,
+      "spouseContact": null,
+      "typeSpeculation": "Services",
+      "speculation": "Hévéa",
+      "service": "Production",
+      "contractType": "CDI",
+      "contractStart": "2026-01-01T00:00:00.000Z",
+      "contractEnd": null,
+      "createdAt": "2026-07-30T12:18:11.027Z",
+      "updatedAt": "2026-07-30T12:18:11.027Z"
+    }
+  ],
+  "Truck": [
+    {
+      "id": "cms7hfabd0006k48s39guru66",
+      "internalCode": "TRA-001",
+      "registration": "AA-426-AH",
+      "category": "TRP",
+      "subCategory": "Semi-remorque",
+      "brand": "Iveco",
+      "model": "Trakker",
+      "year": 2022,
+      "assignment": "EXP",
+      "energyType": "Diesel",
+      "mileage": 120,
+      "consumption": 25,
+      "serviceDate": "2026-07-30T00:00:00.000Z",
+      "nextMaintenance": "2026-08-30T00:00:00.000Z",
+      "status": "Disponible",
+      "driverId": "cms7hbz6g0000k48sh08nejtv",
+      "conveyorId": "cms7hbz6g0000k48sh08nejtv",
+      "createdAt": "2026-07-30T12:20:45.433Z",
+      "updatedAt": "2026-07-30T12:20:45.433Z"
+    }
+  ],
+  "Stock": [
+    {
+      "id": "cms7ij9ml0014k48sjd3uuwep",
+      "name": "Hévéa (Récolte)",
+      "category": "Produit Fini",
+      "quantity": 200,
+      "unit": "KG",
+      "minThreshold": 100,
+      "speculationId": "cms7gsp3k0001aqltcf2mp6bd",
+      "createdAt": "2026-07-30T12:51:50.778Z",
+      "updatedAt": "2026-07-30T13:32:38.362Z"
+    },
+    {
+      "id": "cms7js9ti0004brltwht8g3uq",
+      "name": "Cacao (Récolte)",
+      "category": "Produit Fini",
+      "quantity": 38000,
+      "unit": "KG",
+      "minThreshold": 100,
+      "speculationId": "cms7gsp3z0002aqlto8g7b0bh",
+      "createdAt": "2026-07-30T13:26:50.550Z",
+      "updatedAt": "2026-08-02T09:12:02.859Z"
+    }
+  ]
+}
