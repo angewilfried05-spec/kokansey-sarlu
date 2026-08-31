@@ -96,17 +96,7 @@ async function main() {
     }
     console.log(`Imported ${data.Harvest?.length || 0} harvests`);
 
-    // 7. Sales
-    for (const sale of data.Sale || []) {
-      await prisma.sale.upsert({
-        where: { id: sale.id },
-        update: sale,
-        create: sale,
-      });
-    }
-    console.log(`Imported ${data.Sale?.length || 0} sales`);
-
-    // 8. Invoices
+    // 7. Invoices (must be before Sales due to foreign key)
     for (const invoice of data.Invoice || []) {
       await prisma.invoice.upsert({
         where: { id: invoice.id },
@@ -115,6 +105,16 @@ async function main() {
       });
     }
     console.log(`Imported ${data.Invoice?.length || 0} invoices`);
+
+    // 8. Sales
+    for (const sale of data.Sale || []) {
+      await prisma.sale.upsert({
+        where: { id: sale.id },
+        update: sale,
+        create: sale,
+      });
+    }
+    console.log(`Imported ${data.Sale?.length || 0} sales`);
 
     // 9. Tasks
     for (const task of data.Task || []) {
