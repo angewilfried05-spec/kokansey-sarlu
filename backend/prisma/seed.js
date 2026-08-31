@@ -116,15 +116,15 @@ async function main() {
     }
     console.log(`Imported ${data.Sale?.length || 0} sales`);
 
-    // 9. Tasks
-    for (const task of data.Task || []) {
-      await prisma.task.upsert({
-        where: { id: task.id },
-        update: task,
-        create: task,
-      });
-    }
-    console.log(`Imported ${data.Task?.length || 0} tasks`);
+    // 9. Tasks - Skipped (depends on Trips which are not exported)
+    // for (const task of data.Task || []) {
+    //   await prisma.task.upsert({
+    //     where: { id: task.id },
+    //     update: task,
+    //     create: task,
+    //   });
+    // }
+    // console.log(`Imported ${data.Task?.length || 0} tasks`);
 
     // 10. Expenses
     for (const expense of data.Expense || []) {
