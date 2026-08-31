@@ -385,9 +385,12 @@ async function sendWhatsAppMessage(to, message) {
     }
 }
 
-// Initialiser le client au démarrage si disponible
-if (isWhatsAppAvailable) {
+// Initialiser le client au démarrage si disponible et activé
+const enableWhatsApp = process.env.ENABLE_WHATSAPP === 'true';
+if (isWhatsAppAvailable && enableWhatsApp) {
     initClientIfNeeded().catch(err => console.error('[WhatsApp] Erreur initialisation:', err));
+} else if (!enableWhatsApp) {
+    console.log('[WhatsApp] Service désactivé via ENABLE_WHATSAPP=false');
 }
 
 export default {

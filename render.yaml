@@ -29,6 +29,8 @@ services:
         generateValue: true
       - key: ADMIN_NAME
         value: Administrateur
+      - key: ENABLE_WHATSAPP
+        value: false
 
 databases:
   - name: kokansey-db
