@@ -115,8 +115,8 @@ const userCreateSchema = z.object({
   username: z.string().min(3, 'Identifiant trop court'),
   password: z.string().min(6, 'Mot de passe trop court'),
   name: z.string().min(2, 'Nom trop court'),
-  email: z.string().email('Email invalide').optional().nullable(),
-  contact: z.string().min(8, 'Contact invalide').optional().nullable(),
+  email: z.union([z.string().email('Email invalide'), z.literal('')]).optional().nullable(),
+  contact: z.union([z.string().min(8, 'Contact invalide'), z.literal('')]).optional().nullable(),
   role: z.enum(userRoles).default('GERANT')
 });
 
@@ -124,8 +124,8 @@ const userUpdateSchema = z.object({
   username: z.string().min(3).optional(),
   password: z.string().min(6).optional().nullable(),
   name: z.string().min(2).optional(),
-  email: z.string().email().optional().nullable(),
-  contact: z.string().min(8).optional().nullable(),
+  email: z.union([z.string().email(), z.literal('')]).optional().nullable(),
+  contact: z.union([z.string().min(8), z.literal('')]).optional().nullable(),
   role: z.enum(userRoles).optional()
 });
 
