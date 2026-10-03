@@ -99,15 +99,15 @@ export default function registerMonthlyRoutes(app, { prisma, authenticate, logAc
   app.get('/api/monthly/journal', authenticate, async (req, res) => {
     try {
       const { month } = req.query;
-      
-      const where = month ? { month: month as string } : {};
-      
+
+      const where = month ? { month: String(month) } : {};
+
       const journal = await prisma.monthlyJournal.findMany({
         where,
         orderBy: { date: 'desc' },
         take: 100
       });
-      
+
       res.json(journal);
     } catch (error) {
       console.error('Error fetching monthly journal:', error);
