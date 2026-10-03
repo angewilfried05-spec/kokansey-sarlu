@@ -278,7 +278,7 @@ export default function StockPage() {
                         <Edit className="w-5 h-5" />
                       </button>
                     )}
-                    {isAdmin && (
+                    {(isAdmin || isStockManager) && (
                       <button 
                         onClick={() => handleDeleteStock(item.id)}
                         className="p-2 bg-gray-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition-all"

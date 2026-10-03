@@ -16,6 +16,7 @@ import NotificationsPage from './pages/NotificationsPage';
 import TasksPage from './pages/TasksPage';
 import ClientAccountsPage from './pages/ClientAccountsPage';
 import InvoicesPage from './pages/InvoicesPage';
+import MonthlyReportPage from './pages/MonthlyReportPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="users" element={<UserManagementPage />} />
           <Route path="audit" element={<AuditLogsPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="monthly" element={<MonthlyReportPage />} />
         </Route>
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>

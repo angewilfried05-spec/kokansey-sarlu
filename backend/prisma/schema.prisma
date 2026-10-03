@@ -381,3 +381,37 @@ model Task {
 
   @@map("tasks")
 }
+
+model MonthlyCounter {
+  id          String   @id @default(cuid())
+  month       String   // Format: YYYY-MM (ex: 2026-09)
+  year        Int
+  monthNumber Int      @map("month_number")
+  salesCount  Int      @default(0) @map("sales_count")
+  expensesCount Int    @default(0) @map("expenses_count")
+  stockMovementsCount Int @default(0) @map("stock_movements_count")
+  harvestsCount Int     @default(0) @map("harvests_count")
+  totalSalesAmount Float @default(0) @map("total_sales_amount")
+  totalExpensesAmount Float @default(0) @map("total_expenses_amount")
+  notes       String?
+  resetAt     DateTime? @map("reset_at")
+  resetBy     String?   @map("reset_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([month])
+  @@map("monthly_counters")
+}
+
+model MonthlyJournal {
+  id          String   @id @default(cuid())
+  month       String   // Format: YYYY-MM
+  date        DateTime @default(now())
+  type        String   // SALE, EXPENSE, HARVEST, STOCK, NOTE
+  description String
+  amount      Float?
+  metadata    String?  // JSON string for additional data
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("monthly_journal")
+}

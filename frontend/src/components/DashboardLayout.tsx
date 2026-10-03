@@ -70,6 +70,7 @@ export default function DashboardLayout() {
     if (path === "/dashboard/users") return "Gestion des Utilisateurs";
     if (path === "/dashboard/audit") return "Journaux d'Audit";
     if (path === "/dashboard/invoices") return "Facturation";
+    if (path === "/dashboard/monthly") return "Rapport Mensuel";
     return "KOKANSEY";
   };
 

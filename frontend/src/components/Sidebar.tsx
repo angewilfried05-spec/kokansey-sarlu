@@ -16,7 +16,8 @@ import {
   Bell,
   Wallet,
   FileText,
-  ClipboardList
+  ClipboardList,
+  Calendar
 } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -31,6 +32,7 @@ const menuItems = [
   { name: "Comptes d'Exploitation", href: "/dashboard/accounts", icon: Calculator, category: "Finance" },
   { name: "Comptes Clients", href: "/dashboard/client-accounts", icon: Wallet, category: "Finance" },
   { name: "Facturation", href: "/dashboard/invoices", icon: FileText, category: "Finance" },
+  { name: "Rapport Mensuel", href: "/dashboard/monthly", icon: Calendar, category: "Finance" },
   { name: "Rapports", href: "/dashboard/reports", icon: TrendingUp, category: "Finance" },
   { name: "Tâches", href: "/dashboard/tasks", icon: ClipboardList, category: "RH & Logistique" },
 ];

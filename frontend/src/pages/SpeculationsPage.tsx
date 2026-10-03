@@ -921,7 +921,7 @@ export default function SpeculationsPage() {
       {/* Sale Modal */}
       {showSaleModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouvelle Vente</h3>
               <button onClick={() => setShowSaleModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
@@ -935,7 +935,7 @@ export default function SpeculationsPage() {
                   <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Culture / Spéculation</label>
                   <select 
                     required 
-                    className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold" 
+                    className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold focus:ring-2 focus:ring-primary/20 outline-none" 
                     value={saleFormData.speculationId} 
                     onChange={e => setSaleFormData({...saleFormData, speculationId: e.target.value})}
                   >
@@ -947,7 +947,7 @@ export default function SpeculationsPage() {
                 </div>
                 <div>
                   <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 tracking-widest">Produit spécifique</label>
-                  <input type="text" required placeholder="Ex: Latex, Fond de tasse..." className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold" value={saleFormData.product} onChange={e => setSaleFormData({...saleFormData, product: e.target.value})} />
+                  <input type="text" required placeholder="Ex: Latex, Fond de tasse..." className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold focus:ring-2 focus:ring-primary/20 outline-none" value={saleFormData.product} onChange={e => setSaleFormData({...saleFormData, product: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>

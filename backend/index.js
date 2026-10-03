@@ -24,6 +24,7 @@ import registerStocksRoutes from './routes/stocks.routes.js';
 import registerUsersRoutes from './routes/users.routes.js';
 import registerReportsRoutes from './routes/reports.routes.js';
 import registerWhatsAppRoutes from './routes/whatsapp.routes.js';
+import registerMonthlyRoutes from './routes/monthly.routes.js';
 import notificationService from './services/notifications.js';
 
 dotenv.config();
@@ -204,6 +205,7 @@ registerInvoicesRoutes(app, deps);
 registerClientOperationsRoutes(app, deps);
 registerNotificationsRoutes(app, deps);
 registerSearchRoutes(app, deps);
+registerMonthlyRoutes(app, deps);
 
 // Health & runtime config endpoints (desktop / PWA)
 app.get('/api/health', (_req, res) => {
