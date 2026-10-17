@@ -28,6 +28,7 @@ fun ExpensesScreen(vm: OpsViewModel, isAdmin: Boolean) {
     var query by remember { mutableStateOf("") }
     var showForm by remember { mutableStateOf(false) }
     var deleteTarget by remember { mutableStateOf<Expense?>(null) }
+    var editTarget by remember { mutableStateOf<Expense?>(null) }
     var feedback by remember { mutableStateOf<String?>(null) }
     val snackbar = remember { SnackbarHostState() }
 
@@ -67,6 +68,7 @@ fun ExpensesScreen(vm: OpsViewModel, isAdmin: Boolean) {
                 ) {
                     items(filtered, key = { it.id }) { exp ->
                         Card(shape = RoundedCornerShape(14.dp),
+                            onClick = { editTarget = exp },
                             elevation = CardDefaults.cardElevation(1.dp)) {
                             Row(Modifier.fillMaxWidth().padding(14.dp),
                                 verticalAlignment = Alignment.CenterVertically) {
@@ -119,16 +121,20 @@ fun ExpensesScreen(vm: OpsViewModel, isAdmin: Boolean) {
         )
     }
 
-    if (showForm) {
+    if (showForm || editTarget != null) {
+        val editing = editTarget
         ExpenseFormDialog(
             speculations = state.speculations,
             saving = state.saving,
-            onDismiss = { showForm = false },
+            initial = editing,
+            onDismiss = { showForm = false; editTarget = null },
             onSubmit = { req ->
-                vm.createExpense(req) { ok, err ->
-                    if (ok) showForm = false
+                val done: (Boolean, String?) -> Unit = { ok, err ->
+                    if (ok) { showForm = false; editTarget = null }
                     feedback = if (ok) "Dépense enregistrée" else err ?: "Échec"
                 }
+                if (editing != null) vm.updateExpense(editing.id, req, done)
+                else vm.createExpense(req, done)
             }
         )
     }
@@ -139,21 +145,22 @@ fun ExpensesScreen(vm: OpsViewModel, isAdmin: Boolean) {
 private fun ExpenseFormDialog(
     speculations: List<com.kokansey.app.data.Speculation>,
     saving: Boolean,
+    initial: Expense? = null,
     onDismiss: () -> Unit,
     onSubmit: (ExpenseRequest) -> Unit
 ) {
-    var type by remember { mutableStateOf("") }
-    var category by remember { mutableStateOf("") }
-    var amount by remember { mutableStateOf("") }
-    var supplier by remember { mutableStateOf("") }
-    var observation by remember { mutableStateOf("") }
-    var specId by remember { mutableStateOf<String?>(null) }
+    var type by remember { mutableStateOf(initial?.type ?: "") }
+    var category by remember { mutableStateOf(initial?.category ?: "") }
+    var amount by remember { mutableStateOf(initial?.amount?.toLong()?.toString() ?: "") }
+    var supplier by remember { mutableStateOf(initial?.supplier ?: "") }
+    var observation by remember { mutableStateOf(initial?.observation ?: "") }
+    var specId by remember { mutableStateOf<String?>(initial?.speculation?.id) }
     var specOpen by remember { mutableStateOf(false) }
     var formError by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nouvelle dépense") },
+        title = { Text(if (initial == null) "Nouvelle dépense" else "Modifier la dépense") },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ExposedDropdownMenuBox(specOpen, { specOpen = it }) {

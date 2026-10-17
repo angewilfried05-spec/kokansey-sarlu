@@ -30,10 +30,11 @@ fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel, isAdmin:
     var showForm by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     var deleteTarget by remember { mutableStateOf<Harvest?>(null) }
+    var editTarget by remember { mutableStateOf<Harvest?>(null) }
 
     LaunchedEffect(Unit) { vm.refresh(); specVm.load() }
     LaunchedEffect(state.saveSuccess) {
-        if (state.saveSuccess) { showForm = false; vm.consumeSaveSuccess() }
+        if (state.saveSuccess) { showForm = false; editTarget = null; vm.consumeSaveSuccess() }
     }
 
     Scaffold(
@@ -66,16 +67,22 @@ fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel, isAdmin:
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(filtered, key = { it.id }) { h ->
-                        HarvestCard(h, isAdmin) { deleteTarget = h }
+                        HarvestCard(h, isAdmin,
+                            onClick = { editTarget = h },
+                            onDelete = { deleteTarget = h })
                     }
                 }
             }
         }
     }
 
-    if (showForm) {
+    if (showForm || editTarget != null) {
+        val editing = editTarget
         HarvestFormDialog(speculations, state.saving, state.error,
-            onDismiss = { showForm = false }) { vm.create(it) }
+            initial = editing,
+            onDismiss = { showForm = false; editTarget = null }) { req ->
+            if (editing != null) vm.update(editing.id, req) else vm.create(req)
+        }
     }
 
     deleteTarget?.let { h ->
@@ -89,8 +96,9 @@ fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel, isAdmin:
 }
 
 @Composable
-private fun HarvestCard(h: Harvest, isAdmin: Boolean, onDelete: () -> Unit) {
+private fun HarvestCard(h: Harvest, isAdmin: Boolean, onClick: () -> Unit, onDelete: () -> Unit) {
     Card(shape = RoundedCornerShape(14.dp),
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
@@ -122,18 +130,24 @@ private fun HarvestCard(h: Harvest, isAdmin: Boolean, onDelete: () -> Unit) {
 private fun HarvestFormDialog(
     speculations: List<Speculation>,
     saving: Boolean, error: String?,
+    initial: Harvest? = null,
     onDismiss: () -> Unit, onSubmit: (HarvestRequest) -> Unit
 ) {
-    var quantity by remember { mutableStateOf("") }
-    var unit by remember { mutableStateOf("kg") }
-    var quality by remember { mutableStateOf("") }
-    var selectedSpec by remember { mutableStateOf<Speculation?>(null) }
+    var quantity by remember {
+        mutableStateOf(initial?.quantity?.let { formatQuantity(it) } ?: "")
+    }
+    var unit by remember { mutableStateOf(initial?.unit ?: "kg") }
+    var quality by remember { mutableStateOf(initial?.quality ?: "") }
+    var selectedSpec by remember {
+        mutableStateOf<Speculation?>(initial?.speculation)
+    }
     var specExpanded by remember { mutableStateOf(false) }
     var formError by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nouvelle récolte", fontWeight = FontWeight.Bold) },
+        title = { Text(if (initial == null) "Nouvelle récolte" else "Modifier la récolte",
+            fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ExposedDropdownMenuBox(expanded = specExpanded, onExpandedChange = { specExpanded = it }) {

@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -81,6 +82,16 @@ fun InvoicesScreen(vm: OpsViewModel) {
                                             Icon(Icons.Outlined.Payments, "Encaisser",
                                                 tint = MaterialTheme.colorScheme.primary)
                                         }
+                                    }
+                                    IconButton(onClick = {
+                                        vm.sendInvoicePdf(inv.id) { ok, err ->
+                                            feedback = if (ok) "Facture envoyée par WhatsApp"
+                                                       else err ?: "Échec d'envoi"
+                                        }
+                                    }) {
+                                        Icon(Icons.Outlined.Send, "Envoyer par WhatsApp",
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            modifier = Modifier.size(20.dp))
                                     }
                                 }
                             }

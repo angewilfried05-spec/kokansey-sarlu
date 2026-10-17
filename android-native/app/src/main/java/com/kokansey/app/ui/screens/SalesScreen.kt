@@ -29,10 +29,11 @@ fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel, isAdmin: Boole
     var showForm by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
     var deleteTarget by remember { mutableStateOf<Sale?>(null) }
+    var editTarget by remember { mutableStateOf<Sale?>(null) }
 
     LaunchedEffect(Unit) { vm.refresh(); specVm.load() }
     LaunchedEffect(state.saveSuccess) {
-        if (state.saveSuccess) { showForm = false; vm.consumeSaveSuccess() }
+        if (state.saveSuccess) { showForm = false; editTarget = null; vm.consumeSaveSuccess() }
     }
 
     Scaffold(
@@ -66,20 +67,26 @@ fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel, isAdmin: Boole
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     items(filtered, key = { it.id }) { sale ->
-                        SaleCard(sale, isAdmin) { deleteTarget = sale }
+                        SaleCard(sale, isAdmin,
+                            onClick = { editTarget = sale },
+                            onDelete = { deleteTarget = sale })
                     }
                 }
             }
         }
     }
 
-    if (showForm) {
+    if (showForm || editTarget != null) {
+        val editing = editTarget
         SaleFormDialog(
             speculations = speculations,
             saving = state.saving,
             error = state.error,
-            onDismiss = { showForm = false },
-            onSubmit = { vm.create(it) }
+            initial = editing,
+            onDismiss = { showForm = false; editTarget = null },
+            onSubmit = { req ->
+                if (editing != null) vm.update(editing.id, req) else vm.create(req)
+            }
         )
     }
 
@@ -94,8 +101,9 @@ fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel, isAdmin: Boole
 }
 
 @Composable
-private fun SaleCard(sale: Sale, isAdmin: Boolean, onDelete: () -> Unit) {
+private fun SaleCard(sale: Sale, isAdmin: Boolean, onClick: () -> Unit, onDelete: () -> Unit) {
     Card(shape = RoundedCornerShape(14.dp),
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
@@ -132,21 +140,29 @@ private fun SaleFormDialog(
     speculations: List<Speculation>,
     saving: Boolean,
     error: String?,
+    initial: Sale? = null,
     onDismiss: () -> Unit,
     onSubmit: (SaleRequest) -> Unit
 ) {
-    var product by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("") }
-    var unit by remember { mutableStateOf("kg") }
-    var unitPrice by remember { mutableStateOf("") }
-    var client by remember { mutableStateOf("") }
-    var selectedSpec by remember { mutableStateOf<Speculation?>(null) }
+    var product by remember { mutableStateOf(initial?.product ?: "") }
+    var quantity by remember {
+        mutableStateOf(initial?.quantity?.let { formatQuantity(it) } ?: "")
+    }
+    var unit by remember { mutableStateOf(initial?.unit ?: "kg") }
+    var unitPrice by remember {
+        mutableStateOf(initial?.unitPrice?.toLong()?.toString() ?: "")
+    }
+    var client by remember { mutableStateOf(initial?.client ?: "") }
+    var selectedSpec by remember {
+        mutableStateOf<Speculation?>(initial?.speculation)
+    }
     var specExpanded by remember { mutableStateOf(false) }
     var formError by remember { mutableStateOf<String?>(null) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Nouvelle vente", fontWeight = FontWeight.Bold) },
+        title = { Text(if (initial == null) "Nouvelle vente" else "Modifier la vente",
+            fontWeight = FontWeight.Bold) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 ExposedDropdownMenuBox(

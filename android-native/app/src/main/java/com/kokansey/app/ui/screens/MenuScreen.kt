@@ -24,6 +24,7 @@ enum class AppModule(val label: String, val subtitle: String, val icon: ImageVec
     HR("Employés & Tâches", "RH et suivi d'activité", Icons.Outlined.Groups),
     FLEET("Camions & Missions", "Flotte et trajets", Icons.Outlined.LocalShipping),
     INVOICES("Factures", "Statuts & encaissements", Icons.Outlined.Description),
+    REPORT("Rapport", "Compteurs & journal mensuel", Icons.Outlined.Assessment),
     NOTIFICATIONS("Notifications", "Alertes métier", Icons.Outlined.Notifications)
 }
 

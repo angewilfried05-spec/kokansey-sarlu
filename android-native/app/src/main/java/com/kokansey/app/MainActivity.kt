@@ -169,6 +169,7 @@ private fun App(
                     AppModule.HR -> HrScreen(hrFleetVm, isAdmin)
                     AppModule.FLEET -> FleetScreen(hrFleetVm)
                     AppModule.INVOICES -> InvoicesScreen(opsVm)
+                    AppModule.REPORT -> ReportScreen(opsVm)
                     AppModule.NOTIFICATIONS -> NotificationsScreen(opsVm)
                 }
             } else {

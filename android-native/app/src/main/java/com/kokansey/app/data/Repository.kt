@@ -102,6 +102,22 @@ class Repository(val session: SessionManager, baseUrl: String) {
         if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
     }
 
+    // ---------- Modifications ----------
+    suspend fun updateSale(id: String, req: SaleRequest) = runCatching {
+        val res = api.updateSale(id, req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    suspend fun updateHarvest(id: String, req: HarvestRequest) = runCatching {
+        val res = api.updateHarvest(id, req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    suspend fun updateExpense(id: String, req: ExpenseRequest) = runCatching {
+        val res = api.updateExpense(id, req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
     // ---------- Suppressions ----------
     suspend fun deleteSale(id: String) = runCatching {
         val res = api.deleteSale(id)
@@ -208,6 +224,30 @@ class Repository(val session: SessionManager, baseUrl: String) {
         val res = api.getNotifications()
         if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
         res.body()!!
+    }
+
+    // ---------- Rapport mensuel ----------
+    suspend fun getMonthlyCounter() = runCatching {
+        val res = api.getMonthlyCounter()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun getMonthlyCounters() = runCatching {
+        val res = api.getMonthlyCounters()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun getMonthlyJournal() = runCatching {
+        val res = api.getMonthlyJournal()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun sendInvoicePdf(id: String) = runCatching {
+        val res = api.sendInvoicePdf(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
     }
 }
 

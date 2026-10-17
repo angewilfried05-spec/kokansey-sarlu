@@ -13,6 +13,9 @@ data class OpsUiState(
     val invoices: List<Invoice> = emptyList(),
     val notifications: List<AppNotification> = emptyList(),
     val speculations: List<Speculation> = emptyList(),
+    val counter: MonthlyCounter? = null,
+    val counters: List<MonthlyCounter> = emptyList(),
+    val journal: List<JournalEntry> = emptyList(),
     val loading: Boolean = true,
     val saving: Boolean = false,
     val error: String? = null
@@ -38,11 +41,17 @@ class OpsViewModel(private val repo: Repository) : ViewModel() {
             val invoices = async { repo.getInvoices() }
             val notifs = async { repo.getNotifications() }
             val specs = async { repo.getSpeculations() }
+            val counter = async { repo.getMonthlyCounter() }
+            val counters = async { repo.getMonthlyCounters() }
+            val journal = async { repo.getMonthlyJournal() }
             _state.value = _state.value.copy(
                 expenses = expenses.await().getOrDefault(emptyList()),
                 invoices = invoices.await().getOrDefault(emptyList()),
                 notifications = notifs.await().getOrDefault(emptyList()),
                 speculations = specs.await().getOrDefault(emptyList()),
+                counter = counter.await().getOrNull(),
+                counters = counters.await().getOrDefault(emptyList()),
+                journal = journal.await().getOrDefault(emptyList()),
                 loading = false,
                 error = null
             )
@@ -59,6 +68,14 @@ class OpsViewModel(private val repo: Repository) : ViewModel() {
 
     fun payInvoice(id: String, montant: Double, mode: String?, onDone: (Boolean, String?) -> Unit) {
         runSaving(onDone) { repo.payInvoice(id, montant, mode); load() }
+    }
+
+    fun updateExpense(id: String, req: ExpenseRequest, onDone: (Boolean, String?) -> Unit) {
+        runSaving(onDone) { repo.updateExpense(id, req); load() }
+    }
+
+    fun sendInvoicePdf(id: String, onDone: (Boolean, String?) -> Unit) {
+        runSaving(onDone) { repo.sendInvoicePdf(id); load() }
     }
 
     private fun runSaving(onDone: (Boolean, String?) -> Unit, block: suspend () -> Unit) {

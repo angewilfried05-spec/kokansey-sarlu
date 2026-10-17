@@ -321,3 +321,29 @@ data class InvoicePaymentRequest(
     val montant: Double,
     val modePaiement: String? = null
 )
+
+// ---------- Rapport mensuel ----------
+@Serializable
+data class MonthlyCounter(
+    val id: String,
+    val month: String,
+    val year: Int,
+    val monthNumber: Int,
+    val salesCount: Int = 0,
+    val expensesCount: Int = 0,
+    val stockMovementsCount: Int = 0,
+    val harvestsCount: Int = 0,
+    val totalSalesAmount: Double = 0.0,
+    val totalExpensesAmount: Double = 0.0
+)
+
+@Serializable
+data class JournalEntry(
+    val id: String,
+    val month: String,
+    val date: String,
+    val action: String,
+    val entity: String? = null,
+    val details: String? = null,
+    val userName: String? = null
+)

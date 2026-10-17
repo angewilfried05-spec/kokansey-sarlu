@@ -60,6 +60,16 @@ interface KokanseyApi {
     @POST("api/harvests")
     suspend fun createHarvest(@Body body: HarvestRequest): Response<Unit>
 
+    // ---------- Modifications ----------
+    @PUT("api/sales/{id}")
+    suspend fun updateSale(@Path("id") id: String, @Body body: SaleRequest): Response<Unit>
+
+    @PUT("api/harvests/{id}")
+    suspend fun updateHarvest(@Path("id") id: String, @Body body: HarvestRequest): Response<Unit>
+
+    @PUT("api/expenses/{id}")
+    suspend fun updateExpense(@Path("id") id: String, @Body body: ExpenseRequest): Response<Unit>
+
     // ---------- Suppressions ----------
     @DELETE("api/sales/{id}")
     suspend fun deleteSale(@Path("id") id: String): Response<Unit>
@@ -119,6 +129,20 @@ interface KokanseyApi {
     // ---------- Notifications ----------
     @GET("api/notifications")
     suspend fun getNotifications(): Response<List<AppNotification>>
+
+    // ---------- Rapport mensuel ----------
+    @GET("api/monthly/counter")
+    suspend fun getMonthlyCounter(): Response<MonthlyCounter>
+
+    @GET("api/monthly/counters")
+    suspend fun getMonthlyCounters(): Response<List<MonthlyCounter>>
+
+    @GET("api/monthly/journal")
+    suspend fun getMonthlyJournal(): Response<List<JournalEntry>>
+
+    // ---------- Facture WhatsApp ----------
+    @POST("api/invoices/{id}/send-pdf")
+    suspend fun sendInvoicePdf(@Path("id") id: String): Response<Unit>
 }
 
 object ApiClient {

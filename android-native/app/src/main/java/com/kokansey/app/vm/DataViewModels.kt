@@ -95,6 +95,8 @@ class SalesViewModel(private val repo: Repository) : BaseListViewModel<Sale>(rep
 
     fun create(req: SaleRequest) = runSave { repo.createSale(req).also { it.onSuccess { refresh() } } }
 
+    fun update(id: String, req: SaleRequest) = runSave { repo.updateSale(id, req).also { it.onSuccess { refresh() } } }
+
     fun delete(id: String) = runSave { repo.deleteSale(id).also { it.onSuccess { refresh() } } }
 }
 
@@ -143,6 +145,8 @@ class HarvestsViewModel(private val repo: Repository) : BaseListViewModel<Harves
     }
 
     fun create(req: HarvestRequest) = runSave { repo.createHarvest(req).also { it.onSuccess { refresh() } } }
+
+    fun update(id: String, req: HarvestRequest) = runSave { repo.updateHarvest(id, req).also { it.onSuccess { refresh() } } }
 
     fun delete(id: String) = runSave { repo.deleteHarvest(id).also { it.onSuccess { refresh() } } }
 }
