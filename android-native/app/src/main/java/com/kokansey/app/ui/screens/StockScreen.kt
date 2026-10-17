@@ -25,6 +25,7 @@ fun StockScreen(vm: StockViewModel) {
     var showNewItem by remember { mutableStateOf(false) }
     var movementTarget by remember { mutableStateOf<Stock?>(null) }
     var movementType by remember { mutableStateOf("IN") }
+    var query by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) { vm.refresh() }
     LaunchedEffect(state.saveSuccess) {
@@ -45,16 +46,21 @@ fun StockScreen(vm: StockViewModel) {
                     Icon(Icons.Filled.Refresh, "Actualiser")
                 }
             }
+            SearchField(query, { query = it })
+
+            val filtered = state.items.filter {
+                query.isBlank() || it.name.contains(query, ignoreCase = true)
+            }
             when {
                 state.loading -> LoadingBox()
                 state.error != null && state.items.isEmpty() ->
                     ErrorBox(state.error ?: "Erreur") { vm.refresh() }
-                state.items.isEmpty() -> EmptyBox("Aucun article en stock.\nAppuyez sur + pour en créer un.")
+                filtered.isEmpty() -> EmptyBox("Aucun article en stock.\nAppuyez sur + pour en créer un.")
                 else -> LazyColumn(
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(state.items, key = { it.id }) { stock ->
+                    items(filtered, key = { it.id }) { stock ->
                         StockCard(
                             stock,
                             onIn = { movementTarget = stock; movementType = "IN" },

@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,10 +23,12 @@ import com.kokansey.app.vm.SpeculationViewModel
 import com.kokansey.app.vm.todayIso
 
 @Composable
-fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel) {
+fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel, isAdmin: Boolean = false) {
     val state by vm.state.collectAsState()
     val speculations by specVm.speculations.collectAsState()
     var showForm by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    var deleteTarget by remember { mutableStateOf<Sale?>(null) }
 
     LaunchedEffect(Unit) { vm.refresh(); specVm.load() }
     LaunchedEffect(state.saveSuccess) {
@@ -46,16 +49,25 @@ fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel) {
                     Icon(Icons.Filled.Refresh, "Actualiser")
                 }
             }
+            SearchField(query, { query = it })
+
+            val filtered = state.items.filter {
+                query.isBlank() || listOfNotNull(
+                    it.product, it.client, it.speculation?.name
+                ).any { s -> s.contains(query, ignoreCase = true) }
+            }
             when {
                 state.loading -> LoadingBox()
                 state.error != null && state.items.isEmpty() ->
                     ErrorBox(state.error ?: "Erreur") { vm.refresh() }
-                state.items.isEmpty() -> EmptyBox("Aucune vente enregistrée.\nAppuyez sur + pour commencer.")
+                filtered.isEmpty() -> EmptyBox("Aucune vente enregistrée.\nAppuyez sur + pour commencer.")
                 else -> LazyColumn(
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(state.items, key = { it.id }) { sale -> SaleCard(sale) }
+                    items(filtered, key = { it.id }) { sale ->
+                        SaleCard(sale, isAdmin) { deleteTarget = sale }
+                    }
                 }
             }
         }
@@ -70,10 +82,19 @@ fun SalesScreen(vm: SalesViewModel, specVm: SpeculationViewModel) {
             onSubmit = { vm.create(it) }
         )
     }
+
+    deleteTarget?.let { sale ->
+        ConfirmDeleteDialog(
+            title = "Supprimer la vente",
+            message = "${sale.product} — ${formatMoney(sale.totalPrice)}",
+            onConfirm = { deleteTarget = null; vm.delete(sale.id) },
+            onDismiss = { deleteTarget = null }
+        )
+    }
 }
 
 @Composable
-private fun SaleCard(sale: Sale) {
+private fun SaleCard(sale: Sale, isAdmin: Boolean, onDelete: () -> Unit) {
     Card(shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -91,8 +112,16 @@ private fun SaleCard(sale: Sale) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Text(formatMoney(sale.totalPrice), style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Column(horizontalAlignment = Alignment.End) {
+                Text(formatMoney(sale.totalPrice), style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                if (isAdmin) {
+                    IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
+                        Icon(Icons.Outlined.Delete, "Supprimer",
+                            tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
+                    }
+                }
+            }
         }
     }
 }

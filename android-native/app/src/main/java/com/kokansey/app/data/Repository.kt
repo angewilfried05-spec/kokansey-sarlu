@@ -101,6 +101,114 @@ class Repository(val session: SessionManager, baseUrl: String) {
         val res = api.createHarvest(req)
         if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
     }
+
+    // ---------- Suppressions ----------
+    suspend fun deleteSale(id: String) = runCatching {
+        val res = api.deleteSale(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    suspend fun deleteHarvest(id: String) = runCatching {
+        val res = api.deleteHarvest(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    suspend fun deleteExpense(id: String) = runCatching {
+        val res = api.deleteExpense(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    suspend fun deleteTask(id: String) = runCatching {
+        val res = api.deleteTask(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    // ---------- Dépenses ----------
+    suspend fun getExpenses() = runCatching {
+        val res = api.getExpenses()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun createExpense(req: ExpenseRequest) = runCatching {
+        val res = api.createExpense(req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    // ---------- Employés & Tâches ----------
+    suspend fun getEmployees() = runCatching {
+        val res = api.getEmployees()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun createEmployee(req: EmployeeRequest) = runCatching {
+        val res = api.createEmployee(req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun getTasks() = runCatching {
+        val res = api.getTasks()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun createTask(req: TaskRequest) = runCatching {
+        val res = api.createTask(req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun updateTask(id: String, req: TaskRequest) = runCatching {
+        val res = api.updateTask(id, req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    // ---------- Camions & Missions ----------
+    suspend fun getTrucks() = runCatching {
+        val res = api.getTrucks()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun getTrips() = runCatching {
+        val res = api.getTrips()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun createTrip(req: TripRequest) = runCatching {
+        val res = api.createTrip(req)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun completeTrip(id: String) = runCatching {
+        val res = api.completeTrip(id)
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    // ---------- Factures ----------
+    suspend fun getInvoices() = runCatching {
+        val res = api.getInvoices()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
+
+    suspend fun payInvoice(id: String, montant: Double, mode: String?) = runCatching {
+        val res = api.payInvoice(id, InvoicePaymentRequest(montant, mode))
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+    }
+
+    // ---------- Notifications ----------
+    suspend fun getNotifications() = runCatching {
+        val res = api.getNotifications()
+        if (!res.isSuccessful) throw ApiException(res.errorMessage()!!)
+        res.body()!!
+    }
 }
 
 class ApiException(message: String) : Exception(message)

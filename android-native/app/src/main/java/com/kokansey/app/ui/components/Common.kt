@@ -4,7 +4,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -116,4 +119,108 @@ fun ScreenHeader(title: String, subtitle: String? = null, actions: @Composable R
         }
         actions()
     }
+}
+
+@Composable
+fun SearchField(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholder: String = "Rechercher…"
+) {
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        placeholder = { Text(placeholder) },
+        leadingIcon = {
+            Icon(Icons.Outlined.Search, contentDescription = null,
+                modifier = Modifier.size(20.dp))
+        },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Outlined.Clear, contentDescription = "Effacer",
+                        modifier = Modifier.size(18.dp))
+                }
+            }
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(14.dp)
+    )
+}
+
+@Composable
+fun StatusChip(status: String) {
+    val (bg, fg, label) = when (status.uppercase()) {
+        "PAYEE", "PAYÉE", "COMPLETED", "TERMINEE", "TERMINÉE", "ACTIF", "Disponible".uppercase() ->
+            Triple(
+                MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                MaterialTheme.colorScheme.primary,
+                statusLabel(status)
+            )
+        "PARTIELLEMENT_PAYEE", "IN_PROGRESS", "EN_COURS" ->
+            Triple(
+                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f),
+                MaterialTheme.colorScheme.tertiary,
+                statusLabel(status)
+            )
+        "EN_ATTENTE", "PENDING" ->
+            Triple(
+                MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f),
+                MaterialTheme.colorScheme.onSurface,
+                statusLabel(status)
+            )
+        else ->
+            Triple(
+                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+                MaterialTheme.colorScheme.error,
+                statusLabel(status)
+            )
+    }
+    Surface(color = bg, shape = RoundedCornerShape(50)) {
+        Text(label, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.labelSmall, color = fg,
+            fontWeight = FontWeight.SemiBold)
+    }
+}
+
+fun statusLabel(status: String): String = when (status.uppercase()) {
+    "PENDING" -> "En attente"
+    "IN_PROGRESS" -> "En cours"
+    "COMPLETED" -> "Terminée"
+    "CANCELLED" -> "Annulée"
+    "EN_COURS" -> "En cours"
+    "TERMINEE" -> "Terminée"
+    "PAYEE" -> "Payée"
+    "PARTIELLEMENT_PAYEE" -> "Partielle"
+    "EN_ATTENTE" -> "En attente"
+    "ANNULEE" -> "Annulée"
+    else -> status
+}
+
+@Composable
+fun ConfirmDeleteDialog(
+    title: String,
+    message: String,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Outlined.Delete, contentDescription = null,
+            tint = MaterialTheme.colorScheme.error) },
+        title = { Text(title) },
+        text = { Text(message) },
+        confirmButton = {
+            Button(onClick = onConfirm,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error)) {
+                Text("Supprimer")
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Annuler") } }
+    )
 }

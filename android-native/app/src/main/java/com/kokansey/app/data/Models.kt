@@ -192,3 +192,132 @@ data class ChartPoint(val name: String, val sales: Double, val expenses: Double)
 
 @Serializable
 data class ApiError(val message: String? = null, val error: String? = null)
+
+// ---------- Dépenses ----------
+@Serializable
+data class Expense(
+    val id: String,
+    val date: String,
+    val type: String,
+    val category: String,
+    val amount: Double,
+    val supplier: String? = null,
+    val observation: String? = null,
+    val speculation: Speculation? = null
+)
+
+@Serializable
+data class ExpenseRequest(
+    val speculationId: String? = null,
+    val type: String,
+    val category: String,
+    val amount: Double,
+    val date: String,
+    val supplier: String? = null,
+    val observation: String? = null
+)
+
+// ---------- Employés & Tâches ----------
+@Serializable
+data class Employee(
+    val id: String,
+    val firstName: String,
+    val lastName: String,
+    val position: String = "",
+    val contact: String = "",
+    val salary: Double = 0.0,
+    val contractType: String? = null,
+    val service: String? = null
+)
+
+@Serializable
+data class EmployeeRequest(
+    val firstName: String,
+    val lastName: String,
+    val hireDate: String,
+    val salary: Double,
+    val contact: String,
+    val position: String,
+    val residence: String,
+    val cniNumber: String,
+    val contractType: String? = null,
+    val service: String? = null
+)
+
+@Serializable
+data class TaskDto(
+    val id: String,
+    val title: String,
+    val description: String? = null,
+    val status: String = "PENDING",
+    val priority: String = "NORMAL",
+    val dueDate: String? = null,
+    val assignedTo: Employee? = null,
+    val truck: Truck? = null
+)
+
+@Serializable
+data class TaskRequest(
+    val title: String,
+    val description: String? = null,
+    val status: String = "PENDING",
+    val priority: String = "NORMAL",
+    val dueDate: String? = null,
+    val assignedToId: String,
+    val truckId: String? = null
+)
+
+// ---------- Camions & Missions ----------
+@Serializable
+data class Truck(
+    val id: String,
+    val internalCode: String = "",
+    val registration: String = "",
+    val brand: String = "",
+    val model: String = "",
+    val category: String = "",
+    val status: String = "Disponible",
+    val mileage: Double = 0.0,
+    val nextMaintenance: String? = null,
+    val driver: Employee? = null,
+    val conveyor: Employee? = null
+)
+
+@Serializable
+data class Trip(
+    val id: String,
+    val date: String,
+    val destination: String,
+    val cargo: String,
+    val status: String = "EN_COURS",
+    val observation: String? = null,
+    val truck: Truck? = null
+)
+
+@Serializable
+data class TripRequest(
+    val truckId: String,
+    val date: String,
+    val destination: String,
+    val cargo: String,
+    val observation: String? = null
+)
+
+// ---------- Factures ----------
+@Serializable
+data class Invoice(
+    val id: String,
+    val numero: String,
+    val dateEmission: String,
+    val dateEcheance: String? = null,
+    val montantTotal: Double,
+    val montantPaye: Double = 0.0,
+    val statut: String = "EN_ATTENTE",
+    val client: Client? = null
+)
+
+@Serializable
+data class InvoicePaymentRequest(
+    val montant: Double,
+    val modePaiement: String? = null
+)

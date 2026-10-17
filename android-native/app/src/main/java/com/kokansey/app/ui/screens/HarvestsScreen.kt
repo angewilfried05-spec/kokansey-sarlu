@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,10 +24,12 @@ import com.kokansey.app.vm.SpeculationViewModel
 import com.kokansey.app.vm.todayIso
 
 @Composable
-fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel) {
+fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel, isAdmin: Boolean = false) {
     val state by vm.state.collectAsState()
     val speculations by specVm.speculations.collectAsState()
     var showForm by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+    var deleteTarget by remember { mutableStateOf<Harvest?>(null) }
 
     LaunchedEffect(Unit) { vm.refresh(); specVm.load() }
     LaunchedEffect(state.saveSuccess) {
@@ -47,16 +50,24 @@ fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel) {
                     Icon(Icons.Filled.Refresh, "Actualiser")
                 }
             }
+            SearchField(query, { query = it })
+
+            val filtered = state.items.filter {
+                query.isBlank() || listOfNotNull(it.speculation?.name, it.quality, it.unit)
+                    .any { s -> s.contains(query, ignoreCase = true) }
+            }
             when {
                 state.loading -> LoadingBox()
                 state.error != null && state.items.isEmpty() ->
                     ErrorBox(state.error ?: "Erreur") { vm.refresh() }
-                state.items.isEmpty() -> EmptyBox("Aucune récolte enregistrée.\nAppuyez sur + pour commencer.")
+                filtered.isEmpty() -> EmptyBox("Aucune récolte enregistrée.\nAppuyez sur + pour commencer.")
                 else -> LazyColumn(
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(state.items, key = { it.id }) { h -> HarvestCard(h) }
+                    items(filtered, key = { it.id }) { h ->
+                        HarvestCard(h, isAdmin) { deleteTarget = h }
+                    }
                 }
             }
         }
@@ -66,10 +77,19 @@ fun HarvestsScreen(vm: HarvestsViewModel, specVm: SpeculationViewModel) {
         HarvestFormDialog(speculations, state.saving, state.error,
             onDismiss = { showForm = false }) { vm.create(it) }
     }
+
+    deleteTarget?.let { h ->
+        ConfirmDeleteDialog(
+            title = "Supprimer la récolte",
+            message = "${h.speculation?.name ?: ""} — ${formatQuantity(h.quantity)} ${h.unit}",
+            onConfirm = { deleteTarget = null; vm.delete(h.id) },
+            onDismiss = { deleteTarget = null }
+        )
+    }
 }
 
 @Composable
-private fun HarvestCard(h: Harvest) {
+private fun HarvestCard(h: Harvest, isAdmin: Boolean, onDelete: () -> Unit) {
     Card(shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -82,9 +102,17 @@ private fun HarvestCard(h: Harvest) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Text("${formatQuantity(h.quantity)} ${h.unit}",
-                style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold,
-                color = KokanseyGold)
+            Column(horizontalAlignment = Alignment.End) {
+                Text("${formatQuantity(h.quantity)} ${h.unit}",
+                    style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold,
+                    color = KokanseyGold)
+                if (isAdmin) {
+                    IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
+                        Icon(Icons.Outlined.Delete, "Supprimer",
+                            tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(18.dp))
+                    }
+                }
+            }
         }
     }
 }

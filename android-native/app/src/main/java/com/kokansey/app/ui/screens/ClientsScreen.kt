@@ -26,6 +26,7 @@ fun ClientsScreen(vm: ClientsViewModel) {
     val state by vm.state.collectAsState()
     var showNewClient by remember { mutableStateOf(false) }
     var paymentTarget by remember { mutableStateOf<Client?>(null) }
+    var query by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) { vm.refresh() }
     LaunchedEffect(state.saveSuccess) {
@@ -46,16 +47,22 @@ fun ClientsScreen(vm: ClientsViewModel) {
                     Icon(Icons.Filled.Refresh, "Actualiser")
                 }
             }
+            SearchField(query, { query = it })
+
+            val filtered = state.items.filter {
+                query.isBlank() || listOfNotNull(it.nom, it.telephone)
+                    .any { s -> s.contains(query, ignoreCase = true) }
+            }
             when {
                 state.loading -> LoadingBox()
                 state.error != null && state.items.isEmpty() ->
                     ErrorBox(state.error ?: "Erreur") { vm.refresh() }
-                state.items.isEmpty() -> EmptyBox("Aucun client.\nAppuyez sur + pour en créer un.")
+                filtered.isEmpty() -> EmptyBox("Aucun client.\nAppuyez sur + pour en créer un.")
                 else -> LazyColumn(
                     contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 88.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(state.items, key = { it.id }) { client ->
+                    items(filtered, key = { it.id }) { client ->
                         ClientCard(client, onPay = { paymentTarget = client })
                     }
                 }

@@ -8,8 +8,11 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import java.util.concurrent.TimeUnit
 
@@ -56,6 +59,66 @@ interface KokanseyApi {
 
     @POST("api/harvests")
     suspend fun createHarvest(@Body body: HarvestRequest): Response<Unit>
+
+    // ---------- Suppressions ----------
+    @DELETE("api/sales/{id}")
+    suspend fun deleteSale(@Path("id") id: String): Response<Unit>
+
+    @DELETE("api/harvests/{id}")
+    suspend fun deleteHarvest(@Path("id") id: String): Response<Unit>
+
+    @DELETE("api/expenses/{id}")
+    suspend fun deleteExpense(@Path("id") id: String): Response<Unit>
+
+    @DELETE("api/tasks/{id}")
+    suspend fun deleteTask(@Path("id") id: String): Response<Unit>
+
+    // ---------- Dépenses ----------
+    @GET("api/expenses")
+    suspend fun getExpenses(): Response<List<Expense>>
+
+    @POST("api/expenses")
+    suspend fun createExpense(@Body body: ExpenseRequest): Response<Unit>
+
+    // ---------- Employés & Tâches ----------
+    @GET("api/employees")
+    suspend fun getEmployees(): Response<List<Employee>>
+
+    @POST("api/employees")
+    suspend fun createEmployee(@Body body: EmployeeRequest): Response<Employee>
+
+    @GET("api/tasks")
+    suspend fun getTasks(): Response<List<TaskDto>>
+
+    @POST("api/tasks")
+    suspend fun createTask(@Body body: TaskRequest): Response<TaskDto>
+
+    @PUT("api/tasks/{id}")
+    suspend fun updateTask(@Path("id") id: String, @Body body: TaskRequest): Response<TaskDto>
+
+    // ---------- Camions & Missions ----------
+    @GET("api/trucks")
+    suspend fun getTrucks(): Response<List<Truck>>
+
+    @GET("api/trucks/trips")
+    suspend fun getTrips(): Response<List<Trip>>
+
+    @POST("api/trucks/trips")
+    suspend fun createTrip(@Body body: TripRequest): Response<Trip>
+
+    @PATCH("api/trucks/trips/{id}/complete")
+    suspend fun completeTrip(@Path("id") id: String): Response<Trip>
+
+    // ---------- Factures ----------
+    @GET("api/invoices")
+    suspend fun getInvoices(): Response<List<Invoice>>
+
+    @POST("api/invoices/{id}/payment")
+    suspend fun payInvoice(@Path("id") id: String, @Body body: InvoicePaymentRequest): Response<Unit>
+
+    // ---------- Notifications ----------
+    @GET("api/notifications")
+    suspend fun getNotifications(): Response<List<AppNotification>>
 }
 
 object ApiClient {
