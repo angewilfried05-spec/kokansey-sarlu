@@ -44,3 +44,11 @@ android-webview-app/keystore.properties
 *.jks
 android-webview-app/.gradle/
 android-webview-app/build/
+
+# Android native
+android-native/local.properties
+android-native/keystore.properties
+android-native/.gradle/
+android-native/build/
+android-native/app/build/
+android-webview-app/app/build/
