@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { fetchWithAuth } from "../lib/api";
 import { cn } from "../lib/utils";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 interface Client {
   id: string;
@@ -115,6 +116,8 @@ export default function ClientAccountsPage() {
   const [showModalClient, setShowModalClient] = useState(false);
   const [showModalOperation, setShowModalOperation] = useState(false);
   const [operationEnEdition, setOperationEnEdition] = useState<OperationClient | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingClient, setDeletingClient] = useState(false);
 
   const [formClient, setFormClient] = useState({
     nom: "",
@@ -303,6 +306,27 @@ export default function ClientAccountsPage() {
     }
   };
 
+  const handleSupprimerClient = async () => {
+    if (!clientSelectionne) return;
+    setDeletingClient(true);
+
+    try {
+      const res = await fetchWithAuth(`/api/clients/${clientSelectionne.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Erreur suppression");
+      }
+      setClientSelectionne(null);
+      setReleve(null);
+      await chargerClients();
+    } catch (error) {
+      console.error(error);
+      alert(error instanceof Error ? error.message : "Impossible de supprimer le client. Réservé aux administrateurs.");
+    } finally {
+      setDeletingClient(false);
+    }
+  };
+
   const handleSupprimerOperation = async (operation: OperationClient) => {
     if (!clientSelectionne) return;
     if (!confirm(`Supprimer cette opération (${getLibelleType(operation.typeOperation)} — ${formatMontant(operation.montant)}) ?`)) return;
@@ -441,7 +465,18 @@ export default function ClientAccountsPage() {
               <div className="p-6 border-b border-gray-50">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
                   <div>
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{clientSelectionne.nom}</h3>
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{clientSelectionne.nom}</h3>
+                      {isAdmin && (
+                        <button
+                          onClick={() => setShowDeleteModal(true)}
+                          className="p-2 bg-red-50 text-red-600 hover:bg-red-600 hover:text-white rounded-xl transition-all"
+                          title="Supprimer le client"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                     <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
                       {clientSelectionne.telephone && (
                         <span className="flex items-center gap-1"><Phone className="w-4 h-4" />{clientSelectionne.telephone}</span>
@@ -774,6 +809,18 @@ export default function ClientAccountsPage() {
           </div>
         </div>
       )}
+
+      {/* Modal — Confirmation suppression client */}
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={handleSupprimerClient}
+        title="Supprimer le client"
+        message={`Voulez-vous vraiment supprimer "${clientSelectionne?.nom}" ? Cette action est définitive. Si le client possède des opérations ou des factures, la suppression sera refusée — désactivez-le à la place.`}
+        confirmText={deletingClient ? "Suppression..." : "Supprimer"}
+        cancelText="Annuler"
+        variant="danger"
+      />
     </div>
   );
 }

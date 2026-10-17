@@ -97,6 +97,34 @@ export default function registerClientOperationsRoutes(app, { prisma, authentica
     }
   });
 
+  app.delete('/api/clients/:id', authenticate, checkAdmin, async (req, res) => {
+    try {
+      const client = await prisma.client.findUnique({
+        where: { id: req.params.id },
+        include: { _count: { select: { operations: true, invoices: true } } }
+      });
+
+      if (!client) {
+        return res.status(404).json({ error: 'Client not found' });
+      }
+
+      // Préserver l'intégrité de l'historique financier :
+      // un client avec des opérations ou des factures ne peut pas être supprimé
+      if (client._count.operations > 0 || client._count.invoices > 0) {
+        return res.status(409).json({
+          error: `Impossible de supprimer "${client.nom}" : ${client._count.operations} opération(s) et ${client._count.invoices} facture(s) associée(s). Désactivez le client pour préserver l'historique.`
+        });
+      }
+
+      await prisma.client.delete({ where: { id: req.params.id } });
+      await logAction(req.user.id, 'DELETE', 'CLIENT', { id: client.id, nom: client.nom });
+      res.json({ success: true });
+    } catch (error) {
+      console.error('Erreur suppression client:', error);
+      res.status(500).json({ error: 'Failed to delete client' });
+    }
+  });
+
   app.get('/api/clients/:id/operations', authenticate, async (req, res) => {
     const { date_debut, date_fin, type_operation } = req.query;
     try {
