@@ -190,40 +190,39 @@ export default function registerSalesRoutes(app, { prisma, authenticate, authori
 
       await logAction(req.user.id, 'CREATE', 'SALE', { product, total: result.sale.totalPrice, invoice: result.invoice?.numero });
 
-      // Notification admin
+      // Notification admin (non bloquant)
       const adminNumber = process.env.WHATSAPP_ADMIN_NUMBER;
       if (adminNumber) {
-        try {
-          await notificationService.sendWhatsAppMessage(adminNumber, `Nouvelle vente: ${product} - ${totalPrice.toLocaleString()} FCFA`);
-        } catch (whatsappError) {
-          console.error('Erreur notification WhatsApp admin:', whatsappError);
-        }
+        notificationService.sendWhatsAppMessage(adminNumber, `Nouvelle vente: ${product} - ${totalPrice.toLocaleString()} FCFA`)
+          .catch(whatsappError => console.error('Erreur notification WhatsApp admin:', whatsappError));
       }
 
-      // Envoyer la facture par WhatsApp au client (PDF)
+      // Envoyer la facture par WhatsApp au client (PDF, non bloquant)
       if (result.invoice && result.clientRecord?.telephone) {
-        try {
-          const fullInvoice = await prisma.invoice.findUnique({
-            where: { id: result.invoice.id },
-            include: { items: true, client: true }
-          });
+        (async () => {
+          try {
+            const fullInvoice = await prisma.invoice.findUnique({
+              where: { id: result.invoice.id },
+              include: { items: true, client: true }
+            });
 
-          if (fullInvoice) {
-            const pdfPath = await generateInvoicePDF(fullInvoice, prisma);
-            const caption = `Bonjour ${result.clientRecord.nom},\nVotre facture ${fullInvoice.numero} - Total : ${fullInvoice.montantTotal.toLocaleString()} FCFA\nKOKANSEY SARLU`;
+            if (fullInvoice) {
+              const pdfPath = await generateInvoicePDF(fullInvoice, prisma);
+              const caption = `Bonjour ${result.clientRecord.nom},\nVotre facture ${fullInvoice.numero} - Total : ${fullInvoice.montantTotal.toLocaleString()} FCFA\nKOKANSEY SARLU`;
 
-            const whatsappResult = await notificationService.sendWhatsAppMedia(result.clientRecord.telephone, pdfPath, caption);
-            if (!whatsappResult.success) {
-              console.warn('[SALE] Échec envoi PDF WhatsApp client:', whatsappResult.error);
-            } else {
-              console.log('[SALE] Facture PDF envoyée par WhatsApp au client:', result.clientRecord.telephone);
+              const whatsappResult = await notificationService.sendWhatsAppMedia(result.clientRecord.telephone, pdfPath, caption);
+              if (!whatsappResult.success) {
+                console.warn('[SALE] Échec envoi PDF WhatsApp client:', whatsappResult.error);
+              } else {
+                console.log('[SALE] Facture PDF envoyée par WhatsApp au client:', result.clientRecord.telephone);
+              }
+
+              await cleanupTempFile(pdfPath);
             }
-
-            await cleanupTempFile(pdfPath);
+          } catch (whatsappError) {
+            console.error('Erreur envoi PDF WhatsApp client:', whatsappError);
           }
-        } catch (whatsappError) {
-          console.error('Erreur envoi PDF WhatsApp client:', whatsappError);
-        }
+        })();
       }
 
       res.json({ sale: result.sale, invoice: result.invoice });

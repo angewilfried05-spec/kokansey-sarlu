@@ -63,6 +63,8 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       }
     };
     loadNotifications();
+    const interval = setInterval(loadNotifications, 60000);
+    return () => clearInterval(interval);
   }, []);
 
   const addNotification = useCallback((type: NotificationType, title: string, message?: string) => {

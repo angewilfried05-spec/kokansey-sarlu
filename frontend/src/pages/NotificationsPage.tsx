@@ -13,8 +13,10 @@ export default function NotificationsPage() {
   const [userRole, setUserRole] = useState<string>("");
 
   useEffect(() => {
-    const role = localStorage.getItem('userRole') || 'GERANT';
-    setUserRole(role);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const role = user.role || 'GERANT';
+    // Même logique de secours que les autres pages : KOKANSEY GROUP = ADMIN
+    setUserRole(role === 'ADMIN' || user.username === 'KOKANSEY GROUP' ? 'ADMIN' : role);
     fetchStatus();
     // Actualiser le statut toutes les 5 secondes
     const interval = setInterval(fetchStatus, 5000);

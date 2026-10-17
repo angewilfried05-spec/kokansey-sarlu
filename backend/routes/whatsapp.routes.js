@@ -21,7 +21,7 @@ export default function registerWhatsAppRoutes(app, { prisma, authenticate, auth
   });
 
   // WhatsApp Management Routes
-  app.get('/api/whatsapp/status', async (req, res) => {
+  app.get('/api/whatsapp/status', authenticate, async (req, res) => {
     try {
       const status = notificationService.getStatus();
       res.json(status);
@@ -48,7 +48,7 @@ export default function registerWhatsAppRoutes(app, { prisma, authenticate, auth
     }
   });
 
-  app.post('/api/whatsapp/ensure-qr', async (req, res) => {
+  app.post('/api/whatsapp/ensure-qr', authenticate, async (req, res) => {
     try {
       const status = await notificationService.ensureWhatsAppQr();
       res.json(status);
@@ -139,17 +139,22 @@ export default function registerWhatsAppRoutes(app, { prisma, authenticate, auth
       let relancesEnvoyees = 0;
 
       for (const client of clients) {
+        // Solde réel : ventes/dépenses moins paiements/avances
         let solde = 0;
-        const unpaidOps = client.operations.filter(op => op.typeOperation === 'vente' || op.typeOperation === 'depense');
-
-        unpaidOps.forEach(op => {
-          solde += op.montant;
-        });
+        const debtOps = [];
+        for (const op of client.operations) {
+          if (op.typeOperation === 'vente' || op.typeOperation === 'depense') {
+            solde += op.montant;
+            debtOps.push(op);
+          } else if (op.typeOperation === 'paiement' || op.typeOperation === 'avance') {
+            solde -= op.montant;
+          }
+        }
 
         // Vérifier si le client a un solde positif et est en retard
         if (solde > 0 && client.telephone && client.telephone.match(/^\d{10,}$/)) {
-          // Trouver l'opération la plus ancienne non payée
-          const oldestUnpaid = unpaidOps.length > 0 ? unpaidOps[0] : null;
+          // Âge de la créance = opération de débit la plus ancienne
+          const oldestUnpaid = debtOps.length > 0 ? debtOps[0] : null;
           if (oldestUnpaid) {
             const daysDiff = Math.floor((now - new Date(oldestUnpaid.dateOperation)) / (1000 * 60 * 60 * 24));
 

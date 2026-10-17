@@ -209,10 +209,10 @@ function getFallbackStatus() {
         hasClient: false,
         initializing: false,
         connected: false,
-        qrAvailable: true,
-        status: 'QRCODE',
-        qrCodeData: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0id2hpdGUiLz48dGV4dCB4PSIxMjgiIHk9IjQwIiBmaWxsPSIjMWE0ZDJlIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiPktPSy08L3RleHQ+PHRleHQgeD0iMTI4IiB5PSI2MCIgZmlsbD0iIzFhNGQyZSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5XSC08L3RleHQ+PHRleHQgeD0iMTI4IiB5PSI4MCIgZmlsbD0iIzFhNGQyZSIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5URVNUIExJTks8L3RleHQ+PHJlY3QgeD0iMjAiIHk9IjEwMCIgd2lkdGg9IjIxNiIgaGVpZ2h0PSIyMTYiIGZpbGw9IndoaXRlIiBzdHJva2U9IiMxYTRkMmUiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjMwIiB5PSIxMDAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0iIzFhNGQyZSIvPjxyZWN0IHg9IjE4NiIgeT0iMTAwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMxYTRkMmUiLz48cmVjdCB4PSI5MCIgeT0iMTAwIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMxYTRkMmUiLz48L3N2Zz4=',
-        lastError: null,
+        qrAvailable: false,
+        status: 'UNAVAILABLE',
+        qrCodeData: null,
+        lastError: 'whatsapp-web.js ou qrcode non installé',
         account: null
     };
 }
