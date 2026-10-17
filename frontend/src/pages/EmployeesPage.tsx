@@ -49,7 +49,11 @@ interface Employee {
   };
 }
 
+import { useToast } from "../contexts/ToastContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function EmployeesPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user.role || 'GERANT';
   const isAdmin = role === 'ADMIN';
@@ -332,7 +336,7 @@ export default function EmployeesPage() {
   };
 
   const handleDeleteEmployee = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cet employé ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cet employé ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/employees/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -344,7 +348,7 @@ export default function EmployeesPage() {
   };
 
   const handleDeleteAbsence = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cette absence ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cette absence ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/employees/absences/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -405,7 +409,7 @@ export default function EmployeesPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as any)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all ${
             currentView === tab.id
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105"
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -468,7 +472,7 @@ export default function EmployeesPage() {
             onClick={() => {
               const type = currentView === 'payroll' ? 'sage-accounting' : 'sage';
               downloadWithAuth(`/api/export/csv?type=${type}`, `${type}.csv`).catch(() => {
-                alert('Erreur lors du téléchargement de l\'export');
+                toast.error('Erreur lors du téléchargement de l\'export');
               });
             }}
             className="bg-green-600 text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-green-700 transition-all font-bold shadow-lg shadow-green-200"
@@ -518,7 +522,7 @@ export default function EmployeesPage() {
                   )}
                 </div>
                 <div>
-                  <h3 className="font-black text-gray-800 uppercase tracking-tight">{emp.firstName} {emp.lastName}</h3>
+                  <h3 className="font-black text-gray-800 tracking-tight">{emp.firstName} {emp.lastName}</h3>
                   <div className="flex gap-2 mt-1">
                     <p className="text-[10px] font-black text-primary bg-primary/5 px-2 py-0.5 rounded-full inline-block uppercase tracking-widest">{emp.position}</p>
                     {emp.contractType && (
@@ -611,7 +615,7 @@ export default function EmployeesPage() {
                 {salaryTable.sortedData.map((s: any) => (
                   <tr key={s.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(s.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{s.employee.firstName} {s.employee.lastName}</td>
+                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{s.employee.firstName} {s.employee.lastName}</td>
                     <td className="px-8 py-6 text-sm font-bold text-primary uppercase tracking-widest">
                       {new Date(s.date).toLocaleString('fr-FR', { month: 'long', year: 'numeric' })}
                     </td>
@@ -676,7 +680,7 @@ export default function EmployeesPage() {
                           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-[10px]">
                             {a.employee.firstName[0]}{a.employee.lastName[0]}
                           </div>
-                          <span className="font-black text-gray-800 uppercase tracking-tight">{a.employee.firstName} {a.employee.lastName}</span>
+                          <span className="font-black text-gray-800 tracking-tight">{a.employee.firstName} {a.employee.lastName}</span>
                         </div>
                       </td>
                       <td className="px-8 py-6 text-xs font-bold text-gray-400 uppercase">{a.employee.position}</td>
@@ -805,7 +809,7 @@ export default function EmployeesPage() {
               )}
 
               <div className="md:col-span-2 pt-6">
-                <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+                <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                   {editingEmployee ? "Mettre à jour le profil" : "Enregistrer l'Employé"}
                 </button>
               </div>
@@ -848,7 +852,7 @@ export default function EmployeesPage() {
                 <textarea className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold h-24" placeholder="Ex: Maladie, Urgence familiale..." value={absenceData.reason} onChange={e => setAbsenceData({...absenceData, reason: e.target.value})} />
               </div>
 
-              <button type="submit" className="w-full py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-red-200">
+              <button type="submit" className="w-full py-4 bg-red-600 text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-red-200">
                 Enregistrer l'absence
               </button>
             </form>
@@ -926,13 +930,13 @@ export default function EmployeesPage() {
                   <span>Retenues CNPS (6.3%)</span>
                   <span>{((parseFloat(salaryData.baseSalary || "0") + parseFloat(salaryData.bonuses || "0")) * 0.063).toLocaleString()} FCFA</span>
                 </div>
-                <div className="pt-2 border-t border-primary/10 flex justify-between text-sm font-black text-primary uppercase">
+                <div className="pt-2 border-t border-primary/10 flex justify-between text-sm font-black text-primary">
                   <span>Net Estimé</span>
                   <span>{((parseFloat(salaryData.baseSalary || "0") + parseFloat(salaryData.bonuses || "0")) * (1 - 0.063 - 0.012)).toLocaleString()} FCFA</span>
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 Générer & Enregistrer
               </button>
             </form>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Edit, Trash2, CheckCircle2, X, Truck, Calendar as CalendarIcon, List } from "lucide-react";
 import { fetchWithAuth } from "../lib/api";
-import Toast, { ToastType } from "../components/Toast";
+import { ToastType } from "../components/Toast";
+import { useToast } from "../contexts/ToastContext";
 import Calendar from "../components/Calendar";
 
 interface Employee {
@@ -49,7 +50,10 @@ const priorityLabels: Record<string, string> = {
   HIGH: "Haute"
 };
 
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function TasksPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const [tasks, setTasks] = useState<TaskItem[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [trucks, setTrucks] = useState<Truck[]>([]);
@@ -57,7 +61,6 @@ export default function TasksPage() {
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] = useState<TaskItem | null>(null);
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -70,8 +73,8 @@ export default function TasksPage() {
   const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const showToast = (message: string, type: ToastType = "info") => {
-    setToast({ message, type });
+  const showToast = (message: string, type: ToastType = 'info') => {
+    toast[type](message);
   };
 
   const fetchData = async () => {
@@ -142,7 +145,7 @@ export default function TasksPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Supprimer cette tâche ?")) return;
+    if (!(await confirmDialog("Supprimer cette tâche ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/tasks/${id}`, { method: "DELETE" });
       if (res.ok) {
@@ -168,7 +171,6 @@ export default function TasksPage() {
 
   return (
     <div className="p-6 space-y-6">
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

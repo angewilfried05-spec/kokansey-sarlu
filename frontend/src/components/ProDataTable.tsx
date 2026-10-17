@@ -238,11 +238,16 @@ export default function ProDataTable<T extends { id: string }>({
           </thead>
           <tbody className="divide-y divide-gray-50">
             {loading ? (
-              <tr>
-                <td colSpan={columns.length + (bulkActions.length > 0 ? 1 : 0)} className="px-6 py-12 text-center text-gray-400 italic font-bold">
-                  Chargement...
-                </td>
-              </tr>
+              Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="animate-pulse">
+                  {bulkActions.length > 0 && <td className="px-6 py-4"><div className="w-5 h-5 bg-gray-200 dark:bg-slate-700 rounded" /></td>}
+                  {columns.map((_, j) => (
+                    <td key={j} className="px-6 py-4">
+                      <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded" style={{ width: `${55 + ((i + j) % 3) * 15}%` }} />
+                    </td>
+                  ))}
+                </tr>
+              ))
             ) : sortedData.length === 0 ? (
               <tr>
                 <td colSpan={columns.length + (bulkActions.length > 0 ? 1 : 0)} className="px-6 py-12">

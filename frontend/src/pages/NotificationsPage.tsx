@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Bell, Smartphone, CheckCircle, XCircle, Loader2, QrCode, Send, RefreshCw, MessageSquare, LogOut } from "lucide-react";
 import { fetchWithAuth } from "../lib/api";
 
+import { useToast } from "../contexts/ToastContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function NotificationsPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const [status, setStatus] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [testMessage, setTestMessage] = useState("");
@@ -72,21 +76,21 @@ export default function NotificationsPage() {
       });
       const data = await res.json();
       if (data.success) {
-        alert("Message envoyé avec succès !");
+        toast.success("Message envoyé avec succès !");
         setTestMessage("");
       } else {
-        alert("Erreur: " + (data.error || "Échec de l'envoi"));
+        toast.error("Erreur: " + (data.error || "Échec de l'envoi"));
       }
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de l'envoi");
+      toast.error("Erreur lors de l'envoi");
     } finally {
       setSendingTest(false);
     }
   };
 
   const handleLogout = async () => {
-    if (!confirm("Êtes-vous sûr de vouloir déconnecter WhatsApp ? Vous devrez rescanner le QR code pour vous reconnecter.")) return;
+    if (!(await confirmDialog("Êtes-vous sûr de vouloir déconnecter WhatsApp ? Vous devrez rescanner le QR code pour vous reconnecter."))) return;
     setLoggingOut(true);
     try {
       const res = await fetchWithAuth("/api/whatsapp/logout", { method: 'POST' });
@@ -94,7 +98,7 @@ export default function NotificationsPage() {
       setStatus(data);
     } catch (err) {
       console.error(err);
-      alert("Erreur lors de la déconnexion");
+      toast.error("Erreur lors de la déconnexion");
     } finally {
       setLoggingOut(false);
     }

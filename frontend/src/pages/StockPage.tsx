@@ -45,7 +45,9 @@ interface Stock {
   movements: StockMovement[];
 }
 
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function StockPage() {
+  const confirmDialog = useConfirm();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user.role || 'GERANT';
   const isAdmin = role === 'ADMIN';
@@ -135,7 +137,7 @@ export default function StockPage() {
   };
 
   const handleDeleteStock = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cet article de stock ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cet article de stock ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/stocks/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -186,7 +188,7 @@ export default function StockPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as any)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all ${
             currentView === tab.id 
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -229,7 +231,7 @@ export default function StockPage() {
               <div key={item.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
                 <div className="flex justify-between items-start mb-6">
                   <div>
-                    <h3 className="font-black text-gray-800 uppercase tracking-tight">{item.name}</h3>
+                    <h3 className="font-black text-gray-800 tracking-tight">{item.name}</h3>
                     <div className="flex items-center gap-2">
                       <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{item.category}</p>
                       {item.speculation && (
@@ -254,7 +256,7 @@ export default function StockPage() {
                   )}>
                     {item.quantity}
                   </span>
-                  <span className="text-sm font-black text-gray-400 uppercase tracking-widest">{item.unit}</span>
+                  <span className="text-sm font-black text-gray-400 tracking-widest">{item.unit}</span>
                 </div>
 
                 <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
@@ -316,7 +318,7 @@ export default function StockPage() {
                 {movementTable.sortedData.map((m: any) => (
                   <tr key={m.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(m.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{m.stock.name}</td>
+                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{m.stock.name}</td>
                     <td className="px-8 py-6">
                       <span className={cn(
                         "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
@@ -347,7 +349,7 @@ export default function StockPage() {
           {stocks.filter(s => s.quantity <= s.minThreshold).length === 0 ? (
             <div className="bg-green-50 p-10 rounded-2xl text-center">
               <Package className="w-12 h-12 text-green-500 mx-auto mb-4" />
-              <h3 className="text-xl font-black text-green-800 uppercase">Tout est en ordre</h3>
+              <h3 className="text-xl font-black text-green-800">Tout est en ordre</h3>
               <p className="text-green-600 font-medium">Aucun article n'est en dessous du seuil d'alerte.</p>
             </div>
           ) : (
@@ -420,7 +422,7 @@ export default function StockPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 {editingStock ? "Mettre à jour" : "Enregistrer l'Article"}
               </button>
             </form>

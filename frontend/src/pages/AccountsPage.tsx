@@ -32,7 +32,9 @@ interface Account {
   expensesCount: number;
 }
 
+import { useToast } from "../contexts/ToastContext";
 export default function AccountsPage() {
+  const toast = useToast();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -56,7 +58,7 @@ export default function AccountsPage() {
 
   const handleExport = () => {
     downloadWithAuth('/api/export/csv?type=sales', 'ventes.csv').catch(() => {
-      alert('Erreur lors du téléchargement de l\'export');
+      toast.error('Erreur lors du téléchargement de l\'export');
     });
   };
 
@@ -78,7 +80,7 @@ export default function AccountsPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as any)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all ${
             currentView === tab.id 
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -209,7 +211,7 @@ export default function AccountsPage() {
       {currentView === 'units' && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
           <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
-            <h3 className="text-xl font-black text-gray-800 uppercase tracking-tight">Performance par Unité</h3>
+            <h3 className="text-xl font-black text-gray-800 tracking-tight">Performance par Unité</h3>
             <span className="bg-white px-4 py-2 rounded-full border border-gray-200 text-xs font-black text-gray-400">
               {accounts.length} UNITÉS ACTIVES
             </span>
@@ -238,7 +240,7 @@ export default function AccountsPage() {
                       className={`hover:bg-gray-50/80 transition-all cursor-pointer group ${expandedId === acc.id ? 'bg-gray-50' : ''}`}
                     >
                       <td className="px-8 py-6">
-                        <div className="font-black text-gray-800 uppercase text-lg">{acc.name}</div>
+                        <div className="font-black text-gray-800 text-lg">{acc.name}</div>
                         <div className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{acc.category}</div>
                       </td>
                       <td className="px-8 py-6 text-right">

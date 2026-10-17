@@ -176,7 +176,7 @@ export default function MonthlyReportPage() {
           {currentCounter && (
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-black text-gray-800 uppercase">
+                <h3 className="text-xl font-black text-gray-800">
                   {formatMonth(currentCounter.month)}
                 </h3>
                 <span className="text-sm font-bold text-gray-400">
@@ -233,7 +233,7 @@ export default function MonthlyReportPage() {
 
           {/* Monthly Journal */}
           <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-            <h3 className="text-xl font-black text-gray-800 uppercase mb-6">Journal de Bord</h3>
+            <h3 className="text-xl font-black text-gray-800 mb-6">Journal de Bord</h3>
             
             {journal.length === 0 ? (
               <div className="text-center py-10 text-gray-400 italic">
@@ -260,7 +260,7 @@ export default function MonthlyReportPage() {
                     <div className="flex-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="text-sm font-black text-gray-800 uppercase">{entry.description}</p>
+                          <p className="text-sm font-black text-gray-800">{entry.description}</p>
                           <p className="text-xs text-gray-400">
                             {new Date(entry.date).toLocaleDateString('fr-FR', { 
                               day: 'numeric', 
@@ -286,13 +286,13 @@ export default function MonthlyReportPage() {
 
           {/* Historical Counters */}
           <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-            <h3 className="text-xl font-black text-gray-800 uppercase mb-6">Historique Mensuel</h3>
+            <h3 className="text-xl font-black text-gray-800 mb-6">Historique Mensuel</h3>
             
             <div className="space-y-4">
               {allCounters.map((counter) => (
                 <div key={counter.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
                   <div>
-                    <p className="text-sm font-black text-gray-800 uppercase">{formatMonth(counter.month)}</p>
+                    <p className="text-sm font-black text-gray-800">{formatMonth(counter.month)}</p>
                     <p className="text-xs text-gray-400">
                       {counter.salesCount} ventes • {counter.expensesCount} dépenses • {counter.harvestsCount} récoltes
                     </p>
@@ -343,7 +343,7 @@ export default function MonthlyReportPage() {
 
               <button 
                 onClick={handleReset}
-                className="w-full py-4 bg-red-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200"
+                className="w-full py-4 bg-red-600 text-white rounded-2xl font-black tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-200"
               >
                 Confirmer la Remise à Zéro
               </button>
@@ -403,7 +403,7 @@ export default function MonthlyReportPage() {
 
               <button 
                 type="submit"
-                className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20"
+                className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20"
               >
                 Ajouter au Journal
               </button>

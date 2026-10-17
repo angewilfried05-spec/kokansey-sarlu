@@ -10,18 +10,21 @@ import { useApi } from "../hooks/useApi";
 import { cn } from "../lib/utils";
 import Pagination from "../components/Pagination";
 import EmptyState from "../components/EmptyState";
-import Toast, { ToastType } from "../components/Toast";
+import { ToastType } from "../components/Toast";
+import { useToast } from "../contexts/ToastContext";
 import { TableSkeleton, CardSkeleton } from "../components/LoadingSkeleton";
 import type { Campagne, Client, DataTable, Expense, Harvest, Sale, Speculation, View } from "../types";
 
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function SpeculationsPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user.role || 'GERANT';
   const isAdmin = role === 'ADMIN';
   const isGerant = role === 'GERANT' || isAdmin;
 
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
   const [currentView, setCurrentView] = useState<View>('cultures');
   const [selectedCampagne, setSelectedCampagne] = useState<string>('');
 
@@ -56,7 +59,7 @@ export default function SpeculationsPage() {
   const campagnes = campagnesApi.data ?? [];
 
   const showToast = (message: string, type: ToastType = 'info') => {
-    setToast({ message, type });
+    toast[type](message);
   };
   
   // DataTable hooks
@@ -323,7 +326,7 @@ export default function SpeculationsPage() {
   };
 
   const handleDeleteSpeculation = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cette spéculation ? Tous les historiques liés seront supprimés.")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cette spéculation ? Tous les historiques liés seront supprimés."))) return;
     try {
       const res = await fetchWithAuth(`/api/speculations/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -335,7 +338,7 @@ export default function SpeculationsPage() {
   };
 
   const handleDeleteHarvest = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cette récolte ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cette récolte ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/harvests/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -423,7 +426,7 @@ export default function SpeculationsPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as View)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all whitespace-nowrap ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all whitespace-nowrap ${
             currentView === tab.id 
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -576,7 +579,7 @@ export default function SpeculationsPage() {
                         <div className="p-3 bg-primary/5 text-primary rounded-xl">
                           <Sprout className="w-5 h-5" />
                         </div>
-                        <span className="font-black text-gray-800 uppercase tracking-tight">{spec.name}</span>
+                        <span className="font-black text-gray-800 tracking-tight">{spec.name}</span>
                       </div>
                     </td>
                     <td className="px-8 py-6 text-sm font-bold text-gray-500 uppercase tracking-widest">{spec.category}</td>
@@ -673,7 +676,7 @@ export default function SpeculationsPage() {
                 ) : harvestTable.paginatedData.map((h: Harvest) => (
                   <tr key={h.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(h.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{h.speculation.name}</td>
+                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{h.speculation.name}</td>
                     <td className="px-8 py-6">
                       <span className="text-lg font-black text-primary">{h.quantity} <span className="text-[10px] uppercase opacity-40">{h.unit}</span></span>
                     </td>
@@ -752,7 +755,7 @@ export default function SpeculationsPage() {
                 ) : salesTable.paginatedData.map((s: Sale) => (
                   <tr key={s.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(s.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{s.speculation.name}</td>
+                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{s.speculation.name}</td>
                     <td className="px-8 py-6 text-sm font-bold text-gray-600">{s.quantity} {s.unit}</td>
                     <td className="px-8 py-6 text-sm font-medium text-gray-500 uppercase">
                       <div className="flex items-center gap-2">
@@ -833,7 +836,7 @@ export default function SpeculationsPage() {
                 ) : expensesTable.paginatedData.map((e: Expense) => (
                   <tr key={e.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(e.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{e.speculation?.name || 'Générale'}</td>
+                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{e.speculation?.name || 'Générale'}</td>
                     <td className="px-8 py-6 text-sm font-bold text-gray-600 uppercase tracking-widest">{e.category}</td>
                     <td className="px-8 py-6 text-right">
                       <span className="text-lg font-black text-red-500">-{e.amount.toLocaleString()} <span className="text-[10px] opacity-40 uppercase">FCFA</span></span>
@@ -876,7 +879,7 @@ export default function SpeculationsPage() {
       {currentView === 'analytics' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in zoom-in-95 duration-300">
           <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
-            <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6">Rentabilité par Culture</h4>
+            <h4 className="font-black text-gray-800 tracking-tight mb-6">Rentabilité par Culture</h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={speculations.map(s => ({
                 name: s.name,
@@ -894,7 +897,7 @@ export default function SpeculationsPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
-            <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6">Volume des Récoltes</h4>
+            <h4 className="font-black text-gray-800 tracking-tight mb-6">Volume des Récoltes</h4>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -1034,7 +1037,7 @@ export default function SpeculationsPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-green-600 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-green-200">
+              <button type="submit" className="w-full py-4 bg-green-600 text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-green-200">
                 Confirmer la Vente
               </button>
             </form>
@@ -1084,7 +1087,7 @@ export default function SpeculationsPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-gray-200">
+              <button type="submit" className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black tracking-widest hover:bg-black transition-all shadow-xl shadow-gray-200">
                 Enregistrer la Dépense
               </button>
             </form>
@@ -1154,7 +1157,7 @@ export default function SpeculationsPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 Enregistrer la Récolte
               </button>
             </form>
@@ -1227,7 +1230,7 @@ export default function SpeculationsPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 {editingSpec ? "Mettre à jour" : "Créer la Spéculation"}
               </button>
             </form>
@@ -1299,7 +1302,7 @@ export default function SpeculationsPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-amber-500 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-amber-500/20">
+              <button type="submit" className="w-full py-4 bg-amber-500 text-white rounded-2xl font-black tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-amber-500/20">
                 Enregistrer le Paiement
               </button>
             </form>
@@ -1307,14 +1310,6 @@ export default function SpeculationsPage() {
         </div>
       )}
 
-      {/* Toast Notification */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 }

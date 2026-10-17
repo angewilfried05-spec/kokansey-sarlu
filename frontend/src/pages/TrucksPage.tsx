@@ -60,7 +60,9 @@ interface Truck {
   expenses?: any[];
 }
 
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function TrucksPage() {
+  const confirmDialog = useConfirm();
   const [trucks, setTrucks] = useState<Truck[]>([]);
   const [employees, setEmployees] = useState<any[]>([]);
   const [allTrips, setAllTrips] = useState<Trip[]>([]);
@@ -105,7 +107,7 @@ export default function TrucksPage() {
   };
 
   const handleCompleteTrip = async (id: string) => {
-    if (!confirm("Marquer ce trajet comme terminé ?")) return;
+    if (!(await confirmDialog("Marquer ce trajet comme terminé ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/trucks/trips/${id}/complete`, { method: 'PATCH' });
       if (res.ok) {
@@ -235,7 +237,7 @@ export default function TrucksPage() {
   };
 
   const handleDeleteTruck = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer ce camion ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer ce camion ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/trucks/${id}`, { method: 'DELETE' });
       if (res.ok) {
@@ -343,7 +345,7 @@ export default function TrucksPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as any)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all ${
             currentView === tab.id 
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -409,7 +411,7 @@ export default function TrucksPage() {
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-black text-xs">01</div>
-                    <h4 className="text-sm font-black text-primary uppercase tracking-[0.2em]">Identification</h4>
+                    <h4 className="text-sm font-black text-primary tracking-[0.2em]">Identification</h4>
                   </div>
                   <div className="space-y-4">
                     <div>
@@ -450,7 +452,7 @@ export default function TrucksPage() {
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-black text-xs">02</div>
-                    <h4 className="text-sm font-black text-primary uppercase tracking-[0.2em]">Classification</h4>
+                    <h4 className="text-sm font-black text-primary tracking-[0.2em]">Classification</h4>
                   </div>
                   <div className="space-y-4">
                     <div>
@@ -496,7 +498,7 @@ export default function TrucksPage() {
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-black text-xs">03</div>
-                    <h4 className="text-sm font-black text-primary uppercase tracking-[0.2em]">Technique</h4>
+                    <h4 className="text-sm font-black text-primary tracking-[0.2em]">Technique</h4>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -526,7 +528,7 @@ export default function TrucksPage() {
                 <div className="space-y-6">
                   <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-black text-xs">04</div>
-                    <h4 className="text-sm font-black text-primary uppercase tracking-[0.2em]">Personnel & Statut</h4>
+                    <h4 className="text-sm font-black text-primary tracking-[0.2em]">Personnel & Statut</h4>
                   </div>
                   <div className="space-y-4">
                     <div>
@@ -556,7 +558,7 @@ export default function TrucksPage() {
                 <div className="space-y-6 md:col-span-2">
                   <div className="flex items-center gap-3 border-b border-gray-50 pb-4">
                     <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary font-black text-xs">05</div>
-                    <h4 className="text-sm font-black text-primary uppercase tracking-[0.2em]">Dates de Suivi</h4>
+                    <h4 className="text-sm font-black text-primary tracking-[0.2em]">Dates de Suivi</h4>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
@@ -572,7 +574,7 @@ export default function TrucksPage() {
               </div>
 
               <div className="pt-10 border-t border-gray-100 flex gap-4">
-                <button type="submit" className="flex-1 py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-2xl shadow-primary/20">
+                <button type="submit" className="flex-1 py-5 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-2xl shadow-primary/20">
                   {editingTruck ? "Enregistrer les modifications" : "Enregistrer le nouveau véhicule"}
                 </button>
               </div>
@@ -779,7 +781,7 @@ export default function TrucksPage() {
                       {trip.truck.registration}
                     </span>
                   </td>
-                  <td className="px-8 py-6 font-black text-gray-800 uppercase tracking-tight">{trip.destination}</td>
+                  <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{trip.destination}</td>
                   <td className="px-8 py-6 text-sm font-medium text-gray-600">
                     <div className="flex items-center gap-2">
                       <Shield className="w-3.5 h-3.5 text-blue-400" />
@@ -838,7 +840,7 @@ export default function TrucksPage() {
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-2">
                       {exp.type === 'Carburant' ? <Fuel className="w-4 h-4 text-orange-500" /> : <Wrench className="w-4 h-4 text-blue-500" />}
-                      <span className="text-sm font-black text-gray-700 uppercase tracking-tight">{exp.type}</span>
+                      <span className="text-sm font-black text-gray-700 tracking-tight">{exp.type}</span>
                     </div>
                   </td>
                   <td className="px-8 py-6 text-right">
@@ -860,7 +862,7 @@ export default function TrucksPage() {
       {currentView === 'analytics' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full animate-in zoom-in-95 duration-300">
           <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-            <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6 flex items-center gap-2">
+            <h4 className="font-black text-gray-800 tracking-tight mb-6 flex items-center gap-2">
               <PieChartIcon className="w-5 h-5 text-primary" />
               Répartition Globale des Coûts
             </h4>
@@ -888,7 +890,7 @@ export default function TrucksPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
-            <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6 flex items-center gap-2">
+            <h4 className="font-black text-gray-800 tracking-tight mb-6 flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-primary" />
               Coûts par Véhicule (Total)
             </h4>
@@ -959,7 +961,7 @@ export default function TrucksPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 Enregistrer le Trajet
               </button>
             </form>
@@ -1014,7 +1016,7 @@ export default function TrucksPage() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
+              <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 Enregistrer la Dépense
               </button>
             </form>

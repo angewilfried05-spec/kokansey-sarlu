@@ -3,7 +3,7 @@ import { Download, FileText, Table as TableIcon, Calendar, Filter, ChevronDown }
 import { fetchWithAuth } from "../lib/api";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import Toast from "../components/Toast";
+import { useToast } from "../contexts/ToastContext";
 import * as XLSX from "xlsx";
 
 export default function ReportsPage() {
@@ -16,7 +16,7 @@ export default function ReportsPage() {
 
   const [period, setPeriod] = useState("Mensuel");
   const [customDates, setCustomDates] = useState({ start: "", end: "" });
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'warning' | 'info' } | null>(null);
+  const toast = useToast();
 
   const getPeriodDates = () => {
     if (period === "Personnalisé") {
@@ -77,10 +77,10 @@ export default function ReportsPage() {
 
       XLSX.writeFile(workbook, `${name.replace(/ /g, '_')}_${new Date().getTime()}.xlsx`);
 
-      setToast({ message: "Export Excel généré avec succès !", type: "success" });
+      toast.success("Export Excel généré avec succès !");
     } catch (err) {
       console.error(err);
-      setToast({ message: "Erreur lors de l'export Excel.", type: "error" });
+      toast.error("Erreur lors de l'export Excel.");
     }
   };
 
@@ -132,10 +132,10 @@ export default function ReportsPage() {
       });
 
       doc.save(`${title.replace(/ /g, '_')}_${new Date().getTime()}.pdf`);
-      setToast({ message: "Export PDF généré avec succès !", type: "success" });
+      toast.success("Export PDF généré avec succès !");
     } catch (err) {
       console.error(err);
-      setToast({ message: "Erreur lors de l'export PDF.", type: "error" });
+      toast.error("Erreur lors de l'export PDF.");
     }
   };
 
@@ -198,7 +198,7 @@ export default function ReportsPage() {
               <FileText className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="text-xl font-black text-gray-800 dark:text-white uppercase">Export PDF</h3>
+              <h3 className="text-xl font-black text-gray-800 dark:text-white">Export PDF</h3>
               <p className="text-gray-400 dark:text-slate-400 text-sm">Format prêt pour l'impression</p>
             </div>
           </div>
@@ -226,7 +226,7 @@ export default function ReportsPage() {
               <TableIcon className="w-8 h-8" />
             </div>
             <div>
-              <h3 className="text-xl font-black text-gray-800 dark:text-white uppercase">Export Excel</h3>
+              <h3 className="text-xl font-black text-gray-800 dark:text-white">Export Excel</h3>
               <p className="text-gray-400 dark:text-slate-400 text-sm">Format pour analyse approfondie</p>
             </div>
           </div>
@@ -257,25 +257,18 @@ export default function ReportsPage() {
              <Filter className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-primary uppercase">Génération Automatique</h4>
+            <h4 className="text-lg font-black text-primary">Génération Automatique</h4>
             <p className="text-gray-600 dark:text-slate-300">Tous les rapports sont mis à jour en temps réel à chaque nouvelle transaction.</p>
           </div>
         </div>
         <button 
-          onClick={() => setToast({ message: "Les paramètres d'alerte seront disponibles dans la prochaine mise à jour.", type: "info" })}
+          onClick={() => toast.info("Les paramètres d'alerte seront disponibles dans la prochaine mise à jour.")}
           className="bg-white dark:bg-slate-800 text-primary border-2 border-primary/20 px-6 py-3 rounded-xl font-black hover:bg-primary hover:text-white transition-all"
         >
           CONFIGURER LES ALERTES
         </button>
       </div>
 
-      {toast && (
-        <Toast 
-          message={toast.message} 
-          type={toast.type} 
-          onClose={() => setToast(null)} 
-        />
-      )}
     </div>
   );
 }

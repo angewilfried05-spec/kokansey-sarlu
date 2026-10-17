@@ -44,7 +44,11 @@ interface Operation {
   reason?: string;
 }
 
+import { useToast } from "../contexts/ToastContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function OperationsPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user.role || 'GERANT';
   const isAdmin = role === 'ADMIN';
@@ -142,7 +146,7 @@ export default function OperationsPage() {
   };
 
   const handleDelete = async (op: Operation) => {
-    if (!window.confirm("Êtes-vous sûr de vouloir supprimer cette opération ?")) return;
+    if (!(await confirmDialog("Êtes-vous sûr de vouloir supprimer cette opération ?"))) return;
 
     let endpoint = "";
     if (op.type === 'sale') endpoint = `/api/sales/${op.id}`;
@@ -157,7 +161,7 @@ export default function OperationsPage() {
         fetchData();
       } else {
         const error = await res.json();
-        alert(error.message || "Erreur lors de la suppression");
+        toast.error(error.message || "Erreur lors de la suppression");
       }
     } catch (err) {
       console.error("Delete failed", err);
@@ -215,7 +219,7 @@ export default function OperationsPage() {
   const handleExport = () => {
     const type = filterType === 'all' ? 'sales' : filterType + 's';
     downloadWithAuth(`/api/export/csv?type=${type}&startDate=${dateRange.start}&endDate=${dateRange.end}`, `${type}.csv`).catch(() => {
-      alert('Erreur lors du téléchargement de l\'export');
+      toast.error('Erreur lors du téléchargement de l\'export');
     });
   };
 
@@ -254,7 +258,7 @@ export default function OperationsPage() {
         <button
           key={tab.id}
           onClick={() => setCurrentView(tab.id as any)}
-          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-tight transition-all ${
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-black tracking-tight transition-all ${
             currentView === tab.id 
               ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" 
               : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
@@ -335,7 +339,7 @@ export default function OperationsPage() {
           </div>
 
           <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
-            <h4 className="font-black text-gray-800 uppercase tracking-tight mb-8">Performance Journalière sur la période</h4>
+            <h4 className="font-black text-gray-800 tracking-tight mb-8">Performance Journalière sur la période</h4>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={dateFilteredOps.slice(0, 15).reverse()}>
@@ -432,7 +436,7 @@ export default function OperationsPage() {
                       </span>
                     </td>
                     <td className="px-8 py-6">
-                      <div className="text-sm font-black text-gray-800 uppercase tracking-tight">
+                      <div className="text-sm font-black text-gray-800 tracking-tight">
                         {op.type === 'sale' ? op.product : 
                          op.type === 'expense' ? op.category :
                          op.product}
@@ -478,7 +482,7 @@ export default function OperationsPage() {
             <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
               <div className="flex justify-between items-center mb-8">
                 <div>
-                  <h4 className="font-black text-gray-800 uppercase tracking-tight">Comparatif Mensuel</h4>
+                  <h4 className="font-black text-gray-800 tracking-tight">Comparatif Mensuel</h4>
                   <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Ventes vs Dépenses</p>
                 </div>
                 <BarChart3 className="w-8 h-8 text-primary/20" />
@@ -545,7 +549,7 @@ export default function OperationsPage() {
               <div className="relative z-10 flex justify-between items-start">
                 <div>
                   <p className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Fiche d'opération</p>
-                  <h3 className="text-4xl font-black uppercase tracking-tighter leading-none">
+                  <h3 className="text-4xl font-black tracking-tighter leading-none">
                     {previewOp.type === 'sale' ? 'Vente' : 
                      previewOp.type === 'expense' ? 'Dépense' : 
                      'Mouvement Stock'}
@@ -572,7 +576,7 @@ export default function OperationsPage() {
               <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 space-y-6">
                 <div className="flex justify-between items-center group">
                   <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Spéculation</span>
-                  <span className="font-black text-gray-800 uppercase tracking-tight">{previewOp.speculation?.name || 'N/A'}</span>
+                  <span className="font-black text-gray-800 tracking-tight">{previewOp.speculation?.name || 'N/A'}</span>
                 </div>
                 <div className="h-px bg-gray-200/50" />
                 
@@ -580,7 +584,7 @@ export default function OperationsPage() {
                   <>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Désignation</span>
-                      <span className="font-black text-gray-800 uppercase">{previewOp.product}</span>
+                      <span className="font-black text-gray-800">{previewOp.product}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Volume</span>
@@ -588,29 +592,29 @@ export default function OperationsPage() {
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Tiers</span>
-                      <span className="font-black text-primary uppercase">{previewOp.client || 'Client Inconnu'}</span>
+                      <span className="font-black text-primary">{previewOp.client || 'Client Inconnu'}</span>
                     </div>
                   </>
                 ) : previewOp.type === 'expense' ? (
                   <>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Catégorie</span>
-                      <span className="font-black text-gray-800 uppercase">{previewOp.category}</span>
+                      <span className="font-black text-gray-800">{previewOp.category}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Tiers</span>
-                      <span className="font-black text-red-600 uppercase">{previewOp.supplier || 'Fournisseur Inconnu'}</span>
+                      <span className="font-black text-red-600">{previewOp.supplier || 'Fournisseur Inconnu'}</span>
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Article</span>
-                      <span className="font-black text-gray-800 uppercase">{previewOp.product}</span>
+                      <span className="font-black text-gray-800">{previewOp.product}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Raison</span>
-                      <span className="font-black text-blue-600 uppercase">{previewOp.reason || 'N/A'}</span>
+                      <span className="font-black text-blue-600">{previewOp.reason || 'N/A'}</span>
                     </div>
                   </>
                 )}
@@ -643,7 +647,7 @@ export default function OperationsPage() {
 
               <button 
                 onClick={() => setPreviewOp(null)}
-                className="w-full py-5 bg-gray-900 text-white rounded-3xl font-black uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95"
+                className="w-full py-5 bg-gray-900 text-white rounded-3xl font-black tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95"
               >
                 Fermer la fiche
               </button>
@@ -656,7 +660,7 @@ export default function OperationsPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[100]">
           <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-gray-100 flex justify-between items-center">
-              <h3 className="text-xl font-black uppercase tracking-tight text-gray-800">Modifier l'Opération</h3>
+              <h3 className="text-xl font-black tracking-tight text-gray-800">Modifier l'Opération</h3>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><X className="w-5 h-5" /></button>
             </div>
             <form onSubmit={handleUpdate} className="p-8 space-y-4">
@@ -745,13 +749,13 @@ export default function OperationsPage() {
                 <button 
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="flex-1 py-4 bg-gray-100 text-gray-600 rounded-2xl font-black uppercase tracking-widest hover:bg-gray-200 transition-all"
+                  className="flex-1 py-4 bg-gray-100 text-gray-600 rounded-2xl font-black tracking-widest hover:bg-gray-200 transition-all"
                 >
                   Annuler
                 </button>
                 <button 
                   type="submit"
-                  className="flex-1 py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:shadow-xl hover:shadow-primary/20 transition-all"
+                  className="flex-1 py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:shadow-xl hover:shadow-primary/20 transition-all"
                 >
                   Enregistrer
                 </button>

@@ -41,7 +41,7 @@ export default function Toast({ message, type, onClose, duration = DURATION }: T
   return (
     <div
       role="alert"
-      className={`fixed bottom-6 right-6 flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border border-l-4 border-gray-100 dark:border-slate-700 ${accents[type]} bg-white dark:bg-slate-800 shadow-pop z-[9999] max-w-sm ${
+      className={`flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border border-l-4 border-gray-100 dark:border-slate-700 ${accents[type]} bg-white dark:bg-slate-800 shadow-pop max-w-sm ${
         leaving ? 'animate-out' : 'animate-in slide-in-from-right-8 duration-300'
       }`}
     >

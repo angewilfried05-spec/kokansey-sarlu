@@ -3,7 +3,8 @@ import { Plus, Search, FileText, Printer, CreditCard, Trash2, X, Send, Settings 
 import { useDataTable } from "../hooks/useDataTable";
 import Pagination from "../components/Pagination";
 import EmptyState from "../components/EmptyState";
-import Toast, { ToastType } from "../components/Toast";
+import { ToastType } from "../components/Toast";
+import { useToast } from "../contexts/ToastContext";
 import Modal from "../components/Modal";
 import { fetchWithAuth } from "../lib/api";
 import { getInvoiceHTML, InvoiceTemplate, defaultInvoiceTemplate } from "../lib/invoiceTemplate";
@@ -57,12 +58,14 @@ interface Sale {
   speculation: { name: string };
 }
 
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function InvoicesPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [sales, setSales] = useState<Sale[]>([]);
   const [loading, setLoading] = useState(true);
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
@@ -95,7 +98,7 @@ export default function InvoicesPage() {
   const isGerant = user.role === 'GERANT' || isAdmin;
 
   const showToast = (message: string, type: ToastType = 'info') => {
-    setToast({ message, type });
+    toast[type](message);
   };
 
   const fetchData = async () => {
@@ -266,7 +269,7 @@ export default function InvoicesPage() {
   };
 
   const handleDelete = async (invoice: Invoice) => {
-    if (!window.confirm(`Supprimer la facture ${invoice.numero} ?`)) return;
+    if (!(await confirmDialog(`Supprimer la facture ${invoice.numero} ?`))) return;
 
     try {
       const response = await fetchWithAuth(`/api/invoices/${invoice.id}`, {
@@ -377,7 +380,6 @@ export default function InvoicesPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Facturation</h1>

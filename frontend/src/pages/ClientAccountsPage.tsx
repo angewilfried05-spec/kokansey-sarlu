@@ -94,7 +94,11 @@ function getSoldeLabel(solde: number) {
   return "Compte soldé";
 }
 
+import { useToast } from "../contexts/ToastContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function ClientAccountsPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const role = user.role || "GERANT";
   const isAdmin = role === "ADMIN" || user?.username === "KOKANSEY GROUP";
@@ -262,7 +266,7 @@ export default function ClientAccountsPage() {
       setClientSelectionne({ ...nouveauClient, solde: 0 });
     } catch (error) {
       console.error(error);
-      alert("Impossible de créer le client.");
+      toast.error("Impossible de créer le client.");
     }
   };
 
@@ -302,7 +306,7 @@ export default function ClientAccountsPage() {
       await rafraichirDonneesClient();
     } catch (error) {
       console.error(error);
-      alert(operationEnEdition ? "Impossible de modifier l'opération." : "Impossible d'ajouter l'opération.");
+      toast.error(operationEnEdition ? "Impossible de modifier l'opération." : "Impossible d'ajouter l'opération.");
     }
   };
 
@@ -321,7 +325,7 @@ export default function ClientAccountsPage() {
       await chargerClients();
     } catch (error) {
       console.error(error);
-      alert(error instanceof Error ? error.message : "Impossible de supprimer le client. Réservé aux administrateurs.");
+      toast.error(error instanceof Error ? error.message : "Impossible de supprimer le client. Réservé aux administrateurs.");
     } finally {
       setDeletingClient(false);
     }
@@ -329,7 +333,7 @@ export default function ClientAccountsPage() {
 
   const handleSupprimerOperation = async (operation: OperationClient) => {
     if (!clientSelectionne) return;
-    if (!confirm(`Supprimer cette opération (${getLibelleType(operation.typeOperation)} — ${formatMontant(operation.montant)}) ?`)) return;
+    if (!(await confirmDialog(`Supprimer cette opération (${getLibelleType(operation.typeOperation)} — ${formatMontant(operation.montant)}) ?`))) return;
 
     try {
       const res = await fetchWithAuth(`/api/operations/${operation.id}`, { method: "DELETE" });
@@ -337,7 +341,7 @@ export default function ClientAccountsPage() {
       await rafraichirDonneesClient();
     } catch (error) {
       console.error(error);
-      alert("Impossible de supprimer l'opération. Réservé aux administrateurs.");
+      toast.error("Impossible de supprimer l'opération. Réservé aux administrateurs.");
     }
   };
 
@@ -428,7 +432,7 @@ export default function ClientAccountsPage() {
                         {client.nom.substring(0, 2).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-black text-gray-800 uppercase tracking-tight truncate">{client.nom}</p>
+                        <p className="font-black text-gray-800 tracking-tight truncate">{client.nom}</p>
                         <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                           {client.typeClient} · {client._count?.operations || 0} op.
                         </p>
@@ -457,7 +461,7 @@ export default function ClientAccountsPage() {
           {!clientSelectionne ? (
             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
               <Wallet className="w-16 h-16 text-gray-200 mb-4" />
-              <h3 className="text-xl font-black text-gray-400 uppercase tracking-tight">Sélectionnez un client</h3>
+              <h3 className="text-xl font-black text-gray-400 tracking-tight">Sélectionnez un client</h3>
               <p className="text-gray-400 italic mt-2">Choisissez un client dans la liste pour voir son relevé de compte</p>
             </div>
           ) : (
@@ -703,7 +707,7 @@ export default function ClientAccountsPage() {
               </div>
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20"
+                className="w-full bg-primary text-white py-4 rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20"
               >
                 Créer le client
               </button>
@@ -801,7 +805,7 @@ export default function ClientAccountsPage() {
               )}
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20"
+                className="w-full bg-primary text-white py-4 rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-lg shadow-primary/20"
               >
                 {operationEnEdition ? "Enregistrer les modifications" : "Enregistrer l'opération"}
               </button>

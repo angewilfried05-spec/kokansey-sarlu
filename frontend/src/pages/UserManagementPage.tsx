@@ -38,7 +38,11 @@ interface User {
   createdAt: string;
 }
 
+import { useToast } from "../contexts/ToastContext";
+import { useConfirm } from "../contexts/ConfirmContext";
 export default function UserManagementPage() {
+  const toast = useToast();
+  const confirmDialog = useConfirm();
   const [users, setUsers] = useState<User[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
@@ -119,7 +123,7 @@ export default function UserManagementPage() {
 
     // Simple email validation
     if (formData.email && !formData.email.includes('@')) {
-      alert("Veuillez entrer une adresse email valide");
+      toast.error("Veuillez entrer une adresse email valide");
       return;
     }
 
@@ -145,11 +149,11 @@ export default function UserManagementPage() {
         resetForm();
         fetchData();
       } else {
-        alert(data.error || data.message || `Erreur ${res.status}: Impossible de ${isEdit ? 'modifier' : 'créer'} l'utilisateur`);
+        toast.error(data.error || data.message || `Erreur ${res.status}: Impossible de ${isEdit ? 'modifier' : 'créer'} l'utilisateur`);
       }
     } catch (err: any) {
       console.error("Submit Error:", err);
-      alert(`Erreur de connexion : ${err.message || "Le serveur est peut-être hors ligne"}`);
+      toast.error(`Erreur de connexion : ${err.message || "Le serveur est peut-être hors ligne"}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -161,13 +165,13 @@ export default function UserManagementPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
+    if (!(await confirmDialog("Voulez-vous vraiment supprimer cet utilisateur ?"))) return;
     try {
       const res = await fetchWithAuth(`/api/users/${id}`, { method: 'DELETE' });
       if (res.ok) fetchData();
       else {
         const err = await res.json();
-        alert(err.error || "Erreur lors de la suppression");
+        toast.error(err.error || "Erreur lors de la suppression");
       }
     } catch (err) {
       console.error(err);
@@ -473,7 +477,7 @@ export default function UserManagementPage() {
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (editingUser ? "Mise à jour..." : "Création en cours...") : (editingUser ? "Mettre à jour" : "Créer le compte")}
               </button>
