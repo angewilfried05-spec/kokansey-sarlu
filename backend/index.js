@@ -30,6 +30,7 @@ import notificationService from './services/notifications.js';
 dotenv.config();
 
 const app = express();
+app.disable('x-powered-by');
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
 if (!process.env.JWT_SECRET) {
@@ -151,7 +152,10 @@ const logAction = async (userId, action, entity, details) => {
 
 // Auth Routes
 app.post('/api/auth/login', rateLimit({ windowMs: 15 * 60 * 1000, max: 10 }), async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body || {};
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Nom d\'utilisateur et mot de passe requis' });
+  }
   try {
     const user = await prisma.user.findUnique({ where: { username } });
     if (!user) return res.status(401).json({ message: 'Identifiants invalides' });
