@@ -203,7 +203,7 @@ export default function StockPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Gestion des Stocks</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Gestion des Stocks</h2>
           <p className="text-gray-500 font-medium italic">Suivi des intrants, matériels et produits finis</p>
         </div>
         {isStockManager && (
@@ -226,7 +226,7 @@ export default function StockPage() {
             {loading ? (
               <div className="col-span-full text-center py-20 text-gray-400 italic">Chargement de l'inventaire...</div>
             ) : stockTable.sortedData.map((item: any) => (
-              <div key={item.id} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
+              <div key={item.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group relative overflow-hidden">
                 <div className="flex justify-between items-start mb-6">
                   <div>
                     <h3 className="font-black text-gray-800 uppercase tracking-tight">{item.name}</h3>
@@ -301,7 +301,7 @@ export default function StockPage() {
       {currentView === 'movements' && (
         <div className="animate-in slide-in-from-bottom-4 duration-300">
           <SearchBar table={movementTable} placeholder="Rechercher un mouvement..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -345,7 +345,7 @@ export default function StockPage() {
       {currentView === 'alerts' && (
         <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-300">
           {stocks.filter(s => s.quantity <= s.minThreshold).length === 0 ? (
-            <div className="bg-green-50 p-10 rounded-[2.5rem] text-center">
+            <div className="bg-green-50 p-10 rounded-2xl text-center">
               <Package className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-black text-green-800 uppercase">Tout est en ordre</h3>
               <p className="text-green-600 font-medium">Aucun article n'est en dessous du seuil d'alerte.</p>
@@ -353,13 +353,13 @@ export default function StockPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {stocks.filter(s => s.quantity <= s.minThreshold).map(item => (
-                <div key={item.id} className="bg-white p-8 rounded-[2.5rem] border-2 border-red-100 shadow-xl shadow-red-500/5 flex items-center justify-between">
+                <div key={item.id} className="bg-white p-8 rounded-2xl border-2 border-red-100 shadow-xl shadow-red-500/5 flex items-center justify-between">
                   <div className="flex items-center gap-6">
-                    <div className="p-5 bg-red-50 text-red-600 rounded-[2rem]">
+                    <div className="p-5 bg-red-50 text-red-600 rounded-2xl">
                       <AlertTriangle className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">{item.name}</h3>
+                      <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{item.name}</h3>
                       <p className="text-sm font-bold text-red-500 uppercase tracking-widest">STOCK CRITIQUE : {item.quantity} {item.unit}</p>
                       <p className="text-xs text-gray-400 mt-1 font-medium italic">Seuil d'alerte configuré à {item.minThreshold} {item.unit}</p>
                     </div>
@@ -375,9 +375,9 @@ export default function StockPage() {
       {/* Stock Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">{editingStock ? "Modifier l'Article" : "Nouvel Article"}</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{editingStock ? "Modifier l'Article" : "Nouvel Article"}</h3>
               <button onClick={() => { setShowModal(false); setEditingStock(null); }} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>

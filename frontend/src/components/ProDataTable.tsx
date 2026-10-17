@@ -131,9 +131,9 @@ export default function ProDataTable<T extends { id: string }>({
   };
 
   return (
-    <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+    <div className="card overflow-hidden">
       {/* Header Actions */}
-      <div className="p-6 border-b border-gray-50">
+      <div className="p-6 border-b border-gray-50 dark:border-slate-700">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
           <div className="flex flex-wrap items-center gap-3">
             {/* Search */}

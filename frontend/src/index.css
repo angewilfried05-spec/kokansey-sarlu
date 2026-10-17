@@ -3,18 +3,31 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
+  /* Palette de marque */
   --color-primary: #1a4d2e;
+  --color-primary-light: #2d6a45;
+  --color-primary-dark: #123620;
   --color-secondary: #e8c872;
+  --color-secondary-dark: #d4af4e;
   --color-surface: #ffffff;
   --color-background: #f8fafc;
   --color-muted: #64748b;
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1rem;
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2rem;
-  --shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --shadow-card-hover: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04);
+
+  /* Échelle de rayons normalisée (progression cohérente) */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+
+  /* Graisse de caractère : font-black adouci pour un rendu premium */
+  --font-weight-black: 800;
+
+  /* Élévations */
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 4px 12px -2px rgb(15 23 42 / 0.06);
+  --shadow-card-hover: 0 8px 24px -6px rgb(15 23 42 / 0.12), 0 2px 8px -2px rgb(15 23 42 / 0.06);
+  --shadow-pop: 0 20px 50px -12px rgb(15 23 42 / 0.25);
 }
 
 :root {
@@ -30,7 +43,98 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Animations fluides globales */
+/* Accent de sélection cohérent avec la marque */
+::selection {
+  background: rgb(26 77 46 / 0.18);
+}
+
+/* Anneau de focus global accessible */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Classes composants réutilisables                                     */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  /* Carte standard : surface + bordure + élévation */
+  .card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* Boutons — base partagée */
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .btn-danger,
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer select-none
+      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
+      disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white shadow-sm shadow-primary/20 hover:bg-primary-light active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply bg-secondary/20 text-primary dark:text-secondary hover:bg-secondary/30 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 active:scale-[0.98];
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white shadow-sm shadow-red-600/20 hover:bg-red-700 active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 active:scale-[0.98];
+  }
+
+  /* Champs de formulaire */
+  .input {
+    @apply w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700
+      text-sm font-semibold text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-400
+      transition-shadow duration-200
+      focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary;
+  }
+
+  .label {
+    @apply block text-[11px] font-bold uppercase tracking-wider text-gray-500 dark:text-slate-400 mb-1.5;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider;
+  }
+
+  /* Titres */
+  .page-title {
+    @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight;
+  }
+
+  .section-title {
+    @apply text-base font-bold text-gray-800 dark:text-white tracking-tight;
+  }
+
+  .stat-label {
+    @apply text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-slate-500;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Animations                                                           */
+/* ------------------------------------------------------------------ */
+
 .animate-in {
   animation: fadeIn 0.3s ease-out;
 }
@@ -61,7 +165,56 @@ body {
   }
 }
 
-/* Scrollbar custom */
+/* Shimmer pour les skeletons de chargement */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.5),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+:where(.dark) .skeleton-shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.08),
+    transparent
+  );
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Respect des préférences d'accessibilité */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Scrollbar                                                            */
+/* ------------------------------------------------------------------ */
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -89,7 +242,12 @@ body {
   background: #64748b;
 }
 
-/* Global dark mode helpers (low specificity to allow explicit dark: classes to override) */
+/* ------------------------------------------------------------------ */
+/* Mode sombre — helpers globaux                                        */
+/* (faible spécificité pour laisser les classes dark: explicites        */
+/*  prendre le dessus)                                                  */
+/* ------------------------------------------------------------------ */
+
 :where(.dark) .bg-white { background-color: #1e293b; }
 :where(.dark) .bg-gray-50 { background-color: #334155; }
 :where(.dark) .bg-gray-50\/50 { background-color: rgba(51, 65, 85, 0.5); }

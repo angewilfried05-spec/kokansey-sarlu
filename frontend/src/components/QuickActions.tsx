@@ -10,6 +10,22 @@ export default function QuickActions() {
 
   const actions = [
     {
+      icon: <ShoppingCart className="w-5 h-5" />,
+      label: "Enregistrer Vente",
+      onClick: () => {
+        navigate("/dashboard/speculations?view=sales");
+        setIsOpen(false);
+      },
+    },
+    {
+      icon: <CreditCard className="w-5 h-5" />,
+      label: "Ajouter Dépense",
+      onClick: () => {
+        navigate("/dashboard/speculations?view=expenses");
+        setIsOpen(false);
+      },
+    },
+    {
       icon: <Sprout className="w-5 h-5" />,
       label: "Nouvelle Culture",
       onClick: () => {
@@ -33,57 +49,54 @@ export default function QuickActions() {
         setIsOpen(false);
       },
     },
-    {
-      icon: <ShoppingCart className="w-5 h-5" />,
-      label: "Enregistrer Vente",
-      onClick: () => {
-        navigate("/dashboard/speculations?view=sales");
-        setIsOpen(false);
-      },
-    },
-    {
-      icon: <CreditCard className="w-5 h-5" />,
-      label: "Ajouter Dépense",
-      onClick: () => {
-        navigate("/dashboard/speculations?view=expenses");
-        setIsOpen(false);
-      },
-    },
   ];
 
   return (
-    <div className="fixed bottom-10 right-10 z-[100]">
-      {/* Expanded Actions */}
+    <>
+      {/* Backdrop quand le menu est ouvert */}
       {isOpen && (
-        <div className="mb-4 space-y-2 animate-in slide-in-from-bottom-4 duration-300">
-          {actions.map((action, idx) => (
-            <button
-              key={idx}
-              onClick={action.onClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl border transition-all group w-full ${
-                isDarkMode 
-                  ? "bg-[#1e293b] border-slate-700 text-slate-200 hover:bg-primary" 
-                  : "bg-white border-gray-100 hover:bg-primary"
-              }`}
-            >
-              <span className={isDarkMode ? "text-primary group-hover:text-white" : "text-primary group-hover:text-white"}>{action.icon}</span>
-              <span className={`text-sm font-bold ${isDarkMode ? "text-slate-200 group-hover:text-white" : "text-gray-700 group-hover:text-white"}`}>{action.label}</span>
-            </button>
-          ))}
-        </div>
+        <div
+          className="fixed inset-0 z-[90] bg-black/20 backdrop-blur-[2px] animate-in fade-in duration-200"
+          onClick={() => setIsOpen(false)}
+        />
       )}
 
-      {/* Main Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 bg-primary rounded-3xl shadow-2xl hover:shadow-primary/30 hover:scale-110 transition-all flex items-center justify-center"
-      >
-        {isOpen ? (
-          <X className="w-8 h-8 text-white" />
-        ) : (
-          <Plus className="w-8 h-8 text-white" />
+      <div className="fixed bottom-8 right-8 z-[100] flex flex-col items-end">
+        {/* Expanded Actions */}
+        {isOpen && (
+          <div className="mb-4 space-y-2 animate-in slide-in-from-bottom-4 duration-200">
+            {actions.map((action, idx) => (
+              <button
+                key={idx}
+                onClick={action.onClick}
+                className={`flex items-center gap-3 pl-3 pr-5 py-2.5 rounded-xl shadow-pop border transition-all group w-full ${
+                  isDarkMode 
+                    ? "bg-[#1e293b] border-slate-700 text-slate-200" 
+                    : "bg-white border-gray-100"
+                }`}
+              >
+                <span className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary dark:text-secondary shrink-0">
+                  {action.icon}
+                </span>
+                <span className={`text-sm font-semibold ${isDarkMode ? "text-slate-200" : "text-gray-700"}`}>
+                  {action.label}
+                </span>
+              </button>
+            ))}
+          </div>
         )}
-      </button>
-    </div>
+
+        {/* Main Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "Fermer les actions rapides" : "Ouvrir les actions rapides"}
+          className="w-14 h-14 bg-primary rounded-2xl shadow-pop hover:bg-primary-light hover:scale-105 active:scale-95 transition-all flex items-center justify-center"
+        >
+          <span className={`transition-transform duration-200 ${isOpen ? "rotate-45" : ""}`}>
+            <Plus className="w-7 h-7 text-white" />
+          </span>
+        </button>
+      </div>
+    </>
   );
 }

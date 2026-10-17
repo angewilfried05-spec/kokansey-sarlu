@@ -453,7 +453,7 @@ export default function SpeculationsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Spéculations</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Spéculations</h2>
           <p className="text-gray-500 font-medium italic">Gérez vos cultures et élevages</p>
         </div>
         {isGerant && (
@@ -543,7 +543,7 @@ export default function SpeculationsPage() {
             title="Liste des spéculations"
           />
           <SearchBar table={specTable} placeholder="Rechercher une culture..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -643,7 +643,7 @@ export default function SpeculationsPage() {
             title="Liste des récoltes"
           />
           <SearchBar table={harvestTable} placeholder="Rechercher une récolte..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -722,7 +722,7 @@ export default function SpeculationsPage() {
             title="Liste des ventes"
           />
           <SearchBar table={salesTable} placeholder="Rechercher une vente..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -804,7 +804,7 @@ export default function SpeculationsPage() {
             title="Liste des dépenses"
           />
           <SearchBar table={expensesTable} placeholder="Rechercher une dépense..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -875,7 +875,7 @@ export default function SpeculationsPage() {
 
       {currentView === 'analytics' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in zoom-in-95 duration-300">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm min-h-[400px]">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
             <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6">Rentabilité par Culture</h4>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={speculations.map(s => ({
@@ -893,7 +893,7 @@ export default function SpeculationsPage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm min-h-[400px]">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
             <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6">Volume des Récoltes</h4>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -921,9 +921,9 @@ export default function SpeculationsPage() {
       {/* Sale Modal */}
       {showSaleModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouvelle Vente</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouvelle Vente</h3>
               <button onClick={() => setShowSaleModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -1045,9 +1045,9 @@ export default function SpeculationsPage() {
       {/* Expense Modal */}
       {showExpModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouvelle Dépense</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouvelle Dépense</h3>
               <button onClick={() => setShowExpModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -1095,9 +1095,9 @@ export default function SpeculationsPage() {
       {/* Harvest Modal */}
       {showHarvModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouvelle Récolte</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouvelle Récolte</h3>
               <button onClick={() => setShowHarvModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -1165,9 +1165,9 @@ export default function SpeculationsPage() {
       {/* Speculation Modal */}
       {showSpecModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">
                 {editingSpec ? "Modifier Spéculation" : "Nouvelle Spéculation"}
               </h3>
               <button onClick={() => setShowSpecModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
@@ -1238,9 +1238,9 @@ export default function SpeculationsPage() {
       {/* Encaissement Modal */}
       {showEncaissementModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">
                 Encaisser Paiement
               </h3>
               <button onClick={() => setShowEncaissementModal(false)} className="p-2 hover:bg-gray-100 rounded-full">

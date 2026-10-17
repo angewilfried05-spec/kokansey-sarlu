@@ -88,7 +88,7 @@ export default function AuditLogsPage() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight uppercase">Journal d'Audit</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Journal d'Audit</h2>
           <p className="text-gray-500 font-medium">Historique complet des actions effectuées sur le système</p>
         </div>
         <button 
@@ -100,7 +100,7 @@ export default function AuditLogsPage() {
         </button>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-50 flex flex-wrap gap-4 items-center justify-between">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="relative w-64">

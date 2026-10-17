@@ -360,7 +360,7 @@ export default function TrucksPage() {
     <div className="space-y-8 pb-10">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Gestion Logistique</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Gestion Logistique</h2>
           <p className="text-gray-500 font-medium italic">Parc automobile et engins</p>
         </div>
         <div className="flex gap-4">
@@ -394,10 +394,10 @@ export default function TrucksPage() {
       </div>
 
       {currentView === 'add' ? (
-        <div className="bg-white rounded-[3rem] p-10 shadow-sm border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="bg-white rounded-3xl p-10 shadow-sm border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="max-w-4xl mx-auto">
             <div className="mb-10">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">
                 {editingTruck ? "Modifier le Véhicule" : "Enregistrement d'un nouveau véhicule"}
               </h3>
               <p className="text-gray-400 font-bold text-sm mt-1 uppercase tracking-widest">Veuillez renseigner toutes les informations techniques et administratives</p>
@@ -572,7 +572,7 @@ export default function TrucksPage() {
               </div>
 
               <div className="pt-10 border-t border-gray-100 flex gap-4">
-                <button type="submit" className="flex-1 py-5 bg-primary text-white rounded-[2rem] font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-2xl shadow-primary/20">
+                <button type="submit" className="flex-1 py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:bg-opacity-90 transition-all shadow-2xl shadow-primary/20">
                   {editingTruck ? "Enregistrer les modifications" : "Enregistrer le nouveau véhicule"}
                 </button>
               </div>
@@ -588,7 +588,7 @@ export default function TrucksPage() {
               { label: "Missions en cours", value: fleetStats.totalTrips, icon: MapPin, color: "text-blue-600", bg: "bg-blue-50" },
               { label: "Coûts de Maintenance", value: `${fleetStats.totalExpenses.toLocaleString()} FCFA`, icon: Banknote, color: "text-red-600", bg: "bg-red-50" }
             ].map((stat, i) => (
-              <div key={i} className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex items-center gap-6">
+              <div key={i} className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-6">
                 <div className={cn("p-4 rounded-2xl", stat.bg)}>
                   <stat.icon className={cn("w-6 h-6", stat.color)} />
                 </div>
@@ -602,7 +602,7 @@ export default function TrucksPage() {
 
           {/* Navigation Tabs */}
           <div className="flex justify-between items-center">
-            <div className="flex p-2 bg-white rounded-[2rem] shadow-sm border border-gray-100 w-fit">
+            <div className="flex p-2 bg-white rounded-2xl shadow-sm border border-gray-100 w-fit">
               {[
                 { id: 'fleet', label: "Flotte Automobile", icon: TruckIcon },
                 { id: 'trips', label: "Suivi des Trajets", icon: History },
@@ -650,7 +650,7 @@ export default function TrucksPage() {
               <SearchBar table={truckTable} placeholder="Rechercher un véhicule..." />
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {truckTable.paginatedData.map((truck: any) => (
-                <div key={truck.id} className="bg-white p-8 rounded-[3rem] border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div key={truck.id} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <div className="p-3 bg-primary/10 rounded-xl text-primary">
@@ -758,7 +758,7 @@ export default function TrucksPage() {
       {currentView === 'trips' && (
         <div className="animate-in slide-in-from-bottom-4 duration-300">
           <SearchBar table={tripTable} placeholder="Rechercher un trajet..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -815,7 +815,7 @@ export default function TrucksPage() {
       {currentView === 'expenses' && (
         <div className="animate-in slide-in-from-bottom-4 duration-300">
           <SearchBar table={expenseTable} placeholder="Rechercher une dépense..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -859,7 +859,7 @@ export default function TrucksPage() {
 
       {currentView === 'analytics' && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-full animate-in zoom-in-95 duration-300">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
             <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6 flex items-center gap-2">
               <PieChartIcon className="w-5 h-5 text-primary" />
               Répartition Globale des Coûts
@@ -887,7 +887,7 @@ export default function TrucksPage() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col">
             <h4 className="font-black text-gray-800 uppercase tracking-tight mb-6 flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-primary" />
               Coûts par Véhicule (Total)
@@ -917,9 +917,9 @@ export default function TrucksPage() {
       {/* Add Trip Modal */}
       {showTripModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouveau Trajet</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouveau Trajet</h3>
               <button onClick={() => setShowTripModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -970,9 +970,9 @@ export default function TrucksPage() {
       {/* Add Expense Modal */}
       {showExpenseModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Frais & Entretien</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Frais & Entretien</h3>
               <button onClick={() => setShowExpenseModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>

@@ -2,7 +2,7 @@ import { cn } from "../lib/utils";
 
 export function Skeleton({ className }: { className?: string }) {
   return (
-    <div className={cn("animate-pulse rounded-2xl bg-gray-200 dark:bg-slate-700", className)} />
+    <div className={cn("rounded-xl bg-gray-200 dark:bg-slate-700 skeleton-shimmer", className)} />
   );
 }
 
@@ -22,7 +22,7 @@ export function TableSkeleton({ columns, rows = 5, className }: { columns: numbe
 
 export function CardSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn("bg-white dark:bg-slate-800 rounded-[2.5rem] border border-gray-100 dark:border-slate-700 p-8 shadow-sm", className)}>
+    <div className={cn("card p-8", className)}>
       <Skeleton className="h-6 w-1/3 mb-8" />
       <Skeleton className="h-64 w-full" />
     </div>

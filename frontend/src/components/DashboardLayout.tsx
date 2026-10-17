@@ -95,11 +95,10 @@ export default function DashboardLayout() {
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Desktop Header */}
-        <header className="hidden lg:flex h-24 bg-white dark:bg-[#1e293b] border-b border-gray-100 dark:border-slate-800 items-center justify-between px-10 shadow-sm z-10">
+        <header className="hidden lg:flex h-20 bg-white dark:bg-[#1e293b] border-b border-gray-100 dark:border-slate-800 items-center justify-between px-8 z-10">
           <div>
-            <h2 className="text-2xl font-black text-gray-800 dark:text-white tracking-tight uppercase">{getPageTitle()}</h2>
-            <p className="text-xs font-bold text-gray-400 dark:text-slate-400 mt-1 uppercase tracking-widest">Bienvenue, {user.username}</p>
-            <p className="text-[10px] font-bold text-primary mt-1 uppercase tracking-widest">{formattedDateTime}</p>
+            <h2 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{getPageTitle()}</h2>
+            <p className="text-xs font-medium text-gray-400 dark:text-slate-400 mt-0.5 capitalize">{formattedDateTime}</p>
           </div>
 
           <div className="flex items-center gap-6">
@@ -135,11 +134,11 @@ export default function DashboardLayout() {
 
             <div className="flex items-center gap-3 pl-2">
               <div className="text-right">
-                <p className="text-sm font-black text-gray-800 dark:text-white leading-none">{user.username}</p>
+                <p className="text-sm font-semibold text-gray-800 dark:text-white leading-none">{user.username}</p>
                 <p className="text-[10px] font-bold text-primary uppercase tracking-widest mt-1">{user.role}</p>
               </div>
-              <div className="w-12 h-12 bg-primary/5 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-primary shadow-inner">
-                <UserCircle className="w-8 h-8" />
+              <div className="w-11 h-11 bg-primary/10 dark:bg-slate-800 rounded-xl flex items-center justify-center text-primary dark:text-secondary font-bold text-sm border border-primary/10 dark:border-slate-700">
+                {user.username?.substring(0, 2).toUpperCase() || <UserCircle className="w-6 h-6" />}
               </div>
             </div>
           </div>

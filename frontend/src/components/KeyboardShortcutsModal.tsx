@@ -23,7 +23,7 @@ export default function KeyboardShortcutsModal({ isOpen, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[200] backdrop-blur-sm animate-in fade-in duration-300" onClick={onClose}>
-      <div className={`rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 ${isDarkMode ? "bg-[#1e293b]" : "bg-white"}`} onClick={(e) => e.stopPropagation()}>
+      <div className={`rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 ${isDarkMode ? "bg-[#1e293b]" : "bg-white"}`} onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className={`p-6 border-b flex items-center justify-between ${isDarkMode ? "border-slate-700" : "border-gray-100"}`}>
           <div className="flex items-center gap-3">

@@ -96,7 +96,7 @@ export default function AccountsPage() {
       {/* Header & Global Stats */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">Comptes d'Exploitation</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Comptes d'Exploitation</h2>
           <p className="text-gray-500 font-bold">Analyse chirurgicale de la performance par spéculation</p>
         </div>
 
@@ -155,7 +155,7 @@ export default function AccountsPage() {
 
       {currentView === 'synthesis' && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in fade-in duration-500">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
             <h3 className="text-xl font-black text-gray-800 mb-6 flex items-center gap-3">
               <BarChart3 className="text-primary w-6 h-6" />
               Comparaison Revenus / Charges
@@ -177,7 +177,7 @@ export default function AccountsPage() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
             <h3 className="text-xl font-black text-gray-800 mb-6 flex items-center gap-3">
               <PieChartIcon className="text-secondary w-6 h-6" />
               Répartition de la Marge (ROI)
@@ -207,7 +207,7 @@ export default function AccountsPage() {
       )}
 
       {currentView === 'units' && (
-        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
           <div className="p-8 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
             <h3 className="text-xl font-black text-gray-800 uppercase tracking-tight">Performance par Unité</h3>
             <span className="bg-white px-4 py-2 rounded-full border border-gray-200 text-xs font-black text-gray-400">
@@ -327,7 +327,7 @@ export default function AccountsPage() {
       )}
 
       {currentView === 'journal' && (
-        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-500 p-8 text-center text-gray-400 italic font-bold">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-500 p-8 text-center text-gray-400 italic font-bold">
           <History className="w-12 h-12 mx-auto mb-4 opacity-20" />
           Journal analytique détaillé en cours de génération...
           <p className="text-xs font-medium mt-2">Utilisez la section "Opérations" pour consulter tous les flux financiers en temps réel.</p>

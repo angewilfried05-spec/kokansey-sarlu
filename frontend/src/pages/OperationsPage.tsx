@@ -272,7 +272,7 @@ export default function OperationsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight uppercase">Opérations</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Opérations</h2>
           <p className="text-gray-500 font-medium">Gestion centralisée des flux financiers</p>
         </div>
 
@@ -334,7 +334,7 @@ export default function OperationsPage() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm min-h-[400px]">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm min-h-[400px]">
             <h4 className="font-black text-gray-800 uppercase tracking-tight mb-8">Performance Journalière sur la période</h4>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
@@ -356,7 +356,7 @@ export default function OperationsPage() {
       )}
 
       {currentView === 'journal' && (
-        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
           <div className="p-6 border-b border-gray-50 flex flex-col lg:flex-row justify-between gap-4 bg-gray-50/30">
             <div className="relative flex-1 max-w-xl">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -475,7 +475,7 @@ export default function OperationsPage() {
       {currentView === 'monthly' && (
         <div className="space-y-8 animate-in zoom-in-95 duration-300">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
               <div className="flex justify-between items-center mb-8">
                 <div>
                   <h4 className="font-black text-gray-800 uppercase tracking-tight">Comparatif Mensuel</h4>
@@ -500,12 +500,12 @@ export default function OperationsPage() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col justify-center text-center space-y-6">
+            <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-center text-center space-y-6">
               <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto">
                 <TrendingUp className="w-10 h-10 text-primary" />
               </div>
               <div>
-                <h3 className="text-2xl font-black text-gray-800 uppercase">Analyse de Rentabilité</h3>
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white">Analyse de Rentabilité</h3>
                 <p className="text-gray-400 font-medium max-w-sm mx-auto mt-2">
                   Vos revenus mensuels moyens sont de <span className="text-primary font-black">
                     {(monthlyData.reduce((acc, curr) => acc + curr.sales, 0) / (monthlyData.length || 1)).toLocaleString()} FCFA
@@ -536,7 +536,7 @@ export default function OperationsPage() {
       {/* Preview Modal */}
       {previewOp && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[100]">
-          <div className="bg-white rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className={`p-10 text-white relative overflow-hidden ${
               previewOp.type === 'sale' ? 'bg-green-600' : 
               previewOp.type === 'expense' ? 'bg-red-600' : 
@@ -569,7 +569,7 @@ export default function OperationsPage() {
             </div>
             
             <div className="p-10 space-y-8">
-              <div className="bg-gray-50 rounded-[2rem] p-8 border border-gray-100 space-y-6">
+              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 space-y-6">
                 <div className="flex justify-between items-center group">
                   <span className="text-xs font-black text-gray-400 uppercase tracking-widest">Spéculation</span>
                   <span className="font-black text-gray-800 uppercase tracking-tight">{previewOp.speculation?.name || 'N/A'}</span>
@@ -635,7 +635,7 @@ export default function OperationsPage() {
               {previewOp.observation && (
                 <div className="px-4">
                   <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-2">Note interne</p>
-                  <div className="bg-amber-50 text-amber-900 p-6 rounded-[1.5rem] text-sm font-bold italic border-l-8 border-amber-400 shadow-sm leading-relaxed">
+                  <div className="bg-amber-50 text-amber-900 p-6 rounded-3xl text-sm font-bold italic border-l-8 border-amber-400 shadow-sm leading-relaxed">
                     "{previewOp.observation}"
                   </div>
                 </div>
@@ -643,7 +643,7 @@ export default function OperationsPage() {
 
               <button 
                 onClick={() => setPreviewOp(null)}
-                className="w-full py-5 bg-gray-900 text-white rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95"
+                className="w-full py-5 bg-gray-900 text-white rounded-3xl font-black uppercase tracking-[0.2em] hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95"
               >
                 Fermer la fiche
               </button>
@@ -654,7 +654,7 @@ export default function OperationsPage() {
       {/* Edit Modal */}
       {showEditModal && editingOp && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[100]">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-xl font-black uppercase tracking-tight text-gray-800">Modifier l'Opération</h3>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><X className="w-5 h-5" /></button>

@@ -227,7 +227,7 @@ export default function UserManagementPage() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight uppercase">Utilisateurs</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Utilisateurs</h2>
           <p className="text-gray-500 font-medium">Gestion des accès et des rôles système</p>
         </div>
 
@@ -249,7 +249,7 @@ export default function UserManagementPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-50 flex flex-wrap gap-4 items-center justify-between">
           <div className="flex flex-wrap gap-4 items-center">
             <div className="relative w-64">
@@ -378,9 +378,9 @@ export default function UserManagementPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">{editingUser ? "Modifier Utilisateur" : "Nouvel Utilisateur"}</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{editingUser ? "Modifier Utilisateur" : "Nouvel Utilisateur"}</h3>
               <button onClick={() => { setShowModal(false); setEditingUser(null); resetForm(); }} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <X className="w-6 h-6" />
               </button>

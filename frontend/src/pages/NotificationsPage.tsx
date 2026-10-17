@@ -102,7 +102,7 @@ export default function NotificationsPage() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex justify-between items-end">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 tracking-tight uppercase">Notifications WhatsApp</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Notifications WhatsApp</h2>
           <p className="text-gray-500 font-medium">Connectez votre téléphone pour recevoir les alertes</p>
         </div>
         <div className="flex gap-3">
@@ -147,7 +147,7 @@ export default function NotificationsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* QR Code Section */}
-        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-center justify-center">
           <div className="mb-6 text-center">
             <Smartphone className="w-16 h-16 text-primary mx-auto mb-4" />
             <h3 className="text-2xl font-bold text-gray-800 mb-2">Scannez le QR Code</h3>
@@ -191,7 +191,7 @@ export default function NotificationsPage() {
 
         {/* Status Info */}
         <div className="space-y-6">
-          <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
             <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <Bell className="w-6 h-6 text-primary" />
               Statut de la connexion
@@ -219,7 +219,7 @@ export default function NotificationsPage() {
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+          <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
             <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
               <QrCode className="w-6 h-6 text-primary" />
               Comment connecter ?
@@ -236,7 +236,7 @@ export default function NotificationsPage() {
 
       {/* Test Message Section */}
       {status?.isReady && (
-        <div className="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-sm">
+        <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
           <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
             <MessageSquare className="w-6 h-6 text-primary" />
             Envoyer un message de test

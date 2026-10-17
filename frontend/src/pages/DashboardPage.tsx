@@ -138,8 +138,8 @@ export default function DashboardPage() {
       {/* Global Search & Header */}
       <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
         <div>
-          <h2 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight uppercase">Tableau de Bord</h2>
-          <p className="text-gray-500 dark:text-slate-400 font-medium">Pilotage stratégique de KOKANSEY SARLU</p>
+          <h2 className="page-title">Tableau de bord</h2>
+          <p className="text-gray-500 dark:text-slate-400 font-medium mt-1">Pilotage stratégique de KOKANSEY SARLU</p>
         </div>
         
         <div className="flex items-center gap-4 w-full lg:w-auto">
@@ -148,34 +148,35 @@ export default function DashboardPage() {
             <input 
               type="text" 
               placeholder="Rechercher une opération, un employé, un camion..." 
-              className="w-full pl-12 pr-4 py-3 md:py-4 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl shadow-sm focus:ring-4 focus:ring-primary/5 focus:border-primary outline-none font-bold text-sm text-gray-900 dark:text-white transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl shadow-card focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none font-semibold text-sm text-gray-900 dark:text-white transition-all"
             />
           </div>
-          <div className="hidden md:flex items-center gap-2 bg-white dark:bg-slate-800 px-6 py-4 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="hidden md:flex items-center gap-2 bg-white dark:bg-slate-800 px-5 py-3 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-card">
             <Clock className="w-4 h-4 text-primary" />
-            <span className="text-sm font-black text-gray-700 dark:text-slate-200">{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
+            <span className="text-sm font-semibold text-gray-700 dark:text-slate-200 capitalize">{new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</span>
           </div>
         </div>
       </div>
 
       {/* Top Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5">
         {[
-          { label: "Ventes du Mois", value: summary.totalSales, icon: TrendingUp, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20" },
-          { label: "Dépenses Totales", value: summary.totalExpenses, icon: TrendingDown, color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-900/20" },
-          { label: "Solde Net", value: summary.netProfit, icon: Wallet, color: "text-primary", bg: "bg-primary/5 dark:bg-primary/20" },
-          { label: "Créances Clients", value: summary.totalCreances, icon: CreditCard, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-900/20" },
-          { label: "Effectif Personnel", value: summary.employeesCount, icon: Users, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20" }
+          { label: "Ventes du Mois", value: summary.totalSales, icon: TrendingUp, color: "text-emerald-600 dark:text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-900/20", accent: "bg-emerald-500" },
+          { label: "Dépenses Totales", value: summary.totalExpenses, icon: TrendingDown, color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-900/20", accent: "bg-red-500" },
+          { label: "Solde Net", value: summary.netProfit, icon: Wallet, color: "text-primary dark:text-secondary", bg: "bg-primary/5 dark:bg-primary/20", accent: "bg-primary" },
+          { label: "Créances Clients", value: summary.totalCreances, icon: CreditCard, color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-900/20", accent: "bg-amber-500" },
+          { label: "Effectif Personnel", value: summary.employeesCount, icon: Users, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20", accent: "bg-blue-500" }
         ].map((stat, i) => (
-          <div key={i} className="bg-white dark:bg-slate-800 p-5 md:p-6 lg:p-8 rounded-2xl md:rounded-[2rem] lg:rounded-[2.5rem] border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`p-4 rounded-2xl transition-colors duration-300 ${stat.bg}`}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
+          <div key={i} className="card card-hover p-5 lg:p-6 relative overflow-hidden group">
+            <div className={cn("absolute top-0 left-0 w-1 h-full opacity-80", stat.accent)} />
+            <div className="flex justify-between items-start mb-4 pl-2">
+              <div className={cn("p-3 rounded-xl transition-transform duration-300 group-hover:scale-105", stat.bg)}>
+                <stat.icon className={cn("w-5 h-5", stat.color)} />
               </div>
             </div>
-            <div>
-              <p className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
-              <h3 className="text-2xl font-black text-gray-800 dark:text-white tracking-tight">
+            <div className="pl-2">
+              <p className="stat-label mb-1.5">{stat.label}</p>
+              <h3 className="text-xl lg:text-2xl font-bold text-gray-800 dark:text-white tracking-tight">
                 {typeof stat.value === 'number' && stat.label !== "Effectif Personnel"
                   ? `${stat.value.toLocaleString()} FCFA`
                   : stat.value}
@@ -189,10 +190,10 @@ export default function DashboardPage() {
         {/* Financial Evolution Column */}
         <div className="lg:col-span-2 space-y-8">
           {/* Créances Widget */}
-          <div className="bg-white dark:bg-slate-800 p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-[2rem] lg:rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-2xl lg:rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex justify-between items-center mb-8">
               <div>
-                <h3 className="text-xl font-black text-gray-800 dark:text-white uppercase tracking-tight flex items-center gap-3">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-white tracking-tight flex items-center gap-3">
                   <CreditCard className="w-6 h-6 text-amber-600" />
                   Créances Clients
                 </h3>
@@ -209,7 +210,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Top 5 Débiteurs */}
               <div className="bg-gray-50 dark:bg-slate-700/50 rounded-2xl p-6">
-                <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
                   <UserCheck className="w-4 h-4 text-amber-600" />
                   Top 5 Débiteurs
                 </h4>
@@ -229,7 +230,7 @@ export default function DashboardPage() {
 
               {/* Clients en dépassement */}
               <div className="bg-red-50 dark:bg-red-900/20 rounded-2xl p-6">
-                <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
+                <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest mb-4 flex items-center gap-2">
                   <AlertOctagon className="w-4 h-4 text-red-600" />
                   Seuil Dépassé (&gt;500k)
                 </h4>
@@ -254,13 +255,13 @@ export default function DashboardPage() {
            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div 
                 onClick={() => navigate('/dashboard/speculations?view=sales')}
-                className="bg-[#1a4d2e] p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-[2rem] lg:rounded-[2.5rem] text-white relative overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-primary/20 transition-all"
+                className="bg-[#1a4d2e] p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-2xl lg:rounded-2xl text-white relative overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-primary/20 transition-all"
               >
                 <div className="relative z-10">
                   <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <ArrowUpCircle className="w-6 h-6 text-secondary" />
                   </div>
-                  <h4 className="text-2xl font-black uppercase tracking-tight mb-2">Nouvelle Vente</h4>
+                  <h4 className="text-xl font-bold tracking-tight mb-2">Nouvelle Vente</h4>
                   <p className="text-white/60 text-sm font-bold leading-relaxed mb-8 max-w-[200px]">Enregistrez rapidement une transaction commerciale.</p>
                   <div className="flex items-center gap-2 text-secondary font-black text-xs uppercase tracking-widest">
                     Accès rapide <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -271,13 +272,13 @@ export default function DashboardPage() {
 
               <div 
                 onClick={() => navigate('/dashboard/speculations?view=expenses')}
-                className="bg-gray-900 p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-[2rem] lg:rounded-[2.5rem] text-white relative overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-black/20 transition-all"
+                className="bg-gray-900 p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-2xl lg:rounded-2xl text-white relative overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-black/20 transition-all"
               >
                 <div className="relative z-10">
                   <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                     <ArrowDownCircle className="w-6 h-6 text-red-400" />
                   </div>
-                  <h4 className="text-2xl font-black uppercase tracking-tight mb-2">Nouvelle Dépense</h4>
+                  <h4 className="text-xl font-bold tracking-tight mb-2">Nouvelle Dépense</h4>
                   <p className="text-white/60 text-sm font-bold leading-relaxed mb-8 max-w-[200px]">Saisissez vos charges et factures diverses.</p>
                   <div className="flex items-center gap-2 text-red-400 font-black text-xs uppercase tracking-widest">
                     Accès rapide <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -287,10 +288,10 @@ export default function DashboardPage() {
               </div>
            </div>
 
-           <div className="bg-white dark:bg-slate-800 p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-[2rem] lg:rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm min-h-[300px] md:min-h-[400px] lg:min-h-[500px] flex flex-col">
+           <div className="bg-white dark:bg-slate-800 p-5 md:p-8 lg:p-10 rounded-2xl md:rounded-2xl lg:rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm min-h-[300px] md:min-h-[400px] lg:min-h-[500px] flex flex-col">
               <div className="flex justify-between items-center mb-10">
                 <div>
-                  <h3 className="text-xl font-black text-gray-800 dark:text-white uppercase tracking-tight flex items-center gap-3">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-white tracking-tight flex items-center gap-3">
                     <Activity className="w-6 h-6 text-primary" />
                     Flux de Trésorerie
                   </h3>
@@ -351,9 +352,9 @@ export default function DashboardPage() {
         {/* Right Sidebar Dashboard Column */}
         <div className="space-y-8">
           {/* Notifications Card */}
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex justify-between items-center mb-8">
-              <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
+              <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
                 <Shield className="w-4 h-4 text-primary" />
                 Alertes Maintenance
               </h4>
@@ -400,9 +401,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Stock Alerts */}
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex justify-between items-center mb-8">
-              <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
+              <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
                 <BoxSelect className="w-4 h-4 text-red-600" />
                 Alertes Stock
               </h4>
@@ -442,9 +443,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Upcoming Tasks */}
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex justify-between items-center mb-8">
-              <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
+              <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
                 <CalendarClock className="w-4 h-4 text-primary" />
                 Tâches à venir
               </h4>
@@ -484,9 +485,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Recent Operations - Live Activity Timeline */}
-          <div className="bg-white dark:bg-slate-800 p-8 rounded-[3rem] border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div className="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-gray-100 dark:border-slate-700 shadow-sm">
             <div className="flex justify-between items-center mb-8">
-              <h4 className="text-sm font-black text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
+              <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-widest flex items-center gap-2">
                 <History className="w-4 h-4 text-primary" />
                 Flux d'Activité
               </h4>

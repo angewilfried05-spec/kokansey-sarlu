@@ -422,7 +422,7 @@ export default function EmployeesPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Ressources Humaines</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Ressources Humaines</h2>
           <p className="text-gray-500 font-medium italic">Gestion du personnel et de la paie</p>
         </div>
         <div className="flex items-center gap-3">
@@ -507,7 +507,7 @@ export default function EmployeesPage() {
             {loading ? (
               <div className="col-span-full text-center py-20 text-gray-400 italic">Chargement du personnel...</div>
             ) : empTable.sortedData.map((emp: any) => (
-              <div key={emp.id} className="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-md transition-all group">
+              <div key={emp.id} className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 bg-primary/5 rounded-2xl flex items-center justify-center text-primary relative">
                   <UserCircle className="w-10 h-10" />
@@ -596,7 +596,7 @@ export default function EmployeesPage() {
       {currentView === 'payroll' && (
         <div className="animate-in slide-in-from-bottom-4 duration-300">
           <SearchBar table={salaryTable} placeholder="Rechercher un paiement par nom ou matricule..." />
-          <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
             <table className="w-full text-left">
               <thead>
                 <tr className="bg-gray-50/50">
@@ -654,7 +654,7 @@ export default function EmployeesPage() {
 
           <div className="animate-in slide-in-from-bottom-4 duration-300">
             <SearchBar table={absenceTable} placeholder="Rechercher une absence..." />
-            <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-gray-50/50">
@@ -706,9 +706,9 @@ export default function EmployeesPage() {
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl p-8 shadow-2xl my-8 animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-2xl p-8 shadow-2xl my-8 animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">{editingEmployee ? "Modifier l'Employé" : "Nouvel Employé"}</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{editingEmployee ? "Modifier l'Employé" : "Nouvel Employé"}</h3>
               <button onClick={() => { setShowModal(false); setEditingEmployee(null); resetForm(); }} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -816,9 +816,9 @@ export default function EmployeesPage() {
 
       {showAbsenceModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Signaler Absence</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Signaler Absence</h3>
               <button onClick={() => setShowAbsenceModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -858,9 +858,9 @@ export default function EmployeesPage() {
 
       {showSalaryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Enregistrer Paiement</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Enregistrer Paiement</h3>
               <button onClick={() => setShowSalaryModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>

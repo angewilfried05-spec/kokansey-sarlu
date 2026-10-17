@@ -147,7 +147,7 @@ export default function MonthlyReportPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Rapport Mensuel</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Rapport Mensuel</h2>
           <p className="text-gray-500 font-medium italic">Compteurs et journal de bord</p>
         </div>
         <div className="flex gap-2">
@@ -174,7 +174,7 @@ export default function MonthlyReportPage() {
         <>
           {/* Current Month Stats */}
           {currentCounter && (
-            <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm">
+            <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-black text-gray-800 uppercase">
                   {formatMonth(currentCounter.month)}
@@ -232,7 +232,7 @@ export default function MonthlyReportPage() {
           )}
 
           {/* Monthly Journal */}
-          <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
             <h3 className="text-xl font-black text-gray-800 uppercase mb-6">Journal de Bord</h3>
             
             {journal.length === 0 ? (
@@ -285,7 +285,7 @@ export default function MonthlyReportPage() {
           </div>
 
           {/* Historical Counters */}
-          <div className="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
             <h3 className="text-xl font-black text-gray-800 uppercase mb-6">Historique Mensuel</h3>
             
             <div className="space-y-4">
@@ -316,9 +316,9 @@ export default function MonthlyReportPage() {
       {/* Reset Modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Remise à Zéro</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Remise à Zéro</h3>
               <button onClick={() => setShowResetModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -355,9 +355,9 @@ export default function MonthlyReportPage() {
       {/* Journal Modal */}
       {showJournalModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Ajouter une Note</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Ajouter une Note</h3>
               <button onClick={() => setShowJournalModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>

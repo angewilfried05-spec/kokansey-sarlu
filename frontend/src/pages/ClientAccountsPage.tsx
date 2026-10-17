@@ -332,7 +332,7 @@ export default function ClientAccountsPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-3xl font-black text-gray-800 tracking-tight uppercase">Comptes Clients</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Comptes Clients</h2>
           <p className="text-gray-500 font-medium italic">Suivi des ventes, avances et paiements par client</p>
         </div>
         {isGerant && (
@@ -348,7 +348,7 @@ export default function ClientAccountsPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 min-h-[calc(100vh-12rem)]">
         {/* Colonne gauche — Liste des clients */}
-        <div className="xl:col-span-4 flex flex-col bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+        <div className="xl:col-span-4 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-gray-50 space-y-4">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -429,7 +429,7 @@ export default function ClientAccountsPage() {
         </div>
 
         {/* Colonne droite — Relevé de compte */}
-        <div className="xl:col-span-8 flex flex-col bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+        <div className="xl:col-span-8 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           {!clientSelectionne ? (
             <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
               <Wallet className="w-16 h-16 text-gray-200 mb-4" />
@@ -441,7 +441,7 @@ export default function ClientAccountsPage() {
               <div className="p-6 border-b border-gray-50">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
                   <div>
-                    <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">{clientSelectionne.nom}</h3>
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{clientSelectionne.nom}</h3>
                     <div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
                       {clientSelectionne.telephone && (
                         <span className="flex items-center gap-1"><Phone className="w-4 h-4" />{clientSelectionne.telephone}</span>
@@ -607,9 +607,9 @@ export default function ClientAccountsPage() {
       {/* Modal — Nouveau client */}
       {showModalClient && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-lg p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">Nouveau Client</h3>
+              <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouveau Client</h3>
               <button onClick={() => { setShowModalClient(false); resetFormClient(); }} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
@@ -680,10 +680,10 @@ export default function ClientAccountsPage() {
       {/* Modal — Nouvelle / modifier opération */}
       {showModalOperation && clientSelectionne && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-lg p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-lg p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <div>
-                <h3 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">
                   {operationEnEdition ? "Modifier l'Opération" : "Nouvelle Opération"}
                 </h3>
                 <p className="text-sm text-gray-400 font-medium italic mt-1">{clientSelectionne.nom}</p>

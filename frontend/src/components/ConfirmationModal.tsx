@@ -59,7 +59,7 @@ export default function ConfirmationModal({
       onClick={onClose}
     >
       <div 
-        className={`w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 ${isDarkMode ? "bg-[#1e293b]" : "bg-white"}`}
+        className={`w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 ${isDarkMode ? "bg-[#1e293b]" : "bg-white"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
