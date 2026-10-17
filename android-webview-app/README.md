@@ -1,48 +1,32 @@
 # KOKANSEY SARLU — Android WebView
 
-Ce dossier porte l’application Android native qui encapsule le frontend KOKANSEY dans une `WebView`, adaptée du mode de fonctionnement de `gestion_incidents_projet`.
+Application Android native qui encapsule le frontend KOKANSEY (servi par le serveur de production Hetzner) dans une `WebView`.
 
 ## Prérequis
 
-- Android Studio Hedgehog (2023.1.1) ou supérieur
-- JDK 17
-- Un backend KOKANSEY accessible depuis l’émulateur/appareil
-  - Émulateur Android : `http://10.0.2.2:5000` (par défaut)
-  - Appareil physique : l’URL de votre machine serveur
+- Android Studio Hedgehog (2023.1.1) ou supérieur (le JDK 17 embarqué suffit : `jbr`)
+- Android SDK (platform android-34, build-tools 34)
 
 ## Configuration
 
-1. Ouvrez le dossier `android-webview-app` dans Android Studio.
-2. Laissez Android Studio synchroniser le projet et télécharger le Gradle wrapper s’il manque.
-3. Modifiez `BASE_URL_DEBUG` et `BASE_URL_RELEASE` dans `app/build.gradle.kts` si nécessaire :
-
-```kotlin
-val baseUrlDebug = (project.findProperty("BASE_URL_DEBUG") as String?)?.trim().orEmpty().ifEmpty { "http://10.0.2.2:5000" }
-val baseUrlRelease = (project.findProperty("BASE_URL_RELEASE") as String?)?.trim().orEmpty().ifEmpty { baseUrlDebug }
-```
-
-Vous pouvez aussi les surcharger via `gradle.properties` :
-
-```properties
-BASE_URL_DEBUG=http://10.0.2.2:5000
-BASE_URL_RELEASE=https://api.example.com
-```
+- `local.properties` (non versionné) : `sdk.dir=C:/Users/<user>/AppData/Local/Android/Sdk` — utiliser des `/` ou `\\`, pas `\` seul.
+- `gradle.properties` : `BASE_URL_DEBUG` / `BASE_URL_RELEASE` pointent sur `http://65.109.236.120` (production).
+- `keystore.properties` (non versionné) + `app/kokansey-release.jks` : signature release.
 
 ## Build
 
-- **Debug** : `Build > Build Bundle(s) / APK(s) > Build APK(s)`
-- **Release signée** : créez un fichier `keystore.properties` à la racine de `android-webview-app` :
-
-```properties
-storeFile=keystore.jks
-storePassword=...
-keyAlias=...
-keyPassword=...
+```bash
+JAVA_HOME="C:\Program Files\Android\Android Studio\jbr" ./gradlew assembleRelease
 ```
+
+Produit `app/build/outputs/apk/release/kokansey-sarlu-release.apk` (signé, ~4.4 Mo).
+
+Installation : transférer l'APK sur le téléphone → ouvrir le fichier → autoriser "installer des applications inconnues". Le trafic cleartext HTTP est autorisé via `network_security_config.xml` (le serveur n'a pas encore de HTTPS).
 
 ## Fonctionnement
 
-- La `MainActivity` charge l’URL configurée dans `BuildConfig.BASE_URL`.
-- Elle détecte la disponibilité du réseau et affiche un écran offline avec bouton réessayer.
-- Le cache WebView est utilisé en mode `LOAD_CACHE_ELSE_NETWORK` hors-ligne.
-- Le bouton retour navigate dans l’historique de la `WebView`.
+- `MainActivity` charge `BuildConfig.BASE_URL` dans la WebView.
+- Écran offline + bouton Réessayer si pas de réseau.
+- Cache WebView `LOAD_CACHE_ELSE_NETWORK` hors-ligne.
+- Bouton retour = historique WebView.
+- Les liens vers un autre domaine sont bloqués dans la WebView.

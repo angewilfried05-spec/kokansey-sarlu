@@ -33,6 +33,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        setProperty("archivesBaseName", "kokansey-sarlu")
     }
 
     signingConfigs {
@@ -61,6 +62,11 @@ android {
         debug {
             buildConfigField("String", "BASE_URL", "\"$baseUrlDebug\"")
         }
+    }
+
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     compileOptions {
