@@ -1,8 +1,8 @@
 const { app, BrowserWindow, dialog } = require('electron');
 const path = require('path');
 
-// URL de l'API Hetzner
-const API_URL = process.env.API_URL || 'http://65.109.236.120';
+// URL du serveur de production
+const API_URL = process.env.API_URL || 'https://kokansey-sarlu.com';
 
 let mainWindow = null;
 
@@ -36,7 +36,7 @@ async function createWindow() {
     mainWindow = null;
   });
 
-  // Charger l'application depuis l'API Hetzner
+  // Charger l'application depuis le serveur
   console.log('Chargement de l\'URL:', API_URL);
   try {
     await mainWindow.loadURL(API_URL);
