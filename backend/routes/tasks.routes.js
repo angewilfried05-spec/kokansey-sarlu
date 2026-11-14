@@ -44,7 +44,7 @@ export default function registerTasksRoutes(app, { prisma, authenticate, authori
           priority,
           dueDate: dueDate ? new Date(dueDate) : null,
           assignedToId,
-          truckId,
+          truckId: truckId || null,
           createdById: req.user?.id || null
         },
         include: { assignedTo: true, truck: true }
@@ -82,6 +82,7 @@ export default function registerTasksRoutes(app, { prisma, authenticate, authori
       const { dueDate, ...rest } = req.body;
       const data = {
         ...rest,
+        truckId: rest.truckId || null,
         dueDate: dueDate ? new Date(dueDate) : (dueDate === '' ? null : existingTask.dueDate)
       };
 

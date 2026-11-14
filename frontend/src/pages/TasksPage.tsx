@@ -408,7 +408,7 @@ export default function TasksPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-400 dark:text-slate-500 uppercase mb-1">Véhicule assigné</label>
+                <label className="block text-xs font-bold text-gray-400 dark:text-slate-500 uppercase mb-1">Véhicule assigné (optionnel)</label>
                 <select
                   value={formData.truckId}
                   onChange={(e) => setFormData({ ...formData, truckId: e.target.value })}
