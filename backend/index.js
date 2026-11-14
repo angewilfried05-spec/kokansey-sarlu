@@ -57,7 +57,7 @@ app.use(cors({
       return callback(null, true);
     }
     // Allow same-origin requests
-    if (origin === allowedOrigins[0]) {
+    if (allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
     callback(new Error('Not allowed by CORS'));
