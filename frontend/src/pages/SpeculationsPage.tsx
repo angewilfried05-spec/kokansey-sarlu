@@ -89,6 +89,7 @@ export default function SpeculationsPage() {
     { label: "Quantité", value: (s) => `${s.quantity} ${s.unit}` },
     { label: "Client", value: (s) => s.client || s.clientCompte?.nom || "-" },
     { label: "Total (FCFA)", value: (s) => s.totalPrice.toLocaleString() },
+    { label: "Paiement", value: (s) => s.statutPaiement === 'SOLDE' ? 'Soldé' : s.statutPaiement === 'PARTIEL' ? 'Partiel' : 'En attente' },
   ];
 
   const expenseColumns: ExportColumn<Expense>[] = [
@@ -734,15 +735,16 @@ export default function SpeculationsPage() {
                   <TableHeader label="Quantité" sortKey="quantity" table={salesTable} />
                   <TableHeader label="Client" sortKey="client" table={salesTable} />
                   <TableHeader label="Total" sortKey="totalPrice" table={salesTable} />
+                  <th className="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Paiement</th>
                   <th className="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {loading ? (
-                  <TableSkeleton columns={6} />
+                  <TableSkeleton columns={7} />
                 ) : salesTable.paginatedData.length === 0 && salesTable.totalItems === 0 ? (
                   <tr>
-                    <td colSpan={6}>
+                    <td colSpan={7}>
                       <EmptyState
                         icon="sales"
                         title="Aucune vente"
@@ -768,8 +770,17 @@ export default function SpeculationsPage() {
                     <td className="px-8 py-6 text-right">
                       <span className="text-lg font-black text-green-600">{s.totalPrice.toLocaleString()} <span className="text-[10px] opacity-40 uppercase">FCFA</span></span>
                     </td>
+                    <td className="px-8 py-6">
+                      {s.statutPaiement === 'SOLDE' ? (
+                        <span className="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-lg">Soldé</span>
+                      ) : s.statutPaiement === 'PARTIEL' ? (
+                        <span className="px-3 py-1 bg-amber-50 text-amber-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Partiel</span>
+                      ) : (
+                        <span className="px-3 py-1 bg-red-50 text-red-600 text-[10px] font-black uppercase tracking-widest rounded-lg">En attente</span>
+                      )}
+                    </td>
                     <td className="px-8 py-6 text-right">
-                      {s.clientId && (
+                      {s.clientId && s.statutPaiement !== 'SOLDE' && (
                         <button
                           onClick={() => handleEncaisser(s)}
                           className="px-4 py-2 bg-amber-50 text-amber-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-amber-100 transition-colors"

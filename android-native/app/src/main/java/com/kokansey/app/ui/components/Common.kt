@@ -155,13 +155,13 @@ fun SearchField(
 @Composable
 fun StatusChip(status: String) {
     val (bg, fg, label) = when (status.uppercase()) {
-        "PAYEE", "PAYÉE", "COMPLETED", "TERMINEE", "TERMINÉE", "ACTIF", "Disponible".uppercase() ->
+        "PAYEE", "PAYÉE", "SOLDE", "SOLDÉ", "COMPLETED", "TERMINEE", "TERMINÉE", "ACTIF", "Disponible".uppercase() ->
             Triple(
                 MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
                 MaterialTheme.colorScheme.primary,
                 statusLabel(status)
             )
-        "PARTIELLEMENT_PAYEE", "IN_PROGRESS", "EN_COURS" ->
+        "PARTIELLEMENT_PAYEE", "PARTIEL", "IN_PROGRESS", "EN_COURS" ->
             Triple(
                 MaterialTheme.colorScheme.tertiary.copy(alpha = 0.12f),
                 MaterialTheme.colorScheme.tertiary,
@@ -196,6 +196,8 @@ fun statusLabel(status: String): String = when (status.uppercase()) {
     "TERMINEE" -> "Terminée"
     "PAYEE" -> "Payée"
     "PARTIELLEMENT_PAYEE" -> "Partielle"
+    "SOLDE" -> "Soldé"
+    "PARTIEL" -> "Partiel"
     "EN_ATTENTE" -> "En attente"
     "ANNULEE" -> "Annulée"
     else -> status

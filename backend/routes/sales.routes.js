@@ -29,10 +29,17 @@ export default function registerSalesRoutes(app, { prisma, authenticate, authori
   app.get('/api/sales', authenticate, async (req, res) => {
     try {
       const sales = await prisma.sale.findMany({
-        include: { speculation: true },
+        include: { speculation: true, invoice: { select: { statut: true, montantPaye: true, montantTotal: true } } },
         orderBy: { date: 'desc' }
       });
-      res.json(sales);
+      const withStatus = sales.map(({ invoice, ...s }) => ({
+        ...s,
+        statutPaiement: !s.invoiceId ? 'SOLDE'
+          : invoice?.statut === 'PAYEE' ? 'SOLDE'
+          : invoice?.statut === 'PARTIELLEMENT_PAYEE' ? 'PARTIEL'
+          : 'EN_ATTENTE'
+      }));
+      res.json(withStatus);
     } catch (error) {
       console.error('Erreur récupération ventes:', error);
       res.status(500).json({ error: 'Failed to fetch sales' });

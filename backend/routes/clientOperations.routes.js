@@ -187,13 +187,46 @@ export default function registerClientOperationsRoutes(app, { prisma, authentica
         });
       }
 
-      const operation = await prisma.operationClient.create({
-        data: {
-          ...req.body,
-          clientId: req.params.id,
-          dateOperation: new Date(req.body.dateOperation),
-          creePar: req.user.username
+      const operation = await prisma.$transaction(async (tx) => {
+        const created = await tx.operationClient.create({
+          data: {
+            ...req.body,
+            clientId: req.params.id,
+            dateOperation: new Date(req.body.dateOperation),
+            creePar: req.user.username
+          }
+        });
+
+        // Imputer le paiement sur les factures impayées du client (plus ancienne d'abord)
+        if (created.typeOperation === 'paiement' || created.typeOperation === 'avance') {
+          let reste = created.montant;
+          const impayees = await tx.invoice.findMany({
+            where: { clientId: req.params.id, statut: { not: 'PAYEE' } },
+            orderBy: { createdAt: 'asc' }
+          });
+          for (const inv of impayees) {
+            if (reste <= 0) break;
+            const aPayer = inv.montantTotal - inv.montantPaye;
+            if (aPayer <= 0) {
+              if (inv.statut !== 'PAYEE') {
+                await tx.invoice.update({ where: { id: inv.id }, data: { statut: 'PAYEE' } });
+              }
+              continue;
+            }
+            const versement = Math.min(reste, aPayer);
+            const nouveauPaye = inv.montantPaye + versement;
+            await tx.invoice.update({
+              where: { id: inv.id },
+              data: {
+                montantPaye: nouveauPaye,
+                statut: nouveauPaye >= inv.montantTotal ? 'PAYEE' : 'PARTIELLEMENT_PAYEE'
+              }
+            });
+            reste -= versement;
+          }
         }
+
+        return created;
       });
       await logAction(req.user.id, 'CREATE', 'OPERATION_CLIENT', {
         type: operation.typeOperation,

@@ -54,6 +54,7 @@ export interface Sale {
   speculationId: string;
   speculation: SpeculationRef;
   campagne?: Campagne;
+  statutPaiement?: 'SOLDE' | 'PARTIEL' | 'EN_ATTENTE';
 }
 
 export interface Expense {

@@ -51,7 +51,8 @@ data class Sale(
     val totalPrice: Double,
     val client: String? = null,
     val observation: String? = null,
-    val speculation: Speculation? = null
+    val speculation: Speculation? = null,
+    val statutPaiement: String? = null
 )
 
 @Serializable

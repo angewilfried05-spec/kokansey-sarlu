@@ -123,6 +123,7 @@ private fun SaleCard(sale: Sale, isAdmin: Boolean, onClick: () -> Unit, onDelete
             Column(horizontalAlignment = Alignment.End) {
                 Text(formatMoney(sale.totalPrice), style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                sale.statutPaiement?.let { StatusChip(it) }
                 if (isAdmin) {
                     IconButton(onClick = onDelete, modifier = Modifier.size(28.dp)) {
                         Icon(Icons.Outlined.Delete, "Supprimer",
