@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { 
-  Plus, 
-  Package, 
-  History, 
-  AlertTriangle, 
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  Plus,
+  Package,
+  PackageX,
+  Sprout,
+  History,
+  AlertTriangle,
   Search, 
   ArrowUpRight, 
   ArrowDownRight, 
@@ -68,12 +70,16 @@ export default function StockPage() {
   const [allMovements, setAllMovements] = useState<StockMovement[]>([]);
   const [speculations, setSpeculations] = useState<{id: string, name: string}[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentView, setCurrentView] = useState<'inventory' | 'movements' | 'alerts'>('inventory');
+  const [currentView, setCurrentView] = useState<'inventory' | 'movements' | 'semences' | 'pertes' | 'alerts'>('inventory');
   const [notifiedStockIds, setNotifiedStockIds] = useState<Set<string>>(new Set());
-  
+
   // DataTable hooks
   const stockTable = useDataTable(stocks);
   const movementTable = useDataTable(allMovements);
+  const semences = useMemo(() => allMovements.filter(m => m.type === 'SEMENCE'), [allMovements]);
+  const pertes = useMemo(() => allMovements.filter(m => m.type === 'PERTE'), [allMovements]);
+  const semenceTable = useDataTable(semences);
+  const perteTable = useDataTable(pertes);
 
   // Modal states
   const [showModal, setShowModal] = useState(false);
@@ -231,6 +237,8 @@ export default function StockPage() {
       {[
         { id: 'inventory', label: 'Inventaire', icon: Package },
         { id: 'movements', label: 'Mouvements', icon: History },
+        { id: 'semences', label: 'Semences', icon: Sprout },
+        { id: 'pertes', label: 'Pertes', icon: PackageX },
         { id: 'alerts', label: 'Alertes', icon: AlertTriangle },
       ].map((tab) => (
         <button
@@ -361,47 +369,85 @@ export default function StockPage() {
         </div>
       )}
 
-      {currentView === 'movements' && (
+      {(currentView === 'movements' || currentView === 'semences' || currentView === 'pertes') && (
         <div className="animate-in slide-in-from-bottom-4 duration-300">
-          <SearchBar table={movementTable} placeholder="Rechercher un mouvement..." />
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-gray-50/50">
-                  <TableHeader label="Date" sortKey="date" table={movementTable} />
-                  <TableHeader label="Article" sortKey="stockId" table={movementTable} />
-                  <TableHeader label="Type" sortKey="type" table={movementTable} />
-                  <TableHeader label="Quantité" sortKey="quantity" table={movementTable} />
-                  <th className="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Raison</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {movementTable.sortedData.map((m: any) => (
-                  <tr key={m.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(m.date).toLocaleDateString()}</td>
-                    <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{m.stock.name}</td>
-                    <td className="px-8 py-6">
-                      <span className={cn(
-                        "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
-                        MOVEMENT_TYPE_STYLES[m.type] || 'bg-gray-50 text-gray-600'
-                      )}>
-                        {MOVEMENT_TYPE_LABELS[m.type] || m.type}
-                      </span>
-                    </td>
-                    <td className="px-8 py-6 text-right">
-                      <span className={cn(
-                        "text-lg font-black",
-                        m.type === 'IN' ? 'text-green-600' : 'text-red-600'
-                      )}>
-                        {m.type === 'IN' ? '+' : '-'}{m.quantity} <span className="text-[10px] opacity-40 uppercase">{m.stock.unit}</span>
-                      </span>
-                    </td>
-                    <td className="px-8 py-6 text-xs text-gray-400 italic">{m.reason || '-'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {(() => {
+            const table = currentView === 'movements' ? movementTable
+                        : currentView === 'semences' ? semenceTable : perteTable;
+            const movements = currentView === 'movements' ? allMovements
+                            : currentView === 'semences' ? semences : pertes;
+            const totals = movements.reduce((acc: Record<string, number>, m: StockMovement) => {
+              const u = m.stock?.unit || 'u';
+              acc[u] = (acc[u] || 0) + m.quantity;
+              return acc;
+            }, {});
+            return (
+              <>
+                {currentView !== 'movements' && (
+                  <div className={cn(
+                    "mb-6 p-5 rounded-2xl border flex flex-wrap items-center gap-x-6 gap-y-2",
+                    currentView === 'semences' ? "bg-amber-50/60 border-amber-100" : "bg-orange-50/60 border-orange-100"
+                  )}>
+                    <p className="text-sm font-black text-gray-700">
+                      {movements.length} {currentView === 'semences' ? 'sortie(s) semence' : 'perte(s) enregistrée(s)'}
+                    </p>
+                    <div className="flex items-center gap-2">
+                      {Object.entries(totals).map(([unit, qty]) => (
+                        <span key={unit} className={cn(
+                          "px-3 py-1 rounded-full text-xs font-black",
+                          currentView === 'semences' ? "bg-amber-100 text-amber-700" : "bg-orange-100 text-orange-700"
+                        )}>
+                          {qty} {unit}
+                        </span>
+                      ))}
+                      {movements.length === 0 && (
+                        <span className="text-xs font-medium text-gray-400">Aucun mouvement de ce type pour le moment</span>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <SearchBar table={table} placeholder="Rechercher un mouvement..." />
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-gray-50/50">
+                        <TableHeader label="Date" sortKey="date" table={table} />
+                        <TableHeader label="Article" sortKey="stockId" table={table} />
+                        <TableHeader label="Type" sortKey="type" table={table} />
+                        <TableHeader label="Quantité" sortKey="quantity" table={table} />
+                        <th className="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Raison</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-50">
+                      {table.sortedData.map((m: any) => (
+                        <tr key={m.id} className="hover:bg-gray-50/50 transition-colors group">
+                          <td className="px-8 py-6 text-sm font-bold text-gray-500">{new Date(m.date).toLocaleDateString()}</td>
+                          <td className="px-8 py-6 font-black text-gray-800 tracking-tight">{m.stock.name}</td>
+                          <td className="px-8 py-6">
+                            <span className={cn(
+                              "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
+                              MOVEMENT_TYPE_STYLES[m.type] || 'bg-gray-50 text-gray-600'
+                            )}>
+                              {MOVEMENT_TYPE_LABELS[m.type] || m.type}
+                            </span>
+                          </td>
+                          <td className="px-8 py-6 text-right">
+                            <span className={cn(
+                              "text-lg font-black",
+                              m.type === 'IN' ? 'text-green-600' : 'text-red-600'
+                            )}>
+                              {m.type === 'IN' ? '+' : '-'}{m.quantity} <span className="text-[10px] opacity-40 uppercase">{m.stock.unit}</span>
+                            </span>
+                          </td>
+                          <td className="px-8 py-6 text-xs text-gray-400 italic">{m.reason || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            );
+          })()}
         </div>
       )}
 
