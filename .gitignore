@@ -52,3 +52,5 @@ android-native/.gradle/
 android-native/build/
 android-native/app/build/
 android-webview-app/app/build/
+backend/prisma/dev.db.bak-*
+temp/
