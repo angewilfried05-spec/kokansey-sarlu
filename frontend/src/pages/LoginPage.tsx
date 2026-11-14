@@ -20,6 +20,7 @@ export default function LoginPage() {
         method: "POST",
         body: JSON.stringify({ username, password }),
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(15000),
       });
 
       const data = await res.json();
@@ -32,7 +33,11 @@ export default function LoginPage() {
         setError(data.message || "Identifiants incorrects");
       }
     } catch (err) {
-      setError("Impossible de joindre le serveur. Vérifiez votre connexion.");
+      if (err instanceof DOMException && err.name === "TimeoutError") {
+        setError("Le serveur met trop de temps à répondre. Réessayez.");
+      } else {
+        setError("Impossible de joindre le serveur. Vérifiez votre connexion.");
+      }
     } finally {
       setLoading(false);
     }

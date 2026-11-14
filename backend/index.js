@@ -31,6 +31,8 @@ dotenv.config();
 
 const app = express();
 app.disable('x-powered-by');
+// Derrière nginx : req.ip = vraie IP cliente (rate-limit, logs, audit)
+app.set('trust proxy', 1);
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
 if (!process.env.JWT_SECRET) {
