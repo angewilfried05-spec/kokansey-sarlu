@@ -90,12 +90,28 @@ export default function registerStocksRoutes(app, { prisma, authenticate, author
     }
   });
 
+  const MOVEMENT_TYPES = ['IN', 'OUT', 'SEMENCE', 'PERTE'];
+  const MOVEMENT_LABELS = { IN: 'ENTRÉE', OUT: 'SORTIE', SEMENCE: 'SEMENCE', PERTE: 'PERTE' };
+
   app.post('/api/stocks/:id/movements', authenticate, async (req, res) => {
     const { type, quantity, date, reason, speculationId } = req.body;
     const qty = parseFloat(quantity);
 
+    if (!MOVEMENT_TYPES.includes(type)) {
+      return res.status(400).json({ error: `Type invalide. Valeurs acceptées: ${MOVEMENT_TYPES.join(', ')}` });
+    }
+    if (isNaN(qty) || qty <= 0) {
+      return res.status(400).json({ error: 'Quantité invalide' });
+    }
+
     try {
       const result = await prisma.$transaction(async (tx) => {
+        const current = await tx.stock.findUnique({ where: { id: req.params.id } });
+        if (!current) throw new Error('Article introuvable');
+        if (type !== 'IN' && current.quantity < qty) {
+          throw new Error(`Stock insuffisant (${current.quantity} ${current.unit} disponibles)`);
+        }
+
         // 1. Create movement
         const movement = await tx.stockMovement.create({
           data: {
@@ -124,15 +140,17 @@ export default function registerStocksRoutes(app, { prisma, authenticate, author
       // Envoyer notification WhatsApp au compte connecté
       const adminNumber = process.env.WHATSAPP_ADMIN_NUMBER;
       if (adminNumber) {
-        const typeLabel = type === 'IN' ? 'ENTRÉE' : 'SORTIE';
-        const emoji = type === 'IN' ? '📥' : '📤';
+        const typeLabel = MOVEMENT_LABELS[type] || type;
+        const emoji = type === 'IN' ? '📥' : type === 'SEMENCE' ? '🌱' : type === 'PERTE' ? '🗑️' : '📤';
         const adminMessage = `${emoji} MOUVEMENT DE STOCK\n\nProduit: ${result.stock.name}\nType: ${typeLabel}\nQuantité: ${qty} ${result.stock.unit}\nDate: ${new Date(date).toLocaleDateString('fr-FR')}\n${reason ? `Raison: ${reason}` : ''}`;
         notificationService.sendWhatsAppMessage(adminNumber, adminMessage).catch(err => console.error('Erreur notification stock:', err));
       }
 
       res.json(result);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to record movement' });
+      const clientErrors = ['Article introuvable', 'Stock insuffisant'];
+      const isClientError = clientErrors.some(e => error.message?.startsWith(e));
+      res.status(isClientError ? 400 : 500).json({ error: isClientError ? error.message : 'Failed to record movement' });
     }
   });
 

@@ -136,6 +136,12 @@ private fun MovementDialog(
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(selected = type == "SEMENCE", onClick = { type = "SEMENCE" },
+                        label = { Text("🌱 Semence") })
+                    FilterChip(selected = type == "PERTE", onClick = { type = "PERTE" },
+                        label = { Text("Perte") })
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(selected = type == "IN", onClick = { type = "IN" },
                         label = { Text("Entrée") })
                     FilterChip(selected = type == "OUT", onClick = { type = "OUT" },
@@ -156,7 +162,7 @@ private fun MovementDialog(
                 val qty = quantity.replace(',', '.').toDoubleOrNull()
                 when {
                     qty == null || qty <= 0 -> formError = "Quantité invalide"
-                    type == "OUT" && qty > stock.quantity -> formError = "Stock insuffisant (${formatQuantity(stock.quantity)} ${stock.unit})"
+                    type != "IN" && qty > stock.quantity -> formError = "Stock insuffisant (${formatQuantity(stock.quantity)} ${stock.unit})"
                     else -> onSubmit(type, qty, reason.ifBlank { null })
                 }
             }) { Text(if (saving) "…" else "Valider") }

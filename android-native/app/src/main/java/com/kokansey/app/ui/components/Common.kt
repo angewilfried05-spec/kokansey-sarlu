@@ -198,6 +198,8 @@ fun statusLabel(status: String): String = when (status.uppercase()) {
     "PARTIELLEMENT_PAYEE" -> "Partielle"
     "SOLDE" -> "Soldé"
     "PARTIEL" -> "Partiel"
+    "SEMENCE" -> "Semence"
+    "PERTE" -> "Perte"
     "EN_ATTENTE" -> "En attente"
     "ANNULEE" -> "Annulée"
     else -> status

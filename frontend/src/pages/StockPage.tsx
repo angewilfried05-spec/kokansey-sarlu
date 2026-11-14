@@ -26,12 +26,22 @@ import { useNotifications } from "../contexts/NotificationContext";
 
 interface StockMovement {
   id: string;
-  type: "IN" | "OUT";
+  type: "IN" | "OUT" | "SEMENCE" | "PERTE";
   quantity: number;
   date: string;
   reason: string;
   stock: { name: string, unit: string };
 }
+
+const MOVEMENT_TYPE_LABELS: Record<string, string> = {
+  IN: 'Entrée', OUT: 'Sortie', SEMENCE: 'Semence', PERTE: 'Perte'
+};
+const MOVEMENT_TYPE_STYLES: Record<string, string> = {
+  IN: 'bg-green-50 text-green-600',
+  OUT: 'bg-red-50 text-red-600',
+  SEMENCE: 'bg-amber-50 text-amber-600',
+  PERTE: 'bg-orange-100 text-orange-700'
+};
 
 interface Stock {
   id: string;
@@ -69,6 +79,12 @@ export default function StockPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingStock, setEditingStock] = useState<Stock | null>(null);
   const [formData, setFormData] = useState({ name: "", category: "Engrais", quantity: "0", unit: "Kg", minThreshold: "5", speculationId: "" });
+
+  // Movement modal states
+  const [movementStock, setMovementStock] = useState<Stock | null>(null);
+  const [movementData, setMovementData] = useState({ type: "SEMENCE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
+  const [movementError, setMovementError] = useState("");
+  const [movementSaving, setMovementSaving] = useState(false);
 
   const checkStockAlerts = useCallback((stockList: Stock[]) => {
     stockList.forEach(stock => {
@@ -133,6 +149,38 @@ export default function StockPage() {
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleMovementSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!movementStock) return;
+    setMovementSaving(true);
+    setMovementError("");
+    try {
+      const res = await fetchWithAuth(`/api/stocks/${movementStock.id}/movements`, {
+        method: 'POST',
+        body: JSON.stringify({
+          type: movementData.type,
+          quantity: parseFloat(movementData.quantity),
+          reason: movementData.reason,
+          date: movementData.date,
+          speculationId: movementStock.speculation?.id || null
+        })
+      });
+      if (res.ok) {
+        setMovementStock(null);
+        setMovementData({ type: "SEMENCE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
+        fetchData();
+      } else {
+        const err = await res.json();
+        setMovementError(err.error || "Échec de l'enregistrement");
+      }
+    } catch (err) {
+      console.error(err);
+      setMovementError("Erreur lors de l'enregistrement");
+    } finally {
+      setMovementSaving(false);
     }
   };
 
@@ -262,6 +310,19 @@ export default function StockPage() {
                 <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     {isStockManager && (
+                      <button
+                        onClick={() => {
+                          setMovementStock(item);
+                          setMovementError("");
+                          setMovementData({ type: "SEMENCE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
+                        }}
+                        title="Enregistrer un mouvement (semence, perte, sortie...)"
+                        className="p-2 bg-gray-50 text-green-600 hover:bg-green-600 hover:text-white rounded-xl transition-all"
+                      >
+                        <ArrowDownRight className="w-5 h-5" />
+                      </button>
+                    )}
+                    {isStockManager && (
                       <button 
                         onClick={() => {
                           setEditingStock(item);
@@ -322,9 +383,9 @@ export default function StockPage() {
                     <td className="px-8 py-6">
                       <span className={cn(
                         "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
-                        m.type === 'IN' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                        MOVEMENT_TYPE_STYLES[m.type] || 'bg-gray-50 text-gray-600'
                       )}>
-                        {m.type === 'IN' ? 'Entrée' : 'Sortie'}
+                        {MOVEMENT_TYPE_LABELS[m.type] || m.type}
                       </span>
                     </td>
                     <td className="px-8 py-6 text-right">
@@ -424,6 +485,78 @@ export default function StockPage() {
 
               <button type="submit" className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20">
                 {editingStock ? "Mettre à jour" : "Enregistrer l'Article"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Movement Modal */}
+      {movementStock && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
+          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 tracking-tight">Mouvement de stock</h3>
+                <p className="text-sm text-gray-500 font-medium">{movementStock.name} — {movementStock.quantity} {movementStock.unit} disponibles</p>
+              </div>
+              <button onClick={() => setMovementStock(null)} className="p-2 hover:bg-gray-100 rounded-full">
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleMovementSubmit} className="space-y-5">
+              <div>
+                <label className="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1 tracking-widest">Type de mouvement</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    { value: 'SEMENCE', label: '🌱 Semence', hint: 'Réservé aux semis' },
+                    { value: 'PERTE', label: '🗑️ Perte', hint: 'Pourriture, casse' },
+                    { value: 'OUT', label: '📤 Sortie', hint: 'Autre sortie' },
+                    { value: 'IN', label: '📥 Entrée', hint: 'Ajustement +' },
+                  ] as const).map(t => (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setMovementData({ ...movementData, type: t.value })}
+                      className={cn(
+                        "p-3 rounded-xl border-2 text-left transition-all",
+                        movementData.type === t.value
+                          ? "border-primary bg-primary/5"
+                          : "border-gray-100 hover:border-gray-200"
+                      )}
+                    >
+                      <p className="text-sm font-black text-gray-800">{t.label}</p>
+                      <p className="text-[10px] font-medium text-gray-400">{t.hint}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1 tracking-widest">Quantité ({movementStock.unit})</label>
+                  <input type="number" required min="0.01" step="0.01" max={movementData.type !== 'IN' ? movementStock.quantity : undefined} className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none font-bold" value={movementData.quantity} onChange={e => setMovementData({...movementData, quantity: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1 tracking-widest">Date</label>
+                  <input type="date" required className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none font-bold" value={movementData.date} onChange={e => setMovementData({...movementData, date: e.target.value})} />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1 tracking-widest">
+                  {movementData.type === 'SEMENCE' ? 'Destination (ex: nouveau champ hévéa)' : movementData.type === 'PERTE' ? 'Cause (ex: pourriture, vol)' : 'Raison'}
+                </label>
+                <input type="text" placeholder={movementData.type === 'SEMENCE' ? 'Ex: Semis campagne 2026-2027' : 'Ex: Pourriture au magasin'} className="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary outline-none font-bold" value={movementData.reason} onChange={e => setMovementData({...movementData, reason: e.target.value})} />
+              </div>
+
+              {movementError && (
+                <p className="text-sm font-bold text-red-600 bg-red-50 rounded-xl px-4 py-3">{movementError}</p>
+              )}
+
+              <button type="submit" disabled={movementSaving} className="w-full py-4 bg-primary text-white rounded-2xl font-black tracking-widest hover:bg-opacity-90 transition-all shadow-xl shadow-primary/20 disabled:opacity-50">
+                {movementSaving ? "Enregistrement..." : "Enregistrer le mouvement"}
               </button>
             </form>
           </div>
