@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export default function registerMonthlyRoutes(app, { prisma, authenticate, logAction }) {
+export default function registerMonthlyRoutes(app, { prisma, authenticate, checkAdmin, logAction }) {
   // Get current month counter
   app.get('/api/monthly/counter', authenticate, async (req, res) => {
     try {
@@ -49,7 +49,7 @@ export default function registerMonthlyRoutes(app, { prisma, authenticate, logAc
   });
 
   // Reset monthly counter
-  app.post('/api/monthly/reset', authenticate, async (req, res) => {
+  app.post('/api/monthly/reset', authenticate, checkAdmin, async (req, res) => {
     try {
       const { month, notes } = req.body;
       const userId = req.user.id;

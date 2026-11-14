@@ -158,13 +158,15 @@ export default function MonthlyReportPage() {
             <BookOpen className="w-5 h-5" />
             Ajouter Note
           </button>
-          <button 
-            onClick={() => setShowResetModal(true)}
-            className="bg-red-600 text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-200"
-          >
-            <RotateCcw className="w-5 h-5" />
-            Remise à Zéro
-          </button>
+          {JSON.parse(localStorage.getItem("user") || "{}").role === "ADMIN" && (
+            <button 
+              onClick={() => setShowResetModal(true)}
+              className="bg-red-600 text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-red-700 transition-all font-bold shadow-lg shadow-red-200"
+            >
+              <RotateCcw className="w-5 h-5" />
+              Remise à Zéro
+            </button>
+          )}
         </div>
       </div>
 

@@ -141,6 +141,7 @@ export default function Sidebar({ mobile, onClose }: { mobile?: boolean, onClose
              await fetch("/api/auth/logout", { method: "POST" });
              localStorage.removeItem("user");
              localStorage.removeItem("token");
+             localStorage.removeItem("kokansey_api_cache_v1");
              navigate("/login");
           }}
           className="flex items-center justify-center gap-2 px-4 py-2.5 w-full rounded-xl bg-white/5 hover:bg-red-500/80 text-white/70 hover:text-white transition-all duration-200 group font-semibold text-sm"

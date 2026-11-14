@@ -113,6 +113,7 @@ const rateLimit = ({ windowMs, max }) => {
     }
     record.count++;
     if (record.count > max) {
+      res.set('Retry-After', String(Math.ceil((record.resetTime - now) / 1000)));
       return res.status(429).json({ message: 'Trop de requêtes, veuillez réessayer plus tard.' });
     }
     requests.set(key, record);
@@ -234,13 +235,14 @@ if (process.env.SERVE_FRONTEND === 'true') {
     maxAge: '1h',
     etag: true
   }));
+  // API 404 - JSON for any unmatched API route (all methods)
+  app.use('/api', (req, res) => {
+    res.status(404).json({ error: 'API endpoint not found' });
+  });
+
   // SPA fallback - serve index.html for non-API routes
   app.get('*', (req, res) => {
-    if (req.path.startsWith('/api')) {
-      res.status(404).json({ error: 'API endpoint not found' });
-    } else {
-      res.sendFile(path.join(frontendDistPath, 'index.html'));
-    }
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
   });
 }
 

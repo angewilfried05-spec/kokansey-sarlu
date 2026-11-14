@@ -154,11 +154,12 @@ object ApiClient {
             .readTimeout(30, TimeUnit.SECONDS)
             .addInterceptor { chain ->
                 val token = tokenProvider()
-                val request = if (token != null) {
-                    chain.request().newBuilder()
-                        .addHeader("Authorization", "Bearer $token")
-                        .build()
-                } else chain.request()
+                val request = chain.request().newBuilder()
+                    .addHeader("ngrok-skip-browser-warning", "true")
+                    .apply {
+                        if (token != null) addHeader("Authorization", "Bearer $token")
+                    }
+                    .build()
                 chain.proceed(request)
             }
             .addInterceptor(HttpLoggingInterceptor().apply {

@@ -247,6 +247,7 @@ export default function InvoicesPage() {
   const handleSendPDFWhatsApp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedInvoiceForSend) return;
+    if (!(await confirmDialog(`Envoyer la facture ${selectedInvoiceForSend.numero} par WhatsApp au ${sendPDFForm.telephone || 'numéro du client'} ?`))) return;
 
     try {
       const response = await fetchWithAuth(`/api/invoices/${selectedInvoiceForSend.id}/send-pdf`, {

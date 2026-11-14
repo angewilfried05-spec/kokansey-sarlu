@@ -133,7 +133,7 @@ export default function ClientAccountsPage() {
   });
 
   const [formOperation, setFormOperation] = useState({
-    typeOperation: "vente" as OperationClient["typeOperation"],
+    typeOperation: "paiement" as OperationClient["typeOperation"],
     montant: "",
     description: "",
     reference: "",
@@ -215,7 +215,7 @@ export default function ClientAccountsPage() {
 
   const resetFormOperation = () => {
     setFormOperation({
-      typeOperation: "vente",
+      typeOperation: "paiement",
       montant: "",
       description: "",
       reference: "",
@@ -306,7 +306,10 @@ export default function ClientAccountsPage() {
       await rafraichirDonneesClient();
     } catch (error) {
       console.error(error);
-      toast.error(operationEnEdition ? "Impossible de modifier l'opération." : "Impossible d'ajouter l'opération.");
+      const msg = error instanceof Error && error.message !== "Erreur opération"
+        ? error.message
+        : (operationEnEdition ? "Impossible de modifier l'opération." : "Impossible d'ajouter l'opération.");
+      toast.error(msg);
     }
   };
 
@@ -740,7 +743,7 @@ export default function ClientAccountsPage() {
                   value={formOperation.typeOperation}
                   onChange={(e) => setFormOperation({ ...formOperation, typeOperation: e.target.value as OperationClient["typeOperation"] })}
                 >
-                  {TYPES_OPERATION.map(t => (
+                  {TYPES_OPERATION.filter(t => t.value !== "vente" || t.value === formOperation.typeOperation).map(t => (
                     <option key={t.value} value={t.value}>{t.label}</option>
                   ))}
                 </select>
