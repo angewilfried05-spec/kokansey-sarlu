@@ -488,7 +488,7 @@ export default function SpeculationsPage() {
               className="bg-primary text-white px-6 py-3 rounded-2xl flex items-center gap-2 hover:bg-opacity-90 transition-all font-bold shadow-lg shadow-primary/20"
             >
               <Plus className="w-5 h-5" />
-              Nouvelle Culture
+              Nouvelle Spéculation
             </button>
           </div>
         )}

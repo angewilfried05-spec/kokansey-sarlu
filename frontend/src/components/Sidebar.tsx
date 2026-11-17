@@ -25,7 +25,7 @@ const menuItems = [
   { name: "Notifications", href: "/dashboard/notifications", icon: Bell, category: "Général" },
   { name: "Opérations", href: "/dashboard/operations", icon: History, category: "Général" },
   { name: "Spéculations", href: "/dashboard/speculations", icon: Sprout, category: "Gestion" },
-  { name: "Stocks", href: "/dashboard/stock", icon: Package, category: "Gestion" },
+  { name: "Production", href: "/dashboard/stock", icon: Package, category: "Gestion" },
   { name: "Ressources Humaines", href: "/dashboard/employees", icon: Users, category: "RH & Logistique" },
   { name: "Gestion Logistique", href: "/dashboard/trucks", icon: Truck, category: "RH & Logistique" },
   { name: "Comptes d'Exploitation", href: "/dashboard/accounts", icon: Calculator, category: "Finance" },
@@ -61,8 +61,8 @@ export default function Sidebar({ mobile, onClose }: { mobile?: boolean, onClose
     if (isAdmin) return true;
     if ((item as any).adminOnly) return false;
     if (isGerant) return true;
-    if (isCommercial) return ["Tableau de Bord", "Opérations", "Spéculations", "Stocks", "Comptes Clients", "Facturation", "Rapports"].includes(item.name);
-    if (isStockManager) return ["Tableau de Bord", "Opérations", "Stocks"].includes(item.name);
+    if (isCommercial) return ["Tableau de Bord", "Opérations", "Spéculations", "Production", "Comptes Clients", "Facturation", "Rapports"].includes(item.name);
+    if (isStockManager) return ["Tableau de Bord", "Opérations", "Production"].includes(item.name);
     if (isRH) return ["Tableau de Bord", "Ressources Humaines", "Tâches"].includes(item.name);
     return false;
   });

@@ -88,6 +88,7 @@ export default function StockPage() {
 
   // Movement modal states
   const [movementStock, setMovementStock] = useState<Stock | null>(null);
+  const [movementStockSelectable, setMovementStockSelectable] = useState(false);
   const [movementData, setMovementData] = useState({ type: "SEMENCE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
   const [movementError, setMovementError] = useState("");
   const [movementSaving, setMovementSaving] = useState(false);
@@ -176,6 +177,7 @@ export default function StockPage() {
       });
       if (res.ok) {
         setMovementStock(null);
+        setMovementStockSelectable(false);
         setMovementData({ type: "SEMENCE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
         fetchData();
       } else {
@@ -261,7 +263,7 @@ export default function StockPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Gestion des Stocks</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Gestion de la Production</h2>
           <p className="text-gray-500 font-medium italic">Suivi des intrants, matériels et produits finis</p>
         </div>
         {isStockManager && (
@@ -404,6 +406,20 @@ export default function StockPage() {
                         <span className="text-xs font-medium text-gray-400">Aucun mouvement de ce type pour le moment</span>
                       )}
                     </div>
+                    {currentView === 'pertes' && isStockManager && stocks.length > 0 && (
+                      <button
+                        onClick={() => {
+                          setMovementStockSelectable(true);
+                          setMovementStock(stocks[0]);
+                          setMovementError("");
+                          setMovementData({ type: "PERTE", quantity: "", reason: "", date: new Date().toISOString().split('T')[0] });
+                        }}
+                        className="ml-auto flex items-center gap-2 px-5 py-2.5 bg-orange-600 text-white rounded-xl text-sm font-black hover:bg-orange-700 transition-all shadow-lg shadow-orange-600/20"
+                      >
+                        <PackageX className="w-4 h-4" />
+                        Enregistrer une perte
+                      </button>
+                    )}
                   </div>
                 )}
                 <SearchBar table={table} placeholder="Rechercher un mouvement..." />
@@ -546,10 +562,28 @@ export default function StockPage() {
                 <h3 className="text-xl font-bold text-gray-800 tracking-tight">Mouvement de stock</h3>
                 <p className="text-sm text-gray-500 font-medium">{movementStock.name} — {movementStock.quantity} {movementStock.unit} disponibles</p>
               </div>
-              <button onClick={() => setMovementStock(null)} className="p-2 hover:bg-gray-100 rounded-full">
+              <button onClick={() => { setMovementStock(null); setMovementStockSelectable(false); }} className="p-2 hover:bg-gray-100 rounded-full">
                 <X className="w-6 h-6" />
               </button>
             </div>
+
+            {movementStockSelectable && (
+              <div className="mb-5">
+                <label className="block text-[10px] font-black text-gray-400 uppercase mb-1 ml-1 tracking-widest">Article concerné</label>
+                <select
+                  className="w-full p-4 bg-gray-50 border-none rounded-2xl font-bold"
+                  value={movementStock.id}
+                  onChange={e => {
+                    const s = stocks.find(x => x.id === e.target.value);
+                    if (s) setMovementStock(s);
+                  }}
+                >
+                  {stocks.map(s => (
+                    <option key={s.id} value={s.id}>{s.name} — {s.quantity} {s.unit}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
             <form onSubmit={handleMovementSubmit} className="space-y-5">
               <div>

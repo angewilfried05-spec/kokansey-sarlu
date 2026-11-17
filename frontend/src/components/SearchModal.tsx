@@ -45,7 +45,7 @@ const categories = [
   { key: "employees", label: "Employés", icon: Users, route: "/dashboard/employees" },
   { key: "trucks", label: "Camions", icon: Truck, route: "/dashboard/trucks" },
   { key: "clients", label: "Clients", icon: UserCircle, route: "/dashboard/client-accounts" },
-  { key: "stocks", label: "Stocks", icon: Package, route: "/dashboard/stock" },
+  { key: "stocks", label: "Production", icon: Package, route: "/dashboard/stock" },
   { key: "tasks", label: "Tâches", icon: ClipboardList, route: "/dashboard/tasks" },
 ] as const;
 
