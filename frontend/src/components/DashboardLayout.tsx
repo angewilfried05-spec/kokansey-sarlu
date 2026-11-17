@@ -8,6 +8,7 @@ import { NotificationBell } from "../contexts/NotificationContext";
 import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
 import SearchModal from "./SearchModal";
 import OfflineBanner from "./OfflineBanner";
+import { useVersionCheck } from "../hooks/useVersionCheck";
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -17,6 +18,7 @@ export default function DashboardLayout() {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const { isDarkMode, toggleDarkMode } = useDarkMode();
+  useVersionCheck();
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentDateTime(new Date()), 1000);
