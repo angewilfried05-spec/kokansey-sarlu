@@ -540,7 +540,7 @@ export default function OperationsPage() {
       {/* Preview Modal */}
       {previewOp && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[100]">
-          <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300">
             <div className={`p-10 text-white relative overflow-hidden ${
               previewOp.type === 'sale' ? 'bg-green-600' : 
               previewOp.type === 'expense' ? 'bg-red-600' : 
@@ -658,7 +658,7 @@ export default function OperationsPage() {
       {/* Edit Modal */}
       {showEditModal && editingOp && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-[100]">
-          <div className="bg-white rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-8 border-b border-gray-100 flex justify-between items-center">
               <h3 className="text-xl font-black tracking-tight text-gray-800">Modifier l'Opération</h3>
               <button onClick={() => setShowEditModal(false)} className="p-2 hover:bg-gray-100 rounded-xl transition-colors"><X className="w-5 h-5" /></button>

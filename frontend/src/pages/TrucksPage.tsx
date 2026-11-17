@@ -919,7 +919,7 @@ export default function TrucksPage() {
       {/* Add Trip Modal */}
       {showTripModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Nouveau Trajet</h3>
               <button onClick={() => setShowTripModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
@@ -972,7 +972,7 @@ export default function TrucksPage() {
       {/* Add Expense Modal */}
       {showExpenseModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[100] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Frais & Entretien</h3>
               <button onClick={() => setShowExpenseModal(false)} className="p-2 hover:bg-gray-100 rounded-full">

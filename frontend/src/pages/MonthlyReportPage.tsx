@@ -318,7 +318,7 @@ export default function MonthlyReportPage() {
       {/* Reset Modal */}
       {showResetModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Remise à Zéro</h3>
               <button onClick={() => setShowResetModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
@@ -357,7 +357,7 @@ export default function MonthlyReportPage() {
       {/* Journal Modal */}
       {showJournalModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Ajouter une Note</h3>
               <button onClick={() => setShowJournalModal(false)} className="p-2 hover:bg-gray-100 rounded-full">

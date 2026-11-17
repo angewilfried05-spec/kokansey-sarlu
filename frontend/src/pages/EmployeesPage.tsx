@@ -709,8 +709,8 @@ export default function EmployeesPage() {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-2xl w-full max-w-2xl p-8 shadow-2xl my-8 animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{editingEmployee ? "Modifier l'Employé" : "Nouvel Employé"}</h3>
               <button onClick={() => { setShowModal(false); setEditingEmployee(null); resetForm(); }} className="p-2 hover:bg-gray-100 rounded-full">
@@ -820,7 +820,7 @@ export default function EmployeesPage() {
 
       {showAbsenceModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Signaler Absence</h3>
               <button onClick={() => setShowAbsenceModal(false)} className="p-2 hover:bg-gray-100 rounded-full">
@@ -862,7 +862,7 @@ export default function EmployeesPage() {
 
       {showSalaryModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">Enregistrer Paiement</h3>
               <button onClick={() => setShowSalaryModal(false)} className="p-2 hover:bg-gray-100 rounded-full">

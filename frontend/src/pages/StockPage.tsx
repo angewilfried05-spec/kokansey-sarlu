@@ -484,7 +484,7 @@ export default function StockPage() {
       {/* Stock Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white tracking-tight">{editingStock ? "Modifier l'Article" : "Nouvel Article"}</h3>
               <button onClick={() => { setShowModal(false); setEditingStock(null); }} className="p-2 hover:bg-gray-100 rounded-full">
@@ -540,7 +540,7 @@ export default function StockPage() {
       {/* Movement Modal */}
       {movementStock && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[80] backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in-95 duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-8 shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h3 className="text-xl font-bold text-gray-800 tracking-tight">Mouvement de stock</h3>
