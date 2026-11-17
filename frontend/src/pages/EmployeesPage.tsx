@@ -120,8 +120,9 @@ export default function EmployeesPage() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     const totalPossibleDays = employees.length * diffDays;
-    const actualAbsences = allAbsences.length;
+    if (totalPossibleDays === 0) return "—";
 
+    const actualAbsences = allAbsences.length;
     const rate = ((totalPossibleDays - actualAbsences) / totalPossibleDays) * 100;
     return `${Math.max(0, Math.min(100, rate)).toFixed(1)}%`;
   };
